@@ -136,6 +136,17 @@
               {% endblock %}
               
               <div class="detallesRubro">
+                <div class="toolbar-content clearfix">
+                  <div class="object-tools">
+                    
+                      <a href="/admin/Proyecto/proyecto/{{ proyecto }}/#pagos" class="btn btn-success">
+                        <i class="icon-plus-sign icon-white"></i>&nbsp;
+                        Añadir pago
+                      </a>
+                    
+                  </div>
+                </div>
+
                 <table class="table">
 
                   <thead>
@@ -186,7 +197,7 @@
                           var pago = parseFloat({{ pago.valor }});
                           document.write('<td>$'+pago.formatMoney(0,'.','.')+'</td>');
                         </script>
-                        <td class="text-center"><a href="/admin/presupuesto/rubro/eliminarPago/{{ pago.id }}"><img src="/media/img/delete.png" width="16px" alt=""></a></td>
+                        <td class="text-center"><a href="#" onclick="eliminarRubro({{ pago.pk }});"><img src="/media/img/delete.png" width="16px" alt=""></a></td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -263,6 +274,21 @@
 {% endblock %}
 
   <script src="{% static 'suit/js/suit.js' %}"></script>
+  <script>
+    function eliminarRubro(idPago){
+      var confirmacion = confirm("¿Estás seguro de eliminar este pago?");
+      if(confirmacion){
+        $.ajax({
+          type: "POST",
+          url: "/admin/presupuesto/rubro/eliminarPago/"+idPago,
+          data: '',
+          success: function(){location.reload(true);},
+        });
+      }
+      
+    }
+
+  </script>
   {% block extrajs %}{% endblock %}
 
 </body>

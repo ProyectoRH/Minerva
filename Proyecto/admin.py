@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import models
+from django.http import HttpResponse
 
 from .models import Proyecto
 
@@ -63,6 +64,11 @@ class ProyectoInline(admin.ModelAdmin):
     ]
 
 	suit_form_tabs = (('general', 'Proyecto'), ('entidad', 'Entidad'), ('investigador', 'Personas'), ('fuentes', 'Fuentes'), ('adjuntoEjecucion', 'Adjuntos'), ('alertas', 'Alertas'), ('pagos', 'Pagos'), ('resultados', 'Resultados'))
+
+	def responseLoad():
+		return HttpResponse('<script type="text/javascript">alert("Hola");</script>')
+
+	responseLoad()
 
 	def save_model(self, request, obj, form, change):
 		obj.digitador = request.user

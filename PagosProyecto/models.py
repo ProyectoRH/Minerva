@@ -23,8 +23,12 @@ class PagosProyecto(models.Model):
 	descripcion = models.TextField()
 	valor = models.IntegerField()
 
+	class Meta:
+		verbose_name_plural='Pagos del proyecto'
+		verbose_name='pago del proyecto con numero de comprobante'
+
 	def __unicode__(self):
-		return self.proyecto.titulo
+		return str(self.numero_comprobante)
 	
 class AdjuntoSolicitud(models.Model):
 	pago = models.ForeignKey(PagosProyecto)

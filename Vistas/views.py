@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext
 from Proyecto.models import Proyecto
 from Fuentes.models import Fuente, TipoRubro
@@ -44,9 +45,9 @@ def rubroDetalle(request, pk, proyecto):
 
 	return render_to_response('base_rubroDetalle.html', {'pagos':pagos, 'rubro':rubro, 'proyecto':proyecto}, context_instance = RequestContext(request))
 
+@csrf_exempt
 def eliminarPagoRubro(request, pk):
 	pago = PagosProyecto.objects.get(pk = pk)
 	pago.delete()
-	pago.save()
-
-	return HttpResponse('<script type="text/javascript">location.reload(true);</script>');
+	
+	return HttpResponse(1);

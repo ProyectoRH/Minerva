@@ -70,9 +70,10 @@ class ProyectoInline(admin.ModelAdmin):
 
 	def save_model(self, request, obj, form, change):
 		obj.digitador = request.user
+		ultimoInsertado = Proyecto.objects.latest('pk')
 		if obj.codigo_interno_proyecto == None or obj.codigo_interno_proyecto == '':
 			d = date.today()
-			obj.codigo_interno_proyecto = str(obj.pk) + str(d.month) + str(d.year)
+			obj.codigo_interno_proyecto = str(ultimoInsertado.pk + 1) + str(d.month) + str(d.year)
 		obj.save()
 
 	@property

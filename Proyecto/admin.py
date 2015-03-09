@@ -62,7 +62,7 @@ class ProyectoInline(admin.ModelAdmin):
 	fieldsets = [
         (None, {
             'classes': ('suit-tab', 'suit-tab-general',),
-            'fields': ['codigo_interno_proyecto','tipo_proyecto', 'estado', 'titulo', 'duracion', 'fecha_inicio', 'tipo_investigacion', 'grupos_investigacion', 'categoria_colciencias', 'linea_investigacion', 'resumen', 'palabras_clave', 'departamento', 'municipio', 'corregimiento', 'planteamiento_problema', 'estado_arte', 'objetivos', 'metodologia', 'impacto_esperado',]
+            'fields': ['tipo_proyecto', 'estado', 'titulo', 'duracion', 'fecha_inicio', 'tipo_investigacion', 'grupos_investigacion', 'categoria_colciencias', 'linea_investigacion', 'resumen', 'palabras_clave', 'departamento', 'municipio', 'corregimiento', 'planteamiento_problema', 'estado_arte', 'objetivos', 'metodologia', 'impacto_esperado',]
         }),
     ]
 

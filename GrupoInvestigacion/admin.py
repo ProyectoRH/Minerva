@@ -4,5 +4,7 @@ from .models import GrupoInvestigacion
 
 class GruposAdmin(admin.ModelAdmin):
 	filter_horizontal = ('investigadores',)
+	list_display = ['nombre','sigla','codigo_colombiano',]
+	search_fields = ['nombre','sigla','codigo_colombiano',]
 
 admin.site.register(GrupoInvestigacion, GruposAdmin)

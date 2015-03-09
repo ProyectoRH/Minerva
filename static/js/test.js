@@ -1,13 +1,21 @@
 
 window.onload = function() {
 
-var div = document.createElement('li');
+	var div = document.createElement('div');
 
-div.className = 'presu';
-capa = document.getElementById("suit_form_tabs"); 
-div.innerHTML= '<button type="button" onclick="location.href=\'/admin/presupuesto/ \'" class="btn btn-high btn-info" name="pre">Ver Presupuesto</button>';
- 
-capa.appendChild(div);
+
+	var submitRow = document.getElementsByClassName('submit-row');
+	var deleteButton = document.getElementsByClassName('deletelink');
+
+
+	var urlActual = document.URL;
+	var urlSplitted = urlActual.split('/');
+
+	var proyectoId = urlSplitted[urlSplitted.length - 2];
+
+	div.innerHTML= '<button type="button" onclick="location.href=\'/admin/presupuesto/'+proyectoId+'\'" class="btn btn-high btn-success" style="margin-top:20px;" name="pre"><i class="icon-list icon-white"></i>&nbsp;&nbsp;Ver Presupuesto</button>';
+
+	submitRow[0].appendChild(div);
 
 }
 

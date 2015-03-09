@@ -142,7 +142,7 @@ SUIT_CONFIG = {
 
     # forms
     # 'SHOW_REQUIRED_ASTERISK': True,  # Default True
-    # 'CONFIRM_UNSAVED_CHANGES': True, # Default True
+    'CONFIRM_UNSAVED_CHANGES': False, # Default True
 
     # menu
     'SEARCH_URL': '/admin/Proyecto/proyecto/',

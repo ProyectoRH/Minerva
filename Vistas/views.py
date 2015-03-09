@@ -40,6 +40,7 @@ def rubroDetalle(request, pk, proyecto):
 	#traer todos los pagos
 
 	pagos = PagosProyecto.objects.filter(tipo_rubro = pk, proyecto = proyecto).order_by('entidad')
+	proyecto = Proyecto.objects.get(pk = proyecto)
 	rubro = TipoRubro.objects.get(pk = pk)
 	print pagos
 

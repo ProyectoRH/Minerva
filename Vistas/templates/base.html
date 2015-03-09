@@ -2,7 +2,7 @@
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% block title %}{{ title }} | {{ 'ADMIN_NAME'|suit_conf }}{% endblock %}</title>
+  <title>Presupuesto | {{ 'ADMIN_NAME'|suit_conf }}</title>
   <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% endblock %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'suit/bootstrap/css/bootstrap.min.css' %}" media="all"/>
   <link rel="stylesheet" type="text/css" href="{% static 'suit/css/suit.css' %}" media="all">
@@ -19,6 +19,16 @@
   {% block extrahead %}{% endblock %}
   {% block blockbots %}
     <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
+
+    <style type="text/css">
+
+      #printable { display: none; }
+
+      @media print {
+        #non-printable { display: none; }
+        #proyecto-print-view { display: block; }
+      }
+    </style>
 </head>
 {% load i18n %}
 
@@ -136,233 +146,234 @@
               {% endblock %}
               
               <div class="toolbar-content clearfix">
-                  <div class="object-tools">
-                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}" class="btn btn-success">
-                        <i class="icon-plus-sign icon-white"></i>&nbsp;
-                        Ir al proyecto
-                      </a>
-                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#pagos" class="btn btn-success">
-                        <i class="icon-plus-sign icon-white"></i>&nbsp;
-                        Añadir pago
-                      </a>
-                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#fuentes" class="btn btn-success">
-                        <i class="icon-plus-sign icon-white"></i>&nbsp;
-                        Añadir fuente
-                      </a>
-                      <a href="#" class="btn btn-success">
-                        <i class="icon-plus-sign icon-white"></i>&nbsp;
-                        Imprimir
-                      </a>
-                  </div>
+                <div class="object-tools">
+                    <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}" class="btn btn-success">
+                      <i class="icon-plus-sign icon-white"></i>&nbsp;
+                      Ir al proyecto
+                    </a>
+                    <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#pagos" class="btn btn-success">
+                      <i class="icon-plus-sign icon-white"></i>&nbsp;
+                      Añadir pago
+                    </a>
+                    <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#fuentes" class="btn btn-success">
+                      <i class="icon-plus-sign icon-white"></i>&nbsp;
+                      Añadir fuente
+                    </a>
+                    <a href="#" class="btn btn-success" onclick="imprimir();">
+                      <i class="icon-plus-sign icon-white"></i>&nbsp;
+                      Imprimir
+                    </a>
+                </div>
+              </div>
+              <div id="imprimeme">
+                <div id="proyecto-info">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th colspan="2">
+                          <h4 class="text-center">INFORMACIÓN GENERAL DEL PROYECTO</h4>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Código Interno</td>
+                        <td>{{ proyecto.codigo_interno_proyecto }}</td>
+                      </tr>
+                      <tr>
+                        <td>Título del proyecto</td>
+                        <td>{{ proyecto.titulo }}</td>
+                      </tr>
+                      <tr>
+                        <td>Tiempo de ejecución</td>
+                        <td>
+                          {% if not proyecto.duracion > 1 %}
+                            {{ proyecto.duracion }} mes
+                          {% else %}
+                            {{ proyecto.duracion }} meses
+                          {% endif %}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Fecha de inicio</td>
+                        <td>{{ proyecto.fecha_inicio }}</td>
+                      </tr>
+
+                      <!-- Traer grupos de investigacion, entidades e investigadores -->
+                    </tbody>
+                  </table>
                 </div>
 
-              <div id="proyecto-info">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th colspan="2">
-                        <h4 class="text-center">INFORMACIÓN GENERAL DEL PROYECTO</h4>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Código Interno</td>
-                      <td>XXXXXXX</td>
-                    </tr>
-                    <tr>
-                      <td>Título del proyecto</td>
-                      <td>{{ proyecto.titulo }}</td>
-                    </tr>
-                    <tr>
-                      <td>Tiempo de ejecución</td>
-                      <td>
-                        {% if not proyecto.duracion > 1 %}
-                          {{ proyecto.duracion }} mes
-                        {% else %}
-                          {{ proyecto.duracion }} meses
-                        {% endif %}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Fecha de inicio</td>
-                      <td>{{ proyecto.fecha_inicio }}</td>
-                    </tr>
+                <div id="tabla-presupuesto" class="table-responsive">
 
-                    <!-- Traer grupos de investigacion, entidades e investigadores -->
-                  </tbody>
-                </table>
-              </div>
-
-              <div id="tabla-presupuesto" class="table-responsive">
-
-                <table class="table table-hover table-striped" border="1" style="border:1px solid #DDD;">
-                  <thead>
-                    <tr>
-                      <th rowspan="3" class="text-center">Rubros</th>
-                      
-                      {% for entidadProyecto in entidadProyecto %}
-                        <th colspan="2" class="text-center">{{ entidadProyecto.tipo_participacion }}</th>
-                      {% endfor %}
-                      <th rowspan="3" class="text-center">Total Aprobado</th>
-                      <th rowspan="3" class="text-center">Total Ejecutado</th>
-                      <th rowspan="3" class="text-center">Falta por ejecutar</th>
-                    </tr>
-                    <tr>
-                      {% for entidadProyecto in entidadProyecto %}
-                        <th colspan="2" class="text-center">{{ entidadProyecto.entidad.razon_social }}</th>
-                      {% endfor %}
-                    </tr>
-                    <tr>
-                      {% for entidadProyecto in entidadProyecto %}
-                        <th class="text-center">Efectivo</th>
-                        <th class="text-center">Especie</th>
-                      {% endfor %}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <script>
-                      var contador = 0;
-                      var total_faltante_ejecutar = 0;
-                    </script>
-                    {% for rubro in rubros %}
-                     
-                      
-                        <tr>
-                          <td><a href="{% url 'Vistas.views.rubroDetalle' rubro.id proyecto.id %}"><strong>{{ rubro.descripcion }}</strong></a></td>
-                         {% for entidadProyecto in entidadProyecto %}
-
-                            <script>
-                              contador = 0;
-                            </script>
-                            {% for fuente in fuentes %}
-                              
-                              {% if fuente.tipo_fuente == rubro and fuente.entidad == entidadProyecto.entidad  %}
-                                <script>contador++;</script>
-                                <td><a href="/admin/Fuentes/fuente/{{ fuente.pk }}" id="add_id_fuente_efectivo" onclick="return showAddAnotherPopup(this);">${{ fuente.efectivo|intcomma }}</a></td>
-                                <td><a href="/admin/Fuentes/fuente/{{ fuente.pk }}" id="add_id_fuente_efectivo" onclick="return showAddAnotherPopup(this);">${{ fuente.especie|intcomma }}</a></td>
-                                
-                              {% endif %}
-                              
-                            {% endfor %}
-                            <script>
-                                  if (contador == 0){
-                                    document.write('<td><a href="/admin/Fuentes/fuente/add">$0</a></td><td><a href="/admin/Fuentes/fuente/add">$0</a></td>');
-                                  }
-                                </script>
-                          {% endfor %}  
-
-              
-                            <script type="text/javascript">
-
-                              Number.prototype.formatMoney = function(c, d, t){
-                              var n = this, 
-                                  c = isNaN(c = Math.abs(c)) ? 2 : c, 
-                                  d = d == undefined ? "." : d, 
-                                  t = t == undefined ? "," : t, 
-                                  s = n < 0 ? "-" : "", 
-                                  i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
-                                  j = (j = i.length) > 3 ? j % 3 : 0;
-                                 return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-                               };
-
-                              var total = 0;
-                              var ejecutado = 0;
-                              var total_ejecutado = 0;
-                              var falta_ejecutar = 0;
-                              
-                              {% for fuente in fuentes %}
-                                {% if fuente.tipo_fuente == rubro %}
-
-                                  total = parseFloat({{ fuente.efectivo }}) + parseFloat({{ fuente.especie }}) + total
-                                {% endif %}
-                              {% endfor %}
-                              var contador_pagos = 0;
-                              {% for pago in pagos %}
-                                
-                                {% if pago.tipo_rubro == rubro %}
-                                  ejecutado += parseFloat({{ pago.valor }});
-                                  
-                                {% endif %}
-                                total_ejecutado += parseFloat({{ pago.valor }});
-                              {% endfor %}
-
-                              falta_ejecutar = total - ejecutado;
-                              
-                              total_faltante_ejecutar += falta_ejecutar;
-
-                              document.write('<td><b>$'+total.formatMoney(0, '.', '.')+'</b></td>');
-                              if (ejecutado > total){
-                                document.write('<td><b style="color:red;">$'+ejecutado.formatMoney(0, '.', '.')+'</b></td>');  
-                              }else{
-                                document.write('<td><b>$'+ejecutado.formatMoney(0, '.', '.')+'</b></td>'); 
-                              }
-                              
-                              
-                              if(falta_ejecutar < 0){
-                                document.write('<td><b style="color:red;">$'+falta_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
-                              }else{
-                                document.write('<td><b>$'+falta_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
-                              }
-                              falta_ejecutar = 0;
-                              ejecutado = 0;
-                            </script>
-                        </tr>
-                      {% endfor %}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td style="background-color:rgb(224, 224, 224);"><b>Total del proyecto</b></td>
-                          <script>
-                            var total_efectivo = 0;
-                            var total_especie = 0;
-                            var total_general = 0;
-                            var contador_totales = 0;
-                          </script>
-                            {% for entidadProyecto in entidadProyecto %}
-                              <script>
-                                contador_totales = 0;
-                              </script>
-                              {% for fuente in fuentes %}
-                                  
-                                {% if fuente.entidad == entidadProyecto.entidad  %}
-                                  <script>
-                                    contador_totales++;
-                                    total_efectivo += parseFloat({{ fuente.efectivo }});
-                                    total_especie += parseFloat({{ fuente.especie }});
-                                    total_general += total_especie + total_efectivo;
-                                  </script>
-                                {% endif %}
-                                
-                              {% endfor %}
-                              <script>
-                                document.write('<td style="background-color:rgb(224, 224, 224);"><b>$'+total_efectivo.formatMoney(0, '.', '.')+'</b></td>');
-                                document.write('<td style="background-color:rgb(224, 224, 224);"><b>$'+total_especie.formatMoney(0, '.', '.')+'</b></td>');
-                                total_efectivo = 0;
-                                total_especie = 0;
-                              </script>
-                            {% endfor %}
+                  <table class="table table-hover table-striped" border="1" style="border:1px solid #DDD;">
+                    <thead>
+                      <tr>
+                        <th rowspan="3" class="text-center">Rubros</th>
+                        
+                        {% for entidadProyecto in entidadProyecto %}
+                          <th colspan="2" class="text-center">{{ entidadProyecto.tipo_participacion }}</th>
+                        {% endfor %}
+                        <th rowspan="3" class="text-center">Total Aprobado</th>
+                        <th rowspan="3" class="text-center">Total Ejecutado</th>
+                        <th rowspan="3" class="text-center">Falta por ejecutar</th>
+                      </tr>
+                      <tr>
+                        {% for entidadProyecto in entidadProyecto %}
+                          <th colspan="2" class="text-center">{{ entidadProyecto.entidad.razon_social }}</th>
+                        {% endfor %}
+                      </tr>
+                      <tr>
+                        {% for entidadProyecto in entidadProyecto %}
+                          <th class="text-center">Efectivo</th>
+                          <th class="text-center">Especie</th>
+                        {% endfor %}
+                      </tr>
+                    </thead>
+                    <tbody>
                       <script>
-                        document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+
-                          total_general.formatMoney(0, '.', '.')+'</b></td>');
-
-                        if(total_ejecutado > total_general){
-                          document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;color:red;"><b>$'+total_ejecutado.formatMoney(0, '.', '.')+'</b></td>');  
-                        }else{
-                          document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+total_ejecutado.formatMoney(0, '.', '.')+'</b></td>');
-                        }
-                        
-                        if (total_faltante_ejecutar < 0){
-                          document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;color:red;"><b>$'+total_faltante_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
-                        }else{
-                          document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+total_faltante_ejecutar.formatMoney(0, '.', '.')+'</b></td>');
-                        }
-                        
+                        var contador = 0;
+                        var total_faltante_ejecutar = 0;
                       </script>
-                    </tr>
-                  </tfoot>
+                      {% for rubro in rubros %}
+                       
+                        
+                          <tr>
+                            <td><a href="{% url 'Vistas.views.rubroDetalle' rubro.id proyecto.id %}"><strong>{{ rubro.descripcion }}</strong></a></td>
+                           {% for entidadProyecto in entidadProyecto %}
 
-                </table>
+                              <script>
+                                contador = 0;
+                              </script>
+                              {% for fuente in fuentes %}
+                                
+                                {% if fuente.tipo_fuente == rubro and fuente.entidad == entidadProyecto.entidad  %}
+                                  <script>contador++;</script>
+                                  <td><a href="/admin/Fuentes/fuente/{{ fuente.pk }}" id="add_id_fuente_efectivo" onclick="return showAddAnotherPopup(this);">${{ fuente.efectivo|intcomma }}</a></td>
+                                  <td><a href="/admin/Fuentes/fuente/{{ fuente.pk }}" id="add_id_fuente_efectivo" onclick="return showAddAnotherPopup(this);">${{ fuente.especie|intcomma }}</a></td>
+                                  
+                                {% endif %}
+                                
+                              {% endfor %}
+                              <script>
+                                    if (contador == 0){
+                                      document.write('<td><a href="/admin/Fuentes/fuente/add">$0</a></td><td><a href="/admin/Fuentes/fuente/add">$0</a></td>');
+                                    }
+                                  </script>
+                            {% endfor %}  
+
+                
+                              <script type="text/javascript">
+
+                                Number.prototype.formatMoney = function(c, d, t){
+                                var n = this, 
+                                    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+                                    d = d == undefined ? "." : d, 
+                                    t = t == undefined ? "," : t, 
+                                    s = n < 0 ? "-" : "", 
+                                    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+                                    j = (j = i.length) > 3 ? j % 3 : 0;
+                                   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+                                 };
+
+                                var total = 0;
+                                var ejecutado = 0;
+                                var total_ejecutado = 0;
+                                var falta_ejecutar = 0;
+                                
+                                {% for fuente in fuentes %}
+                                  {% if fuente.tipo_fuente == rubro %}
+
+                                    total = parseFloat({{ fuente.efectivo }}) + parseFloat({{ fuente.especie }}) + total
+                                  {% endif %}
+                                {% endfor %}
+                                var contador_pagos = 0;
+                                {% for pago in pagos %}
+                                  
+                                  {% if pago.tipo_rubro == rubro %}
+                                    ejecutado += parseFloat({{ pago.valor }});
+                                    
+                                  {% endif %}
+                                  total_ejecutado += parseFloat({{ pago.valor }});
+                                {% endfor %}
+
+                                falta_ejecutar = total - ejecutado;
+                                
+                                total_faltante_ejecutar += falta_ejecutar;
+
+                                document.write('<td><b>$'+total.formatMoney(0, '.', '.')+'</b></td>');
+                                if (ejecutado > total){
+                                  document.write('<td><b style="color:red;">$'+ejecutado.formatMoney(0, '.', '.')+'</b></td>');  
+                                }else{
+                                  document.write('<td><b>$'+ejecutado.formatMoney(0, '.', '.')+'</b></td>'); 
+                                }
+                                
+                                
+                                if(falta_ejecutar < 0){
+                                  document.write('<td><b style="color:red;">$'+falta_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
+                                }else{
+                                  document.write('<td><b>$'+falta_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
+                                }
+                                falta_ejecutar = 0;
+                                ejecutado = 0;
+                              </script>
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td style="background-color:rgb(224, 224, 224);"><b>Total del proyecto</b></td>
+                            <script>
+                              var total_efectivo = 0;
+                              var total_especie = 0;
+                              var total_general = 0;
+                              var contador_totales = 0;
+                            </script>
+                              {% for entidadProyecto in entidadProyecto %}
+                                <script>
+                                  contador_totales = 0;
+                                </script>
+                                {% for fuente in fuentes %}
+                                    
+                                  {% if fuente.entidad == entidadProyecto.entidad  %}
+                                    <script>
+                                      contador_totales++;
+                                      total_efectivo += parseFloat({{ fuente.efectivo }});
+                                      total_especie += parseFloat({{ fuente.especie }});
+                                      total_general += total_especie + total_efectivo;
+                                    </script>
+                                  {% endif %}
+                                  
+                                {% endfor %}
+                                <script>
+                                  document.write('<td style="background-color:rgb(224, 224, 224);"><b>$'+total_efectivo.formatMoney(0, '.', '.')+'</b></td>');
+                                  document.write('<td style="background-color:rgb(224, 224, 224);"><b>$'+total_especie.formatMoney(0, '.', '.')+'</b></td>');
+                                  total_efectivo = 0;
+                                  total_especie = 0;
+                                </script>
+                              {% endfor %}
+                        <script>
+                          document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+
+                            total_general.formatMoney(0, '.', '.')+'</b></td>');
+
+                          if(total_ejecutado > total_general){
+                            document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;color:red;"><b>$'+total_ejecutado.formatMoney(0, '.', '.')+'</b></td>');  
+                          }else{
+                            document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+total_ejecutado.formatMoney(0, '.', '.')+'</b></td>');
+                          }
+                          
+                          if (total_faltante_ejecutar < 0){
+                            document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;color:red;"><b>$'+total_faltante_ejecutar.formatMoney(0, '.', '.')+'</b></td>');  
+                          }else{
+                            document.write('<td style="background-color:rgb(224, 224, 224);font-size:18px;"><b>$'+total_faltante_ejecutar.formatMoney(0, '.', '.')+'</b></td>');
+                          }
+                          
+                        </script>
+                      </tr>
+                    </tfoot>
+
+                  </table>
+                </div>
               </div>
             </div>
             <!-- END Content -->
@@ -434,6 +445,16 @@
 {% endblock %}
 
   <script src="{% static 'suit/js/suit.js' %}"></script>
+  <script>
+    function imprimir(){
+      var objeto = document.getElementById('imprimeme');
+      var ventana = window.open('','_blank');
+      ventana.document.write(objeto.innerHTML);
+      ventana.document.close();
+      ventana.print();
+      ventana.close();
+    }
+  </script>
   {% block extrajs %}{% endblock %}
 
 </body>

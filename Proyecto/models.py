@@ -15,6 +15,7 @@ from GrupoInvestigacion.models import GrupoInvestigacion
 # Create your models here.
 
 class Proyecto(models.Model):
+	codigo_interno_proyecto = models.CharField(max_length=50, blank=True)
 	tipo_proyecto = models.ForeignKey(TipoProyecto, verbose_name= u'Tipo de proyecto')
 	titulo = models.TextField(verbose_name=u'Título del proyecto')
 	duracion = models.IntegerField(help_text='En meses')

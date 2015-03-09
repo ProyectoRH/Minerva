@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import models
 from django.http import HttpResponse
+from datetime import date
 
 from .models import Proyecto
 
@@ -55,26 +56,27 @@ class ProyectoInline(admin.ModelAdmin):
 
 	inlines = [EntidadVsProyectoInline, InvestigadorProyectoInline, AdjuntoProyectoInline, FuenteInline, AlertasInline, PagosProyectoInline, ResultadosProyectoInline, ]
 	filter_horizontal = ('grupos_investigacion',)
+	list_display = ['codigo_interno_proyecto','titulo','fecha_inicio','tipo_proyecto','duracion','categoria_colciencias',]
+	search_fields = ['codigo_interno_proyecto','titulo','fecha_inicio','palabras_clave',]
 
 	fieldsets = [
         (None, {
             'classes': ('suit-tab', 'suit-tab-general',),
-            'fields': ['tipo_proyecto', 'estado', 'titulo', 'duracion', 'fecha_inicio', 'tipo_investigacion', 'grupos_investigacion', 'categoria_colciencias', 'linea_investigacion', 'resumen', 'palabras_clave', 'departamento', 'municipio', 'corregimiento', 'planteamiento_problema', 'estado_arte', 'objetivos', 'metodologia', 'impacto_esperado',]
+            'fields': ['codigo_interno_proyecto','tipo_proyecto', 'estado', 'titulo', 'duracion', 'fecha_inicio', 'tipo_investigacion', 'grupos_investigacion', 'categoria_colciencias', 'linea_investigacion', 'resumen', 'palabras_clave', 'departamento', 'municipio', 'corregimiento', 'planteamiento_problema', 'estado_arte', 'objetivos', 'metodologia', 'impacto_esperado',]
         }),
     ]
 
 	suit_form_tabs = (('general', 'Proyecto'), ('entidad', 'Entidad'), ('investigador', 'Personas'), ('fuentes', 'Fuentes'), ('adjuntoEjecucion', 'Adjuntos'), ('alertas', 'Alertas'), ('pagos', 'Pagos'), ('resultados', 'Resultados'))
 
-	def responseLoad():
-		return HttpResponse('<script type="text/javascript">alert("Hola");</script>')
-
-	responseLoad()
-
 	def save_model(self, request, obj, form, change):
 		obj.digitador = request.user
+		if obj.codigo_interno_proyecto == None or obj.codigo_interno_proyecto == '':
+			d = date.today()
+			obj.codigo_interno_proyecto = str(obj.pk) + str(d.month) + str(d.year)
 		obj.save()
+
 	@property
-    	def media(self):
+	def media(self):
 		media = super(ProyectoInline, self).media
 		js = ["js/test.js",]
 		media.add_js(js)

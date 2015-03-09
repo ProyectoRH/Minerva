@@ -6,10 +6,12 @@
   <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% endblock %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'suit/bootstrap/css/bootstrap.min.css' %}" media="all"/>
   <link rel="stylesheet" type="text/css" href="{% static 'suit/css/suit.css' %}" media="all">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/filtergrid.css' %}">
   {% block extrastyle %}{% endblock %}
   {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
   <script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
   <script src="{% static 'suit/js/jquery-1.8.3.min.js' %}"></script>
+  <script src="{% static 'js/tablefilter.js' %}"></script>
   <script type="text/javascript">var Suit = { $: $.noConflict() }; if (!$) $ = Suit.$; </script>
   <script src="{% static 'suit/bootstrap/js/bootstrap.min.js' %}"></script>
   <script src="/static/admin/js/admin/RelatedObjectLookups.js" type="text/javascript"></script>
@@ -138,16 +140,26 @@
               <div class="detallesRubro">
                 <div class="toolbar-content clearfix">
                   <div class="object-tools">
-                    
-                      <a href="/admin/Proyecto/proyecto/{{ proyecto }}/#pagos" class="btn btn-success">
+                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}" class="btn btn-success">
+                        <i class="icon-plus-sign icon-white"></i>&nbsp;
+                        Ir al proyecto
+                      </a>
+                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#pagos" class="btn btn-success">
                         <i class="icon-plus-sign icon-white"></i>&nbsp;
                         Añadir pago
                       </a>
-                    
+                      <a href="/admin/Proyecto/proyecto/{{ proyecto.id }}/#fuentes" class="btn btn-success">
+                        <i class="icon-plus-sign icon-white"></i>&nbsp;
+                        Añadir fuente
+                      </a>
+                      <a href="#" class="btn btn-success">
+                        <i class="icon-plus-sign icon-white"></i>&nbsp;
+                        Imprimir
+                      </a>
                   </div>
                 </div>
 
-                <table class="table">
+                <table class="table" id="table_pagos">
 
                   <thead>
                     <tr>
@@ -275,6 +287,12 @@
 
   <script src="{% static 'suit/js/suit.js' %}"></script>
   <script>
+    var tableFilters = {
+      col_9: "none",
+      col_10: "none",
+    }
+    setFilterGrid("table_pagos", 1, tableFilters);
+
     function eliminarRubro(idPago){
       var confirmacion = confirm("¿Estás seguro de eliminar este pago?");
       if(confirmacion){

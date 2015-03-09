@@ -67,6 +67,12 @@ class ProyectoInline(admin.ModelAdmin):
 	def save_model(self, request, obj, form, change):
 		obj.digitador = request.user
 		obj.save()
+	@property
+    	def media(self):
+		media = super(ProyectoInline, self).media
+		js = ["js/test.js",]
+		media.add_js(js)
+		return media
     
 
 

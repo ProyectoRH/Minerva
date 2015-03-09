@@ -1,7 +1,7 @@
 # Full path and name to your csv file
-csv_filepathname="/Users/juanpestana/Sites/Repositorios/MINERVA/Minerva/departamentos.csv"
+csv_filepathname="/opt/minervaenv/Minerva/departamentos.csv"
 # Full path to your django project directory
-home="/Users/juanpestana/Sites/Repositorios/MINERVA/Minerva/Minerva"
+home="/opt/minervaenv/Minerva/Minerva"
 
 import sys,os
 sys.path.append(home)

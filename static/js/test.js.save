@@ -1,0 +1,16 @@
+$(document).ready(function(){
+  $('.b1').click(function(){
+      $('div').append('<input type="text"..etc ');
+  });
+});
+
+window.onload = function() {
+var div = document.createElement('div');
+
+div.className = 'submit-row';
+capa = document.getElementById("content-main"); 
+div.innerHTML= '<button type="submit" class="btn btn-high btn-info" name="pre">Presupuesto</button>';
+ 
+capa.appendChild(div);
+
+}

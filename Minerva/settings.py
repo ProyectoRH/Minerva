@@ -136,7 +136,7 @@ STATICFILES_DIRS = (
 
 SUIT_CONFIG = {
     # header
-    'ADMIN_NAME': 'MINERVA',
+    'ADMIN_NAME': 'BILHA',
     # 'HEADER_DATE_FORMAT': 'l, j. F Y',
     # 'HEADER_TIME_FORMAT': 'H:i',
 

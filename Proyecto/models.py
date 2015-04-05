@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from redactor.fields import RedactorField
-from smart_selects.db_fields import ChainedForeignKey 
+from smart_selects.db_fields import ChainedForeignKey
 from Departamento.models import Departamento
 from Municipio.models import Municipio
 from Corregimiento.models import Corregimiento

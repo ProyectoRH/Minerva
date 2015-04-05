@@ -1,6 +1,5 @@
 
 window.onload = function() {
-
 	var div = document.createElement('div');
 
 

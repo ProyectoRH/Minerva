@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'ResultadosProyecto',
     'GrupoInvestigacion',
     'Vistas',
+    'Distinciones',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'Minerva.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'minerva20db',
-        'USER': 'minervaus20',
-        'PASSWORD': '?"i5=&{-a"3M',
+        'NAME': 'minervadb',
+        'USER': 'jpestana',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
     }

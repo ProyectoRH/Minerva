@@ -25,7 +25,7 @@ class PagosProyecto(models.Model):
 
 	class Meta:
 		verbose_name_plural='Pagos del proyecto'
-		verbose_name='pago del proyecto con numero de comprobante'
+		verbose_name='pago del proyecto # '
 
 	def __unicode__(self):
 		return str(self.numero_comprobante)

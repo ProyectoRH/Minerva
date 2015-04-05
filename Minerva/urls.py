@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 	url(r'^admin/presupuesto/rubro/(?P<pk>[\d]+)/(?P<proyecto>[\d]+)', 'Vistas.views.rubroDetalle', name="DetalleRubro"),
 	url(r'^admin/presupuesto/rubro/eliminarPago/(?P<pk>[\d]+)', 'Vistas.views.eliminarPagoRubro', name='EliminarPagoRubro'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^usuarios/', include('Entidad.urls')),
     url(r'^redactor/', include('redactor.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

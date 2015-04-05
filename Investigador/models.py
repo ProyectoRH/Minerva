@@ -12,12 +12,9 @@ class TipoInvestigador(models.Model):
 
 
 class Investigador(models.Model):
-	nombre1 = models.CharField(verbose_name="Nombre", max_length=150)
-	nombre2 = models.CharField(verbose_name="Segundo Nombre", max_length=150)
-	apellido1 = models.CharField(verbose_name="Apellido", max_length=150)
-	apellido2 = models.CharField(verbose_name="Segundo Apellido", max_length=150)
+	perfil_usuario = models.OneToOneField(User)
 	numero_horas_investigacion = models.IntegerField(verbose_name="Horas de investigación", help_text='Por semana')
-	numero_documento = models.CharField(verbose_name="Número de documento", max_length=200)
+	numero_documento = models.CharField(verbose_name="Número de documento", max_length=45)
 	tipo_investigador = models.ForeignKey(TipoInvestigador)
 
 	class Meta:
@@ -25,5 +22,5 @@ class Investigador(models.Model):
 		verbose_name_plural='Personas'
 
 	def __unicode__(self):
-		return '%s %s %s %s' % (self.nombre1, self.nombre2, self.apellido1, self.apellido2)
+		return self.numero_documento
 

@@ -1,0 +1,1867 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Inicio | Premio al mérito empresarial</title>
+
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+	
+	<link href="{% static 'css/bootstrap-wizard.css' %}" rel="stylesheet" />
+	<style>
+		html {
+			height: 100%;
+		}
+
+		body{
+			min-height: 100%;
+			padding-top:2%; 
+		}
+		a {
+			text-decoration: none;
+			color: white;
+		}
+		a:hover {
+			color: lightgray;
+			text-decoration: none;
+		}
+		.bg-green {
+			border: darkgreen;
+
+			background: #c9de96; /* Old browsers */
+			background: -moz-linear-gradient(top,  #c9de96 0%, #8ab66b 44%, #398235 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9de96), color-stop(44%,#8ab66b), color-stop(100%,#398235)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  #c9de96 0%,#8ab66b 44%,#398235 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  #c9de96 0%,#8ab66b 44%,#398235 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  #c9de96 0%,#8ab66b 44%,#398235 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  #c9de96 0%,#8ab66b 44%,#398235 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', endColorstr='#398235',GradientType=0 ); /* IE6-9 */
+
+		}
+
+		.jumbotron {
+			background-image: url('http://portal.unisimonbolivar.edu.co/merito/hipermedia/banner.jpg');
+			background-position: center;
+			background-size: cover;
+			height: 200px;
+		}
+		#t_organizacion_otra, #a_economica_otra {
+			display: none;
+		}
+		
+	</style>
+</head>
+<body onload="carga()">
+	
+	<div class="container">
+		<div class="container-fluid">
+			
+			<div class="well">
+				{% if request.user.is_authenticated %}
+					<i class="glyphicon glyphicon-user"></i> {{ request.user.username }} - {{ entidad.0 }}
+				{% else %}
+					Para realizar cualquier acción debe loguearse
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="container-fluid">
+
+			<div class="jumbotron">
+			  
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-default bg-green">
+					<a href="#"><div class="panel-body">
+						<h3 class="text-center">Emprendedor Bolivariano</h3>
+					</div></a>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-default bg-green">
+					<a href="#" id="open-wizard"><div class="panel-body">
+						<h3 class="text-center">Empresarial</h3>
+					</div></a>
+				</div>
+			</div>
+			
+			<form action="#" class="formulario">
+				<div class="wizard" id="some-wizard" data-title="Empresarial">
+				    <div class="wizard-card" data-cardname="card1" style="overflow:scroll;">
+				        <h3>Datos generales</h3>
+				        
+				        	<div class="form-group">
+				        		<label for="razon_social">Nombre o razón social</label>
+				        		{% if entidad.0.razon_social %}
+				        			<input type="text" class="form-control" id="razon_social" name="razon_social" value="{{ entidad.0.razon_social }}" />
+				        		{% else %}
+									<input type="text" class="form-control" id="razon_social" name="razon_social" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="nit_rut">NIT / RUT</label>
+				        		{% if entidad.0.nit %}
+				        			<input type="text" class="form-control" id="nit_rut" name="nit_rut" value="{{ entidad.0.nit }}" />
+				        		{% else %}
+									<input type="text" class="form-control" id="nit_rut" name="nit_rut" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="domicilio">Domicilio principal</label>
+				        		{% if entidad.0.direccion %}
+				        			<input type="text" class="form-control" id="domicilio" name="domicilio" value="{{ entidad.0.direccion }}" />
+				        		{% else %}
+									<input type="text" class="form-control" id="domicilio" name="domicilio" />
+				        		{% endif %}
+				        		
+				        	</div>
+				        	
+				        	<div class="form-group">
+				        		<label for="departamento">Departamento</label>
+				        		<select name="departamento" id="departamento" class="form-control">
+				        			<option value="">-------------</option>
+				        			{% for departamento in departamentos %}
+				        				{% if entidad.0.departamento and departamento == entidad.0.departamento %}
+											<option value="{{ departamento.COD_DEPTO }}" selected="selected">{{ departamento }}</option>
+				        				{% else %}
+				        					<option value="{{ departamento.COD_DEPTO }}">{{ departamento }}</option>
+				        				{% endif %}
+				        				
+				        			{% endfor %}
+				        		</select>
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="municipio">Municipio</label>
+				        		<select name="municipio" id="municipio" class="form-control">
+				        			<option value="" selected>-------------</option>
+				        		</select>
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="corregimiento">Corregimiento</label>
+				        		<select name="corregimiento" id="corregimiento" class="form-control">
+				        			<option value="" selected>-------------</option>
+				        		</select>
+				        	</div>
+
+				        	<div class="form-group">
+				        		<label for="telefono">Teléfono</label>
+				        		{% if entidad.0.telefono %}
+									<input type="text" class="form-control" id="telefono" name="telefono" value="{{ entidad.0.telefono }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="telefono" name="telefono" />
+				        		{% endif %}
+				        		
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="fax">Fax</label>
+				        		{% if entidad.0.fax %}
+				        			<input type="text" class="form-control" id="fax" name="fax" value="{{ entidad.0.fax }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="fax" name="fax" />
+				        		{% endif %}
+				        		
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="web">Página web</label>
+				        		{% if entidad.0.url_web %}
+									<input type="text" class="form-control" id="web" name="web" value="{{ entidad.0.url_web }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="web" name="web" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="email">E-mail</label>
+				        		{% if entidad.0.email %}
+				        			<input type="email" class="form-control" id="email" name="email" value="{{ entidad.0.email }}" />
+				        		{% else %}
+				        			<input type="email" class="form-control" id="email" name="email" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="facebook">Facebook</label>
+				        		{% if entidad.0.facebook %}
+				        			<input type="text" class="form-control" id="facebook" name="facebook" value="{{ entidad.0.facebook }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="facebook" name="facebook" />
+				        		{% endif %}
+				        		
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="twitter">Twitter</label>
+				        		{% if entidad.0.twitter %}
+				        			<input type="text" class="form-control" id="twitter" name="twitter" value="{{ entidad.0.twitter }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="twitter" name="twitter" />
+				        		{% endif %}
+				        		
+				        	</div>
+				        
+				    </div>
+
+				    <div class="wizard-card" data-cardname="card2">
+				        <h3>Representante legal</h3>
+				        
+				        	<div class="form-group">
+				        		<label for="nombre_repLegal">Nombre o razón social</label>
+				        		{% if representante.0.nombres %}
+				        			<input type="text" class="form-control" id="nombre_repLegal" name="nombre_repLegal" value="{{ representante.0.nombres }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="nombre_repLegal" name="nombre_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="cargo_repLegal">Cargo</label>
+				        		{% if representante.0.cargo %}
+				        			<input type="text" class="form-control" id="cargo_repLegal" name="cargo_repLegal" value="{{ representante.0.cargo }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="cargo_repLegal" name="cargo_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="direccion_repLegal">Dirección</label>
+				        		{% if representante.0.direccion %}
+				        			<input type="text" class="form-control" id="direccion_repLegal" name="direccion_repLegal" value="{{ representante.0.direccion }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="direccion_repLegal" name="direccion_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="ciudad_repLegal">Ciudad</label>
+				        		{% if representante.0.ciudad %}
+				        			<input type="text" class="form-control" id="ciudad_repLegal" name="ciudad_repLegal" value="{{ representante.0.ciudad }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="ciudad_repLegal" name="ciudad_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="telefono_repLegal">Teléfono</label>
+				        		{% if representante.0.telefono %}
+				        			<input type="text" class="form-control" id="telefono_repLegal" name="telefono_repLegal" value="{{ representante.0.telefono }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="telefono_repLegal" name="telefono_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="celular_repLegal">Celular</label>
+				        		{% if representante.0.celular %}
+				        			<input type="text" class="form-control" id="celular_repLegal" name="celular_repLegal" value="{{ representante.0.celular }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="celular_repLegal" name="celular_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="email_repLegal">E-mail</label>
+				        		{% if representante.0.email %}
+				        			<input type="email" class="form-control" id="email_repLegal" name="email_repLegal" value="{{ representante.0.email }}" />
+				        		{% else %}
+				        			<input type="email" class="form-control" id="email_repLegal" name="email_repLegal" />
+				        		{% endif %}
+				        	</div>
+				        	
+				    </div>
+				    <div class="wizard-card" data-cardname="card3">
+				        <h3>Persona de contacto</h3>
+				        
+				        	<div class="form-group">
+				        		<label for="nombres_contacto">Nombres y apellidos</label>
+				        		{% if contacto.0.nombres %}
+				        			<input type="text" class="form-control" id="nombres_contacto" name="nombres_contacto" value="{{ contacto.0.nombres }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="nombres_contacto" name="nombres_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="cargo_contacto">Cargo</label>
+				        		{% if contacto.0.cargo %}
+				        			<input type="text" class="form-control" id="cargo_contacto" name="cargo_contacto" value="{{ contacto.0.cargo }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="cargo_contacto" name="cargo_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="direccion_contacto">Dirección</label>
+				        		{% if contacto.0.direccion %}
+				        			<input type="text" class="form-control" id="direccion_contacto" name="direccion_contacto" value="{{ contacto.0.direccion }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="direccion_contacto" name="direccion_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="ciudad_contacto">Ciudad</label>
+				        		{% if contacto.0.ciudad %}
+				        			<input type="text" class="form-control" id="ciudad_contacto" name="ciudad_contacto" value="{{ contacto.0.ciudad }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="ciudad_contacto" name="ciudad_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="telefono_contacto">Teléfono</label>
+				        		{% if contacto.0.telefono %}
+				        			<input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto" value="{{ contacto.0.telefono }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="celular_contacto">Celular</label>
+				        		{% if contacto.0.celular %}
+				        			<input type="text" class="form-control" id="celular_contacto" name="celular_contacto" value="{{ contacto.0.celular }}" />
+				        		{% else %}
+									<input type="text" class="form-control" id="celular_contacto" name="celular_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	
+				        	<div class="form-group">
+				        		<label for="email_contacto">E-mail</label>
+				        		{% if contacto.0.email %}
+				        			<input type="email" class="form-control" id="email_contacto" name="email_contacto" value="{{ contacto.0.email }}" />
+				        		{% else %}
+				        			<input type="email" class="form-control" id="email_contacto" name="email_contacto" />
+				        		{% endif %}
+				        	</div>
+				        	
+				    </div>
+				    <div class="wizard-card" data-cardname="card4">
+				        <h3>Operación</h3>
+				        
+				        	<div class="form-group">
+				        		<label for="anios_operacion">Años de operación</label>
+				        		{% if perfil.0.anios_operacion %}
+				        			<input type="number" class="form-control" min='0' id="anios_operacion" name="anios_operacion" value="{{ perfil.0.anios_operacion }}" />
+				        		{% else %}
+				        			<input type="number" class="form-control" min='0' id="anios_operacion" name="anios_operacion" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="tOrganizacion_operacion">Tipo de organización</label>
+				        		<select name="tOrganizacion_operacion" id="tOrganizacion_operacion" class="form-control">
+				        			{% for tipo in tipos_org %}
+				        				{% if perfil.0.tipo_organizacion == tipo %}
+											<option value="{{ tipo.id }}" selected="selected">{{ tipo.descripcion }}</option>
+										{% else %}
+											<option value="{{ tipo.id }}">{{ tipo.descripcion }}</option>
+										{% endif %}
+				        			{% endfor %}
+				        		</select>
+				        		{% if perfil.0.tipo_organizacion_otra %}
+				        			<input type="text" class="form-control" placeholder="Si otra, especifique" id="tOrganizacionotra_operacion" name="tOrganizacionotra_operacion" value="{{ perfil.0.tipo_organizacion_otra }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" placeholder="Si otra, especifique" id="tOrganizacionotra_operacion" name="tOrganizacionotra_operacion" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="aEconomica_operacion">Actividad Económica</label>
+				        		<select name="aEconomica_operacion" id="aEconomica_operacion" class="form-control">
+				        			{% for actividad in actividades_eco %}
+				        				{% if perfil.0.actividad_economica == actividades %}
+				        					<option value="{{ actividad.id }}" selected="selected">{{ actividad.descripcion }}</option>
+				        				{% else %}
+				        					<option value="{{ actividad.id }}">{{ actividad.descripcion }}</option>
+				        				{% endif %}
+				        			{% endfor %}
+				        		</select>
+				        		{% if perfil.0.actividad_economica_otra %}
+				        			<input type="text" class="form-control" placeholder="Si otra, especifique" id="aEconomicaOtra_operacion" value="{{ perfil.0.actividad_economica_otra }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" placeholder="Si otra, especifique" id="aEconomicaOtra_operacion" />
+				        		{% endif %}
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="codigoCiuu_operacion">Código del CIUU</label>
+				        		{% if perfil.0.codigo_ciiu %}
+				        			<input type="text" class="form-control" id="codigoCiuu_operacion" name="codigoCiuu_operacion" value="{{ perfil.0.codigo_ciiu }}" />
+				        		{% else %}
+				        			<input type="text" class="form-control" id="codigoCiuu_operacion" name="codigoCiuu_operacion" />
+				        		{% endif %}
+				        	</div>
+				        	
+				        	
+				        	
+				    </div>
+				    <div class="wizard-card" data-cardname="card5">
+				    	<h3>Organización</h3>
+						<div class="form-group">
+				        		<label>Número de trabajadores</label>
+				        		<table class="table">
+				        			<tr>
+				        				<td>Directos</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_directos %}
+				        						<input type="text" class="form-control" id="empleoDirecto_trabajadores" name="empleoDirecto_trabajadores" placeholder="Empleos directos (requerido)" value="{{ trabajadores.0.trabajadores_directos }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" id="empleoDirecto_trabajadores" name="empleoDirecto_trabajadores" placeholder="Empleos directos (requerido)">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Indirectos</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_indirectos %}
+				        						<input type="text" class="form-control" id="empleoIndirecto_trabajadores" name="empleoIndirecto_trabajadores" placeholder="Empleos indirectos (requerido)" value="{{ trabajadores.0.trabajadores_indirectos }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" id="empleoIndirecto_trabajadores" name="empleoIndirecto_trabajadores" placeholder="Empleos indirectos (requerido)">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Total</td>
+				        				<td><input type="text" class="form-control" id="totalTrabajadores" readonly placeholder="0"></td>
+				        			</tr>
+				        		</table>
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="telefono">Número de trabajadores directos, de acuerdo a su grado de formación</label>
+				        		<table class="table">
+				        			<tr>
+				        				<td>Técnico</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_tecnico %}
+				        						<input type="text" id="tecnicos_trabajadores" name="tecnicos_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_tecnico }}">
+				        					{% else %}
+				        						<input type="text" id="tecnicos_trabajadores" name="tecnicos_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Tecnólogo</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_tecnologo %}
+				        						<input type="text" id="tecnologos_trabajadores" name="tecnologos_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_tecnologo }}">
+				        					{% else %}
+				        						<input type="text" id="tecnologos_trabajadores" name="tecnologos_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Profesional</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_profesional %}
+				        						<input type="text" id="profesionales_trabajadores" name="profesionales_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_profesional }}">
+				        					{% else %}
+				        						<input type="text" id="profesionales_trabajadores" name="profesionales_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Profesional Especializado</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_profesional_esp %}
+				        						<input type="text" id="especializados_trabajadores" name="especializados_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_profesional_esp }}">
+				        					{% else %}
+				        						<input type="text" id="especializados_trabajadores" name="especializados_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Maestría</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_maestria %}
+				        						<input type="text" id="maestrias_trabajadores" name="maestrias_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_maestria }}">
+				        					{% else %}
+				        						<input type="text" id="maestrias_trabajadores" name="maestrias_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Doctorado (Ph.D)</td>
+				        				<td>
+				        					{% if trabajadores.0.trabajadores_doctorado %}
+				        						<input type="text" id="doctores_trabajadores" name="doctores_trabajadores" class="form-control" value="{{ trabajadores.0.trabajadores_doctorado }}">
+				        					{% else %}
+				        						<input type="text" id="doctores_trabajadores" name="doctores_trabajadores" class="form-control">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        		</table>
+				        	</div>
+
+				        	<div class="form-group" id="tamano_organizacion_radios">
+				        		<label for="tamano_organizacion">Tamaño de la organización</label>
+				        		{% for tamano in tamanos %}
+				        			<div class="radio">
+										<label>
+											{% if perfil.0.tamano_organizacion == tamano %}
+										    	<input type="radio" name="tamano_organizacion" id="optionsRadios1" value="{{ tamano.id }}" checked="checked">
+												{{ tamano.descripcion }}
+											{% else %}
+												<input type="radio" name="tamano_organizacion" id="optionsRadios1" value="{{ tamano.id }}">
+												{{ tamano.descripcion }}
+											{% endif %}
+										</label>	
+									</div>
+								{% endfor %}
+				        	</div>
+				    </div>
+				    <div class="wizard-card" data-cardname="card6">
+				    	<h3>Mercado</h3>
+						
+						
+				        	<div class="form-group">
+				        		<label for="descProductos_mercado">Descripción de sus Productos y/o Servicios</label>
+				        		<textarea name="descProductos_mercado" id="descProductos_mercado" cols="30" rows="3" class="form-control">{% if descripciones.0.descripcion_productos %}{{ descripciones.0.descripcion_productos }}{% endif %}</textarea>
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="descProveedores_mercado">Mencione 3 de sus proveedores principales</label>
+				        		<textarea name="descProveedores_mercado" id="descProveedores_mercado" cols="30" rows="3" class="form-control">{% if descripciones.0.proveedores_principales %}{{ descripciones.0.proveedores_principales }}{% endif %}</textarea>
+				        	</div>
+				        	<div class="form-group">
+				        		<label for="descClientes_mercado">Mencione 3 de sus clientes principales</label>
+				        		<textarea name="descClientes_mercado" id="descClientes_mercado" cols="30" rows="3" class="form-control">{% if descripciones.0.clientes_principales %}{{ descripciones.0.clientes_principales }}{% endif %}</textarea>
+				        	</div>
+				        	
+				        	<div class="form-group">
+				        		<label for="ventas">Ventas totales anuales</label>
+				        		<table class="table table-bordered">
+				        			<thead>
+				        				<th class="text-center">2014</th>
+				        				<th class="text-center">2013</th>
+				        				<th class="text-center">2012</th>
+				        			</tr>
+				        			<tr>
+				        				<td>
+				        					{% if perfil.0.anio_venta_1 %}
+				        						<input type="text" class="form-control" id="ventasAnio1_mercado" name="ventasAnio1_mercado" value="{{ perfil.0.anio_venta_1 }}" />
+				        					{% else %}
+				        						<input type="text" class="form-control" id="ventasAnio1_mercado" name="ventasAnio1_mercado" />
+				        					{% endif %}
+				        				</td>
+				        				<td>
+				        					{% if perfil.0.anio_venta_2 %}
+				        						<input type="text" class="form-control" id="ventasAnio2_mercado" name="ventasAnio2_mercado" value="{{ perfil.0.anio_venta_2 }}" />
+				        					{% else %}
+				        						<input type="text" class="form-control" id="ventasAnio2_mercado" name="ventasAnio2_mercado" />
+				        					{% endif %}
+				        				</td>
+				        				<td>
+				        					{% if perfil.0.anio_venta_3 %}
+				        						<input type="text" class="form-control" id="ventasAnio3_mercado" name="ventasAnio3_mercado" value="{{ perfil.0.anio_venta_3 }}" />
+				        					{% else %}
+				        						<input type="text" class="form-control" id="ventasAnio3_mercado" name="ventasAnio3_mercado" />
+				        					{% endif %}
+	
+				        				</td>
+				        			</tr>
+				        		</table>
+				        	</div>
+				        	<div class="form-group" id="checkboxes_alcance_mercado">
+				        		<label for="checkboxes">Alcance del mercado</label>	
+
+				        		{% for alcance in alcances %}
+					        		<div class="checkbox alcance_mercado">
+					        			<label>
+					        				{% if alcance in perfil.0.alcance_mercado.all %}
+												<input type="checkbox" name="alcances_mercado" value="{{ alcance.id }}" id="alcance_mercado{{ alcance.id }}" checked>
+					        					{{ alcance.descripcion }}
+					        				{% else %}
+					        					<input type="checkbox" name="alcances_mercado" value="{{ alcance.id }}" id="alcance_mercado{{ alcance.id }}">
+					        					{{ alcance.descripcion }}
+					        				{% endif %}
+					        				
+					        			</label>
+					        		</div>
+				        		{% endfor %}
+				        	</div>
+				    </div>
+
+				    <div class="wizard-card" data-cardname="card7">
+				    	<h3>Sistemas de Gestión</h3>
+
+				    	<div class="form-group">
+				    		<label for="sistema_gestion">Dispone de algún sistema de gestión</label>
+				    		<table class="table">
+				        			<tr>
+				        				<td>Calidad</td>
+				        				<td>
+				        					{% if perfil.0.calidad %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="calidad_sistemaGestion" name="calidad_sistemaGestion" value="{{ perfil.0.calidad }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="calidad_sistemaGestion" name="calidad_sistemaGestion">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Seguridad Industrial</td>
+				        				<td>
+				        					{% if perfil.0.seguridad_industrial %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="seguridadInd_sistemaGestion" name="seguridadInd_sistemaGestion" value="{{ perfil.0.seguridad_industrial }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="seguridadInd_sistemaGestion" name="seguridadInd_sistemaGestion">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Ambiental</td>
+				        				<td>
+				        					{% if perfil.0.ambiental %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="ambiental_sistemaGestion" name="ambiental_sistemaGestion" value="{{ perfil.0.ambiental }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="ambiental_sistemaGestion" name="ambiental_sistemaGestion">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>Otro</td>
+				        				<td>
+				        					{% if perfil.0.otro %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="otro_sistemaGestion" name="otro_sistemaGestion" value="{{ perfil.0.otro }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" placeholder="Especifique la norma y el año de certificación" id="otro_sistemaGestion" name="otro_sistemaGestion">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td>En implementación (<b>%</b>)</td>
+				        				<td>
+				        					{% if perfil.0.implementacion %}
+				        						<input type="text" class="form-control" placeholder="Especifique el porcentaje de avance en la implementación" id="implementacion_sistemaGestion" name="implementacion_sistemaGestion" value="{{ perfil.0.implementacion }}">
+				        					{% else %}
+				        						<input type="text" class="form-control" placeholder="Especifique el porcentaje de avance en la implementación" id="implementacion_sistemaGestion" name="implementacion_sistemaGestion">
+				        					{% endif %}
+				        				</td>
+				        			</tr>
+				        			
+				        		</table>
+				    	</div>
+				    </div>
+
+				    <div class="wizard-card" data-cardname="card8">
+				    	<h3>Investigación e innovación</h3>
+				    	<div class="form-group">
+				    		<label for="checkboxes">Indique cómo la empresa adelanta las actividades de investigación, desarrollo e innovación (I+D+i)</label>
+					    	<div class="checkbox">
+					    		<label>
+					    			{% if perfil.0.departamento_idi %}
+					    				<input type="checkbox" id="departamento_ii" name="departamento_ii" checked>
+					    			{% else %}
+										<input type="checkbox" id="departamento_ii" name="departamento_ii">
+					    			{% endif %}
+					    			Cuenta con un departamento de I+d+i
+					    		</label>
+					    	</div>
+					    	<div class="checkbox">
+					    		<label>
+					    			{% if perfil.0.asesor_externo %}
+					    				<input type="checkbox" id="asesor_ii" name="asesor_ii" checked>
+					    			{% else %}
+					    				<input type="checkbox" id="asesor_ii" name="asesor_ii">
+					    			{% endif %}
+					    			Asesor externo
+					    		</label>
+					    		{% if perfil.0.asesor_externo_especifique %}
+					    			<input type="text" class="form-control" id="asesorEspecifique_ii" name="asesorEspecifique_ii" placeholder="Especifique" value="{{ perfil.0.asesor_externo_especifique }}">
+					    		{% else %}
+					    			<input type="text" class="form-control" id="asesorEspecifique_ii" name="asesorEspecifique_ii" placeholder="Especifique">
+					    		{% endif %}
+					    	</div>
+					    	<div class="checkbox">
+					    		<label>
+					    			{% if perfil.0.firma_consultora %}
+					    				<input type="checkbox" id="firma_ii" name="firma_ii" checked>
+					    			{% else %}
+					    				<input type="checkbox" id="firma_ii" name="firma_ii">
+					    			{% endif %}
+					    			Firma consultora
+					    		</label>
+					    		{% if perfil.0.firma_consultora_especifique %}
+					    			<input type="text" class="form-control" id="firmaEspecifique_ii" name="firmaEspecifique_ii" placeholder="Especifique" value="{{ perfil.0.firma_consultora_especifique }}">
+					    		{% else %}
+					    			<input type="text" class="form-control" id="firmaEspecifique_ii" name="firmaEspecifique_ii" placeholder="Especifique">
+					    		{% endif %}
+					    	</div>
+					    	<div class="checkbox">
+					    		<label>
+					    			{% if perfil.0.alianza %}
+					    				<input type="checkbox" id="alianza_ii" name="alianza_ii" checked>
+					    			{% else %}
+					    				<input type="checkbox" id="alianza_ii" name="alianza_ii">
+					    			{% endif %}
+					    			Alianza con un centro de investigación y/o universidad
+					    		</label>
+					    		{% if perfil.0.alianza_especifique %}
+					    			<input type="text" class="form-control" id="alianzaEspecifique_ii" name="alianzaEspecifique_ii" placeholder="Especifique" value="{{ perfil.0.alianza_especifique }}">
+					    		{% else %}
+					    			<input type="text" class="form-control" id="alianzaEspecifique_ii" name="alianzaEspecifique_ii" placeholder="Especifique">
+					    		{% endif %}
+					    	</div>
+					    	<div class="checkbox">
+					    		<label>
+					    			{% if perfil.0.no_aplica %}
+					    				<input type="checkbox" id="noAplica_ii" name="noAplica_ii" checked>
+					    			{% else %}
+					    				<input type="checkbox" id="noAplica_ii" name="noAplica_ii">
+					    			{% endif %}
+					    			No aplica
+					    		</label>
+					    	</div>
+				    	</div>
+
+				    	<div class="form-group">
+				    		<label for="patentes">La empresa ha patentado productos o tecnologías</label>
+				    		{% if perfil.0.patentes %}
+					    		<div class="radio">
+					    			<label>
+					    				<input type="radio" name="patentes_ii" id="patente_ii_1" value="1" checked>
+					    				Si
+					    			</label>
+					    		</div>
+					    		<div class="radio">
+					    			<label>
+					    				<input type="radio" name="patentes_ii" id="patente_ii_2" value="0">
+					    				No
+					    			</label>
+					    		</div>
+				    		{% else %}
+				    			<div class="radio">
+					    			<label>
+					    				<input type="radio" name="patentes_ii" id="patente_ii_1" value="1">
+					    				Si
+					    			</label>
+					    		</div>
+					    		<div class="radio">
+					    			<label>
+					    				<input type="radio" name="patentes_ii" id="patente_ii_2" value="0" checked>
+					    				No
+					    			</label>
+					    		</div>
+				    		{% endif %}
+				    	</div>
+				    	<div class="form-group">
+				    		<label for="enuncie_patentes">Enuncie los productos o tecnologías y el año de patentamiento</label>
+				    		<textarea name="enunciePatentes_ii" id="enunciePatentes_ii" cols="30" rows="3" class="form-control">{% if perfil.0.patentes_descripcion %}{{ perfil.0.patentes_descripcion }}{% endif %}</textarea>
+				    	</div>
+				    	<div class="form-group">
+				    		<label for="competitividad_ii">Especifique por qué su producto y/o servicio es competitivo en el mercado</label>
+				    		{% for competitividad in competitividades %}
+					    		<div class="checkbox">
+								  <label>
+								  	{% if competitividad in perfil.0.competitividad.all %}
+								    	<input type="checkbox" value="{{ competitividad.id }}" id="competitividad_ii{{ competitividad.id }}" checked>
+								    	{{ competitividad.descripcion }}
+								    {% else %}
+								    	<input type="checkbox" value="{{ competitividad.id }}" id="competitividad_ii{{ competitividad.id }}">
+								    	{{ competitividad.descripcion }}
+								    {% endif %}
+								  </label>
+								</div>
+							{% endfor %}
+							<input type="text" class="form-control" id="competitividadOtra_ii" placeholder="Especifique" />
+				    	</div>
+
+				    </div>
+
+				    <div class="wizard-card" data-cardname="card9">
+				    	<h3>Distinciones</h3>
+						<div class="form-group">
+							<label class="text-justify">Enumere los reconocimientos o distinciones que ha logrado su empresa. Especifique la fecha del logro (en formato DD/MM/AAAA) y señale el alcance (Regional, nacional o internacional)</label>
+							<table class="table">
+								<thead>
+									<th>Reconocimiento</th>
+									<th>Fecha</th>
+									<th>Alcance</th>
+								</thead>
+								<tbody id="table_distinciones">
+									<tr>
+										<td>
+											{% if distinciones.0.reconocimiento %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones1" name="reconocimiento_distinciones1" value="{{ distinciones.0.reconocimiento }}">
+											{% else %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones1" name="reconocimiento_distinciones1">
+											{% endif %}
+										</td>
+										<td>
+											{% if distinciones.0.fecha %}
+												<input type="date" class="form-control" id="fecha_distinciones1" name="fecha_distinciones1" placeholder="AAAA-MM-DD" value="{{ distinciones.0.fecha|date:'Y-m-d' }}">
+											{% else %}
+												<input type="date" class="form-control" id="fecha_distinciones1" name="fecha_distinciones1" placeholder="AAAA-MM-DD">
+											{% endif %}
+										</td>
+										<td><select name="alcance_distinciones1" id="alcance_distinciones1" class="form-control">
+											{% for alcance in alcances %}
+												{% if alcance == distinciones.0.alcance %}
+								        			<option value="{{ alcance.id }}" selected="selected">{{ alcance.descripcion }}</option>
+								        		{% else %}
+								        			<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>
+								        		{% endif %}
+							        		{% endfor %}
+										</select></td>
+									</tr>
+									<tr>
+										<td>
+											{% if distinciones.1.reconocimiento %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones2" name="reconocimiento_distinciones2" value="{{ distinciones.1.reconocimiento }}">
+											{% else %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones2" name="reconocimiento_distinciones2">
+											{% endif %}
+										</td>
+										<td>
+											{% if distinciones.1.fecha %}
+												<input type="date" class="form-control" id="fecha_distinciones2" name="fecha_distinciones2" placeholder="AAAA-MM-DD" value="{{ distinciones.1.fecha|date:'Y-m-d' }}">
+											{% else %}
+												<input type="date" class="form-control" id="fecha_distinciones2" name="fecha_distinciones2" placeholder="AAAA-MM-DD">
+											{% endif %}
+										</td>
+										<td><select name="alcance_distinciones2" id="alcance_distinciones2" class="form-control">
+											{% for alcance in alcances %}
+												{% if alcance == distinciones.1.alcance %}
+								        			<option value="{{ alcance.id }}" selected="selected">{{ alcance.descripcion }}</option>
+								        		{% else %}
+								        			<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>
+								        		{% endif %}
+							        		{% endfor %}
+										</select></td>
+									</tr>
+									<tr>
+										<td>
+											{% if distinciones.2.reconocimiento %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones3" name="reconocimiento_distinciones3" value="{{ distinciones.2.reconocimiento }}">
+											{% else %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones3" name="reconocimiento_distinciones3">
+											{% endif %}
+										</td>
+										<td>
+											{% if distinciones.2.fecha %}
+												<input type="date" class="form-control" id="fecha_distinciones3" name="fecha_distinciones3" placeholder="AAAA-MM-DD" value="{{ distinciones.2.fecha|date:'Y-m-d' }}">
+											{% else %}
+												<input type="date" class="form-control" id="fecha_distinciones3" name="fecha_distinciones3" placeholder="AAAA-MM-DD">
+											{% endif %}
+										</td>
+										<td><select name="alcance_distinciones3" id="alcance_distinciones3" class="form-control">
+											{% for alcance in alcances %}
+												{% if alcance == distinciones.2.alcance %}
+								        			<option value="{{ alcance.id }}" selected="selected">{{ alcance.descripcion }}</option>
+								        		{% else %}
+								        			<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>
+								        		{% endif %}
+							        		{% endfor %}
+										</select></td>
+									</tr>
+									<tr>
+										<td>
+											{% if distinciones.3.reconocimiento %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones4" name="reconocimiento_distinciones4" value="{{ distinciones.3.reconocimiento }}">
+											{% else %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones4" name="reconocimiento_distinciones4">
+											{% endif %}
+										</td>
+										<td>
+											{% if distinciones.3.fecha %}
+												<input type="date" class="form-control" id="fecha_distinciones4" name="fecha_distinciones4" placeholder="AAAA-MM-DD" value="{{ distinciones.3.fecha|date:'Y-m-d' }}">
+											{% else %}
+												<input type="date" class="form-control" id="fecha_distinciones4" name="fecha_distinciones4" placeholder="AAAA-MM-DD">
+											{% endif %}
+										</td>
+										<td><select name="alcance_distinciones4" id="alcance_distinciones4" class="form-control">
+											{% for alcance in alcances %}
+												{% if alcance == distinciones.3.alcance %}
+								        			<option value="{{ alcance.id }}" selected="selected">{{ alcance.descripcion }}</option>
+								        		{% else %}
+								        			<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>
+								        		{% endif %}
+							        		{% endfor %}
+										</select></td>
+									</tr>
+									<tr>
+										<td>
+											{% if distinciones.4.reconocimiento %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones5" name="reconocimiento_distinciones5" value="{{ distinciones.4.reconocimiento }}">
+											{% else %}
+												<input type="text" class="form-control" id="reconocimiento_distinciones5" name="reconocimiento_distinciones5">
+											{% endif %}
+										</td>
+										<td>
+											{% if distinciones.4.fecha %}
+												<input type="date" class="form-control" id="fecha_distinciones5" name="fecha_distinciones5" placeholder="AAAA-MM-DD" value="{{ distinciones.4.fecha|date:'Y-m-d' }}">
+											{% else %}
+												<input type="date" class="form-control" id="fecha_distinciones5" name="fecha_distinciones5" placeholder="AAAA-MM-DD">
+											{% endif %}
+										</td>
+										<td><select name="alcance_distinciones5" id="alcance_distinciones5" class="form-control">
+											{% for alcance in alcances %}
+												{% if alcance == distinciones.4.alcance %}
+								        			<option value="{{ alcance.id }}" selected="selected">{{ alcance.descripcion }}</option>
+								        		{% else %}
+								        			<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>
+								        		{% endif %}
+							        		{% endfor %}
+										</select></td>
+									</tr>
+									
+								</tbody>
+								
+							</table>
+						</div>
+				    </div>
+				    <div class="wizard-card" data-cardname="card10">
+				    	<h3>Participación</h3>
+
+				    	<div class="form-group">
+				    		<label for="razon">Seleccione las principales razones por las cuales su empresa desea participar  en el "Premio al Mérito Empresarial - Universidad Simón Bolívar"</label>
+				    		{% for razon in razones %}
+				    			<div class="checkbox">
+								  <label>
+								  	{% if razon in perfil.0.razones_participacion.all %}
+								    	<input type="checkbox" value="{{ razon.id }}" id="razon_participacion{{ razon.id }}" checked>
+								    	{{ razon.descripcion }}
+								    {% else %}
+								    	<input type="checkbox" value="{{ razon.id }}" id="razon_participacion{{ razon.id }}">
+								    	{{ razon.descripcion }}
+								    {% endif %}
+								  </label>
+								</div>
+				    		{% endfor %}
+							<input type="text" class="form-control" id="razonOtra_participacion" name="razonOtra_participacion" placeholder="Especifique" />
+				    	</div>
+
+				    	<div class="form-group">
+				    		<label for="categoria_participacion">Seleccione la categoría en la cual desea participar</label>
+				    		<select name="categoria_participacion" id="categoria_participacion" class="form-control">
+				    			<option value="">Seleccione</option>
+				    			<option value="meritoEI">Mérito a la Empresa Innovadora</option>
+				    			<option value="meritoRSE">Mérito a la Responsabilidad Social Empresarial</option>
+				    			<option value="meritoES">Mérito a la Empresa de Salud</option>
+				    			<option value="meritoEIM">Mérito a la Empresa Industrial-Manufacturera</option>
+				    			<option value="meritoEE">Mérito al esfuerzo exportador</option>
+				    			<option value="meritoEC">Mérito a la Empresa Comercial</option>
+				    			<option value="meritoEDS">Mérito a la Empresa de Servicios</option>
+				    			<option value="meritoEAA">Mérito a la Empresa Agroindustrial-Agropecuaria</option>
+				    		</select>
+				    	</div>
+				    	<div class="form-group">
+				    		<label for="canal">Seleccione el medio a través del cual se enteró del "Premio al Mérito Empresarial - Universidad Simón Bolívar"</label>
+				    		{% for canal in canales %}
+								<div class="checkbox">
+								  <label>
+								  	{% if canal in perfil.0.canal_recepcion.all %}
+								    	<input type="checkbox" value="{{ canal.id }}" id="canal_recepcion{{ canal.id }}" checked>
+								    	{{ canal.descripcion }}
+								    {% else %}
+								    	<input type="checkbox" value="{{ canal.id }}" id="canal_recepcion{{ canal.id }}">
+								    	{{ canal.descripcion }}
+								    {% endif %}
+								  </label>
+								</div>
+				    		{% endfor %}
+							<input type="text" class="form-control" id="canalOtra_recepcion" placeholder="Especifique" />
+				    	</div>
+				    </div>
+					
+				    <div class="wizard-card" data-cardname="card11" style="display:none;">
+				    	<h3>Detalles de la categoría</h3>
+
+						<div id="meritoEI" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa Innovadora</h3>-->
+					    	<div class="form-group">
+					    		<label for="meritoEI_a">A.- Mencione las personas dedicadas a actividades de Investigación, Desarrollo e Innovación en la empresa. Especifique nombre, cargo, nivel de formación y tiempo de dedicación (Debe expresarse en horas/mes)</label>
+					    		<textarea name="meritoEI_a" id="meritoEI_a" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_a %}{{ merito_entidad_innovadora.0.descripcion_a }}{% endif %}</textarea>
+					    	</div>
+					    	<div class="form-group">
+					    		<label for="meritoEI_b">
+					    			B.- Enumere las actividades de formación, relacionadas con el desarrollo de competencias en materia de innovación, en las que ha participado el personal de la empresa en los últimos 3 años. Indique el nombre de la actividad de formación y el número de asistentes</label>
+					    			<textarea name="meritoEI_b" id="meritoEI_b" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_b %}{{ merito_entidad_innovadora.0.descripcion_b }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_c">C.- Describa los productos y/o servicios innovadores lanzados al mercado por la empresa en los últimos 3 años. Especifique nombre, fecha de lanzamiento (en formato DD/MM/AAAA), alcance (Local, Nacional o Internacional) y las ventas del producto o servicio para el último año (Debe expresar los valores en pesos colombianos)</label>
+				    			<textarea name="meritoEI_c" id="meritoEI_c" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_c %}{{ merito_entidad_innovadora.0.descripcion_c }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_d">D.- Indique el porcentaje de innovaciones en productos y/o servicios realizadas conjuntamente con empresas o instituciones externas (Entiéndase como el cociente entre el número de productos y/o servicios innovadores trabajados conjuntamente con empresas o instituciones externas y el número total de productos y/o servicios realizados multiplicado por 100)</label>
+				    			{% if merito_entidad_innovadora.0.descripcion_d %}
+				    				<input type="text" name="meritoEI_d" id="meritoEI_d" class="form-control" value="{{ merito_entidad_innovadora.0.descripcion_d }}">
+				    			{% else %}
+									<input type="text" name="meritoEI_d" id="meritoEI_d"  class="form-control">
+				    			{% endif %}
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_e">E.- Describa el producto y/o servicio innovador más destacado desarrollado por la empresa en los últimos 3 años. Mencione la ficha técnica del producto y/o servicio, sus ventajas tecnológicas y el valor agregado que aporta.</label>
+				    			<textarea name="meritoEI_e" id="meritoEI_e" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_e %}{{ merito_entidad_innovadora.0.descripcion_e }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_f">F.- Mencione las innovaciones en los procesos implementados en la empresa en los últimos 3 años. Especifique nombre, fecha de implementación (en formato DD/MM/AAAA), beneficios que le ha generado a la empresa y la modalidad de desarrollo utilizada (Desarrollo propio o Desarrollo en Alianza con una empresa o institución externa)</label>
+				    			<textarea name="meritoEI_f" id="meritoEI_f" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_f %}{{ merito_entidad_innovadora.0.descripcion_f }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_g">G.- Realice una descripción de las innovaciones en marketing desarrolladas en los últimos 3 años por la empresa (Entiéndase como innovación la modificación de cualquiera de las variables del marketing como: nueva presentación de un producto, nuevo método de distribución, nueva forma de aplicación de un producto ya conocido, nuevos medios de promoción de ventas, etc.).</label>
+				    			<textarea name="meritoEI_g" id="meritoEI_g" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_g %}{{ merito_entidad_innovadora.0.descripcion_g }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_h">H.- Describa las innovaciones en la gestión o administración de la empresa en los últimos 3 años (Entiéndase como innovación a la adopción de nuevos sistemas de dirección estratégica, nuevos sistemas de gestión del conocimiento, nueva estructuración de bases de datos para la gestión, etc.).</label>
+				    			<textarea name="meritoEI_h" id="meritoEI_h" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_h %}{{ merito_entidad_innovadora.0.descripcion_h }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_i">I.- Indique las ventas que provienen de los productos y/o servicios innovadores para los últimos 3 años. (Debe expresar los valores en pesos colombianos)</label>
+				    			<textarea name="meritoEI_i" id="meritoEI_i" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_i %}{{ merito_entidad_innovadora.0.descripcion_i }}{% endif %}</textarea>
+				    		</div>
+				    		<div class="form-group">
+				    			<label for="meritoEI_j">J.- Indique el valor de los gastos y/o inversiones realizadas en I+D+i en los últimos 3 años (Debe expresar los valores en pesos colombianos).</label>
+				    			<textarea name="meritoEI_j" id="meritoEI_j" cols="30" rows="3" class="form-control">{% if merito_entidad_innovadora.0.descripcion_j %}{{ merito_entidad_innovadora.0.descripcion_j }}{% endif %}</textarea>
+				    		</div>
+
+						</div>
+						<div id="meritoRSE" class="divFormCategoria" style="display:none;">
+							<!--<h3>Responsabilidad Social Empresarial</h3>-->
+							<div class="form-group">
+				    			<label for="meritoRSE_a">
+				    				A.- De acuerdo al balance social de la empresa, describa las principales acciones realizadas en el último año orientadas al mejoramiento de la calidad de vida de la comunidad interna y externa, evidenciando iniciativas que atiendan problematicas sociales específicas.*</label>
+				    				<textarea name="meritoRSE_a" id="meritoRSE_a" cols="30" rows="3" class="form-control">{% if merito_responsabilidad.0.descripcion_a %}{{ merito_responsabilidad.0.descripcion_a }}{% endif %}</textarea>
+			    			</div>
+			    			<div class="form-group">
+			    				<label for="meritoRSE_b">
+			    					B.- Describa las acciones de alto impacto con las cuales la empresa ha contribuido al mejoramiento del medio ambiente.*</label>
+			    				<textarea name="meritoRSE_b" id="meritoRSE_b" cols="30" rows="3" class="form-control">{% if merito_responsabilidad.0.descripcion_b %}{{ merito_responsabilidad.0.descripcion_b }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoRSE_c">C.- Describa las acciones de responsabilidad social implementadas por la empresa para con los empleados (aporte indicadores y alcances)*</label>
+		    					<textarea name="meritoRSE_c" id="meritoRSE_c" cols="30" rows="3" class="form-control">{% if merito_responsabilidad.0.descripcion_c %}{{ merito_responsabilidad.0.descripcion_c }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoRSE_d">D.- Describa las acciones de responsabilidad social implementadas por la empresa para con los proveedores (aporte indicadores y alcances)*</label>
+		    					{% if merito_responsabilidad.0.descripcion_d %}
+		    						<input type="text" name="meritoRSE_d" id="meritoRSE_d" class="form-control" value="{{ merito_responsabilidad.0.descripcion_d }}">
+		    					{% else %}
+		    						<input type="text" name="meritoRSE_d" id="meritoRSE_d" class="form-control" />
+		    					{% endif %}
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoRSE_e">E.- Describa las acciones de responsabilidad social implementadas por la empresa para con la comunidad (aporte indicadores y alcances)*</label>
+		    					<textarea name="meritoRSE_e" id="meritoRSE_e" cols="30" rows="3" class="form-control">{% if merito_responsabilidad.0.descripcion_e %}{{ merito_responsabilidad.0.descripcion_e }}{% endif %}</textarea>
+		    				</div>
+						</div>
+						<div id="meritoES" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa de Salud</h3>-->
+							<div class="form-group">
+								<label for="meritoES_a">A.- Enumere y describa los proyectos generadores de productos y/o servicios innovadores en cuidado continuo que ha desarrollado la empresa en los últimos 3 años. (Monitoreo, Promoción, Prevención, Diagnóstico, Intervención).</label>
+								<textarea name="meritoES_a" id="meritoES_a" cols="30" rows="3" class="form-control">{% if merito_empresa_salud.0.descripcion_a %}{{ merito_empresa_salud.0.descripcion_a }}{% endif %}</textarea>
+							</div>
+							<div class="form-group">
+								<label for="meritoES_b">
+									B.- Indique el número de usuarios atendidos con los productos y/o servicios innovadores enfocados en cuidado continuo en el último año.
+								</label>
+								<textarea name="meritoES_b" id="meritoES_b" cols="30" rows="3" class="form-control">{% if merito_empresa_salud.0.descripcion_b %}{{ merito_empresa_salud.0.descripcion_b }}{% endif %}</textarea>
+							</div>
+							<div class="form-group">
+								<label for="meritoES_c">C.- Enumere y describa los productos y/o servicios diseñados que incorporen las TIC y su aplicación en el proceso de cuidado continuo.</label>
+								<textarea name="meritoES_c" id="meritoES_c" cols="30" rows="3" class="form-control">{% if merito_empresa_salud.0.descripcion_c %}{{ merito_empresa_salud.0.descripcion_c }}{% endif %}</textarea>
+							</div>
+							<div class="form-group">
+								<label for="meritoES_d">D.- ¿Cuál ha sido la calificación obtenida en el último año en Servicio al Cliente?. Indique el tamaño de la población, el parámetro de calificación, el tamaño de la muestra y adjunte el instrumento utilizado.</label>
+								{% if merito_empresa_salud.0.descripcion_d %}
+									<input type="text" name="meritoES_d" id="meritoES_d" class="form-control" value="{{ merito_empresa_salud.0.descripcion_d }}">
+								{% else %}
+									<input type="text" name="meritoES_d" id="meritoES_d" class="form-control" />
+								{% endif %}
+							</div>
+						</div>
+						<div id="meritoEIM" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa Industrial-Manufacturera</h3>-->
+                            <div class="form-group">
+                                <label for="meritoEIM_a">A.- Indique la productividad total de la empresa en los últimos 3 años (Entíendase productividad total como el cociente entre la producción total y los insumos totales por cien)</label>
+                                <textarea name="meritoEIM_a" id="meritoEIM_a" cols="30" rows="3" class="form-control">{% if merito_industrial.0.descripcion_a %}{{ merito_industrial.0.descripcion_a }}{% endif %}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="meritoEIM_b">B.- Describa la acciones de modernización tecnológica realizadas por la empresa en los últimos 3 años, indicando el nombre y la fecha de implementación (en formato DD/MM/AAAA).</label>
+                                <textarea name="meritoEIM_b" id="meritoEIM_b" cols="30" rows="3" class="form-control">{% if merito_industrial.0.descripcion_b %}{{ merito_industrial.0.descripcion_b }}{% endif %}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="meritoEIM_c">C.- Describa las acciones desarrolladas por la empresa para mitigar su impacto en el medio ambiente en los últimos 3 años, indique la fecha de implementación (en formato DD/MM/AAAA)</label>
+                                <textarea name="meritoEIM_c" id="meritoEIM_c" cols="30" rows="3" class="form-control">{% if merito_industrial.0.descripcion_c %}{{ merito_industrial.0.descripcion_c }}{% endif %}</textarea>
+                            </div>
+						</div>
+						<div id="meritoEE" class="divFormCategoria" style="display:none;">
+							<!--<h3>Esfuerzo Exportador</h3>-->
+							<div class="form-group">
+								<label for="meritoEE_a">A.- Mencione el año en el cual la empresa inició a exportar*</label>
+								{% if merito_exportador.0.descripcion_a %}
+									<input name="meritoEE_a" id="meritoEE_a" size="5" class="form-control" value="{{ merito_exportador.0.descripcion_a }}">
+								{% else %}
+									<input name="meritoEE_a" id="meritoEE_a" size="5" class="form-control">
+								{% endif %}
+							</div>
+							
+							<div class="form-group">
+								<label for="meritoEE_b">B.- Indique el porcentaje de exportaciones de la empresa, de acuerdo a las ventas totales en el último año*</label>
+								{% if merito_exportador.0.descripcion_b %}
+									<input name="meritoEE_b" id="meritoEE_b" size="5" class="form-control" value="{{ merito_exportador.0.descripcion_b }}">
+								{% else %}
+									<input name="meritoEE_b" id="meritoEE_b" size="5" class="form-control">
+								{% endif %}
+							</div>
+							
+							<div class="form-group">
+								<label for="meritoEE_c">C.- Mencione los paises con los cuales establece relaciones comerciales, especifique el porcentaje de exportaciones realizadas a cada país en el último año.*</label>
+								<textarea name="meritoEE_c" id="meritoEE_c" cols="30" rows="3" class="form-control">{% if merito_exportador.0.descripcion_c %}{{ merito_exportador.0.descripcion_c }}{% endif %}</textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="checkboxes">D.- Seleccione la modalidad de internacionalización que utiliza la empresa.</label>
+								{% for modalidad in modalidadesEExportador %}
+					        		<div class="checkbox">
+					        			<label>
+					        				{% if modalidad in merito_exportador.0.descripcion_d.all %}
+												<input type="checkbox" name="meritoEE_d" value="{{ modalidad.id }}" id="meritoEE_d{{ modalidad.id }}" checked>
+				        						{{ modalidad.descripcion }}
+				        					{% else %}
+				        						<input type="checkbox" name="meritoEE_d" value="{{ modalidad.id }}" id="meritoEE_d{{ modalidad.id }}">
+				        						{{ modalidad.descripcion }}
+				        					{% endif %}
+					        			</label>
+					        		</div>
+				        		{% endfor %}
+							</div>
+
+							<div class="form-group">
+								<label for="meritoEE_d_otra">Si otra, especifique</label>
+								<textarea name="meritoEE_d_otra" id="meritoEE_d_otra" cols="30" rows="3" class="form-control">{% if merito_exportador.0.descripcion_d_otra %}{{ merito_exportador.0.descripcion_d_otra }}{% endif %}</textarea>
+							</div>
+							<div class="form-group">
+								<label for="meritoEE_e">E.- Indique el valor de las exportaciones y/o importaciones no tradicionales en el último año en valor FOB (Free On Board)* Entiéndase como valor FOB (Free On Board: Término de comercialización internacional que indica el precio de la mercancía a bordo de la nave o aeronave. Sin incluir fletes, seguros y otros gastos de manipulación después de embarcada la mercancía. El valor debe ser expresado en pesos colombianos - COP)</label>
+								{% if merito_exportador.0.descripcion_e %}
+									<input name="meritoEE_e" id="meritoEE_e" size="5" class="form-control" value="{{ merito_exportador.0.descripcion_e }}">
+								{% else %}
+									<input name="meritoEE_e" id="meritoEE_e" size="5" class="form-control">
+								{% endif %}
+							</div>
+							<div class="form-group">
+								<label for="meritoEE_f">F.- Describa los productos exportados en el último año y mencione el valor exportado en pesos colombianos - COP</label>
+								<textarea name="meritoEE_f" id="meritoEE_f" cols="30" rows="3" class="form-control">{% if merito_exportador.0.descripcion_f %}{{ merito_exportador.0.descripcion_f }}{% endif %}</textarea>
+							</div>
+							<div class="form-group">
+								<label for="meritoEE_g">G.- Indique si la empresa importa materia prima para la fabricación de su producto</label>
+								{% if merito_exportador.0.descripcion_g %}
+									<div class="radio">
+						    			<label>
+						    				<input type="radio" name="meritoEE_g" id="meritoEE_g1" value="1" checked>
+						    				Si
+						    			</label>
+						    		</div>
+						    		<div class="radio">
+						    			<label>
+						    				<input type="radio" name="meritoEE_g" id="meritoEE_g2" value="0">
+						    				No
+						    			</label>
+						    		</div>
+						    	{% else %}
+						    		<div class="radio">
+						    			<label>
+						    				<input type="radio" name="meritoEE_g" id="meritoEE_g1" value="1">
+						    				Si
+						    			</label>
+						    		</div>
+						    		<div class="radio">
+						    			<label>
+						    				<input type="radio" name="meritoEE_g" id="meritoEE_g2" value="0" checked>
+						    				No
+						    			</label>
+						    		</div>
+						    	{% endif %}
+							</div>
+							<div class="form-group">
+								<label for="meritoEE_h">H.- Si la respuesta a la pregunta anterior es afirmativa. Especifique el procentaje de materia prima importada en el producto final*</label>
+								{% if merito_exportador.0.descripcion_h %}
+									<input name="meritoEE_h" id="meritoEE_h" size="5" class="form-control" value="{{ merito_exportador.0.descripcion_h }}">
+								{% else %}
+									<input name="meritoEE_h" id="meritoEE_h" size="5" class="form-control">
+								{% endif %}
+							</div>
+
+						</div>
+						<div id="meritoEC" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa Comercial</h3>-->
+							<div class="form-group">
+		    					<label for="meritoEC_a">A.- Mencione el número total de establecimientos comerciales que tiene la empresa actualmente.</label>
+		    					<textarea name="meritoEC_a" id="meritoEC_a" cols="30" rows="3" class="form-control">{% if merito_empresa_comercial.0.descripcion_a %}{{ merito_empresa_comercial.0.descripcion_a }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEC_b">B.- Indique cuantos establecimientos comerciales ha abierto la empresa en los últimos 3 años, especifique donde están ubicados (domicilio, ciudad, país).</label>
+		    					{% if merito_empresa_comercial.0.descripcion_b %}
+		    						<input type="text" name="meritoEC_b" id="meritoEC_b" class="form-control" value="{{ merito_empresa_comercial.0.descripcion_b }}" />
+		    					{% else %}
+		    						<input type="text" name="meritoEC_b" id="meritoEC_b" class="form-control" />
+		    					{% endif %}
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEC_c">C.- Describa los canales de comercialización utilizados para penetrar a nuevos mercados en los últimos 3 años, especificando ciudad y país.</label>
+		    					<textarea name="meritoEC_c" id="meritoEC_c" cols="30" rows="3" class="form-control">{% if merito_empresa_comercial.0.descripcion_c %}{{ merito_empresa_comercial.0.descripcion_c }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEC_d">D.- Describa los productos y/o servicios nuevos dentro de la misma línea o lineas nuevas lanzadas al mercado en los últimos 3 años.</label>
+		    					<textarea name="meritoEC_d" id="meritoEC_d" cols="30" rows="3" class="form-control">{% if merito_empresa_comercial.0.descripcion_d %}{{ merito_empresa_comercial.0.descripcion_d }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEC_e">E.- Describa las estrategias de comercialización novedosas, exitosas y comprobables utilizadas por la empresa en los últimos 3 años. Teniendo en cuenta modificaciones en las variables de marketing: producto, precio, distribución y promoción.</label>
+		    					<textarea name="meritoEC_e" id="meritoEC_e" cols="30" rows="3" class="form-control">{% if merito_empresa_comercial.0.descripcion_e %}{{ merito_empresa_comercial.0.descripcion_e }}{% endif %}</textarea>
+		    				</div>
+						</div>
+						<div id="meritoEDS" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa de Servicios</h3>-->
+							<div class="form-group">
+		    					<label for="meritoEDS_a">A.- Describa los nuevos servicios y/o modelos innovadores en atención al cliente desarrollados por la empresa en los últimos 3 años.</label>
+		    					<textarea name="meritoEDS_a" id="meritoEDS_a" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_a %}{{ merito_empresa_servicio.0.descripcion_a }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEDS_b">B.- ¿La empresa tiene un plan de formación y/o apoyo para el crecimiento profesional de sus empleados?. En caso afirmativo descríbalo.</label>
+		    					<textarea name="meritoEDS_b" id="meritoEDS_b" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_b %}{{ merito_empresa_servicio.0.descripcion_b }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEDS_c">C.- Describa el plan de mejoramiento continuo de la empresa enfocado en servicio al cliente o sistemas de gestión implementados.</label>
+		    					<textarea name="meritoEDS_c" id="meritoEDS_c" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_c %}{{ merito_empresa_servicio.0.descripcion_c }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEDS_d">D.- Mencione el número de personas capacitadas en servicio al cliente en el último año. Especifique las actividades de formación y fecha de realización de las mismas. (en formato DD/MM/AAAA).</label>
+		    					<textarea name="meritoEDS_d" id="meritoEDS_d" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_d %}{{ merito_empresa_servicio.0.descripcion_d }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEDS_e">E.- Describa como la empresa ha implementado las TIC en sus servicios en los últimos 3 años.</label>
+		    					<textarea name="meritoEDS_e" id="meritoEDS_e" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_e %}{{ merito_empresa_servicio.0.descripcion_e }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEDS_f">F.- ¿Cuál ha sido la calificación obtenida por la empresa en el último año en Servicio al Cliente?. Indique el tamaño de la población, tamaño de la muestra, parámetro de calificación y adjunte el instrumento utilizado.</label>
+		    					<textarea name="meritoEDS_f" id="meritoEDS_f" cols="30" rows="3" class="form-control">{% if merito_empresa_servicio.0.descripcion_f %}{{ merito_empresa_servicio.0.descripcion_f }}{% endif %}</textarea>
+		    				</div>
+						</div>
+						<div id="meritoEAA" class="divFormCategoria" style="display:none;">
+							<!--<h3>Empresa Agroindustrial-Agropecuaria</h3>-->
+							<div class="form-group">
+		    					<label for="meritoEAA_a">A.- ¿Cómo ha sido el comportamiento de la producción en su organización durante los últimos 5 años en términos de porcentaje (aumentos o disminuciones). Realice un breve comentario sobre los factores que han incidido en la producción.</label>
+		    					<textarea name="meritoEAA_a" id="meritoEAA_a" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_a %}{{ merito_empresa_agro.0.descripcion_a }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEAA_b">B.- Mencione los procesos tecnológicos implentemados en su organización que han permitido desarrollar nuevos productos y/o servicios en los últimos 5 años.</label>
+		    					<textarea name="meritoEAA_b" id="meritoEAA_b" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_b %}{{ merito_empresa_agro.0.descripcion_b }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEAA_c">C.- ¿La organización ha desarrollado por su propia cuenta nuevas técnicas? Descríbalas y mencione los resultados obtenidos.</label>
+		    					<textarea name="meritoEAA_c" id="meritoEAA_c" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_c %}{{ merito_empresa_agro.0.descripcion_c }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEAA_d">D.- ¿Cómo gestiona su organización la calidad de sus procesos? Especifique las certificaciones obtenidas y el año.</label>
+		    					<textarea name="meritoEAA_d" id="meritoEAA_d" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_d %}{{ merito_empresa_agro.0.descripcion_d }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEAA_e">E.- ¿Cómo gestiona su organización la seguridad industrial y la salud ocupacional?</label>
+		    					<textarea name="meritoEAA_e" id="meritoEAA_e" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_e %}{{ merito_empresa_agro.0.descripcion_e }}{% endif %}</textarea>
+		    				</div>
+		    				<div class="form-group">
+		    					<label for="meritoEAA_f">F.- Describa las acciones encaminadas a la gestión ambiental que está ejecutando su organización tales como: manejos de residuos sólidos, de aguas servidas, cuencas hidrográficas, emisiones atmosféricas, desechos contaminantes, lixiviados polutantes, escapes de especies exóticas, eficiencia energética, uso racional de recursos hídricos y otros.</label>
+		    					<textarea name="meritoEAA_f" id="meritoEAA_f" cols="30" rows="3" class="form-control">{% if merito_empresa_agro.0.descripcion_f %}{{ merito_empresa_agro.0.descripcion_f }}{% endif %}</textarea>
+		    				</div>
+						</div>
+						
+				    </div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="{% static 'js/jquery-2.1.3.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script>
+	<script src="{% static 'js/bootstrap-wizard.js' %}"></script>
+
+	<script>
+		$(function() {
+		    var options = {};
+		    var wizard = $("#some-wizard").wizard({'contentHeight':560, 'contentWidth':800});
+
+		    $('#open-wizard').click(function(e) {
+				e.preventDefault();
+				wizard.show();
+			});
+
+			$('.wizard-card-container').css('overflow', 'scroll');
+			$('.wizard-dialog').css('margin-top', '20px');
+
+			var nextClick_control = 0;
+			$('.wizard-next').click(function(){
+				if(nextClick_control == 1){
+					saveForm();
+				}
+				if($(this).text() == "Terminar"){
+					nextClick_control = 1;
+				}else{
+					nextClick_control = 0;
+				}
+			});
+
+			tOrganizacionSelect();
+			$('#tOrganizacion_operacion').change(function(){
+				tOrganizacionSelect();	
+			});
+
+			
+			aEconomicaSelect();
+			$('#aEconomica_operacion').change(function(){
+				aEconomicaSelect();	
+			});
+			
+			$('#categoria_participacion').change(function(){
+				$('.wizard-card').find('.divFormCategoria').each(function(){
+					$(this).css('display','none');
+				});
+				var idDiv = $(this).val();
+				$('#'+idDiv).css('display','block');
+			});
+
+			$('#categoria_participacion').find('option[value="{{ perfil.0.categoria }}"]').each(function(){
+				$(this).attr('selected', 'selected');
+				$('#categoria_participacion').change();
+			});
+
+			
+
+			// ----------- Sumatoria de trabajadores --------
+			$('#empleoDirecto_trabajadores').change(function(){
+				var valorEmpleadosDirecto = $(this).val();
+				var valorEmpleadosIndirecto = $('#empleoIndirecto_trabajadores').val();
+				var totalTrabajadores = parseInt(valorEmpleadosDirecto) + parseInt(valorEmpleadosIndirecto);
+
+				if (isNaN(totalTrabajadores)){
+					$('#totalTrabajadores').val(0);	
+				}else{
+					$('#totalTrabajadores').val(totalTrabajadores);
+				}
+				
+			});
+
+			$('#empleoIndirecto_trabajadores').change(function(){
+				var valorEmpleadosIndirecto = $(this).val();
+				var valorEmpleadosDirecto = $('#empleoDirecto_trabajadores').val();
+				var totalTrabajadores = parseInt(valorEmpleadosDirecto) + parseInt(valorEmpleadosIndirecto);
+
+				$('#totalTrabajadores').val(totalTrabajadores);
+			});
+
+
+			// ----------- Combos anidados ------------------
+
+			$('#departamento').change(function(){
+				$.post('{% url "Entidad.views.chainedMunicipio" %}', {'departamento': $(this).val()}, function(response){
+					json_data = JSON.parse(response);
+					$('#municipio').empty();
+					$.each(json_data, function(key, value){
+						var val = "", name = "";
+						$.each(value, function(k, v){
+							if(k == "COD_MPIO"){
+								val = v;
+							}
+							if (k == "NOM_MPIO") {
+								name = v;
+							};
+						});
+						var codigoMunicipio = "";
+						{% if entidad.0.municipio.COD_MPIO %}
+							codigoMunicipio = {{ entidad.0.municipio.COD_MPIO }};
+						{% endif %}
+						if (codigoMunicipio != null && codigoMunicipio != ""){
+							if(codigoMunicipio == val){
+								$('#municipio').append('<option value="'+val+'" selected>'+name+'</option>');	
+							}else{
+								$('#municipio').append('<option value="'+val+'">'+name+'</option>');
+							}
+						}else{
+							$('#municipio').append('<option value="'+val+'">'+name+'</option>');	
+						}
+						
+					});
+					$('#municipio').change();
+					
+				});
+			});
+
+			$('#municipio').change(function(){
+				$.post('{% url "Entidad.views.chainedCorregimiento" %}', {'municipio': $(this).val()}, function(response){
+					json_data = JSON.parse(response);
+					$('#corregimiento').empty();
+					$.each(json_data, function(key, value){
+						var val = "", name = "";
+						$.each(value, function(k, v){
+							if(k == "COD_CORRE"){
+								val = v;
+							}
+							if (k == "NOM_CORRE") {
+								name = v;
+							};
+						});
+						var codigoCorregimiento = "";
+						{% if entidad.0.corregimiento.COD_CORRE %}
+							codigoCorregimiento = {{ entidad.0.corregimiento.COD_CORRE }};
+						{% endif %}
+						if (codigoCorregimiento != null && codigoCorregimiento != ""){
+							if(codigoCorregimiento == val){
+								$('#corregimiento').append('<option value="'+val+'" selected>'+name+'</option>');		
+							}else{
+								$('#corregimiento').append('<option value="'+val+'">'+name+'</option>');
+							}
+						}else{
+							$('#corregimiento').append('<option value="'+val+'">'+name+'</option>');
+						}
+					});
+					
+				});
+			});
+
+			var contadorDistinciones = 0;
+			$('#agregarDistincion').click(function(e){
+				var html = '<tr>';
+					html += '<td><input type="text" class="form-control" id="reconocimiento_distinciones'+contadorDistinciones+'"';
+					html += 'name="reconocimiento_distinciones'+contadorDistinciones+'"></td>';
+					html += '<td><input type="date" class="form-control" id="fecha_distinciones'+contadorDistinciones+'" name="fecha_distinciones'+contadorDistinciones+'"></td>';
+					html += '<td><select name="alcance_distinciones'+contadorDistinciones+'" id="alcance_distinciones'+contadorDistinciones+'" class="form-control">';
+					html += '{% for alcance in alcances %}';
+					html += '<option value="{{ alcance.id }}">{{ alcance.descripcion }}</option>';
+					html += '{% endfor %}';
+					html += '</select></td>';
+					html += '</tr>';
+
+					contadorDistinciones++;
+
+				$('#table_distinciones').append(html);
+			});
+
+
+
+			$('.wizard-save-progress').click(function(){
+				saveForm();
+			});
+
+			
+		});
+		
+		// FUNCION IMPORTANTE, NO TOCAR
+		function saveForm(){
+			var razon_social = $('#razon_social').val();
+			var nit_rut = $('#nit_rut').val();
+			var domicilio = $('#domicilio').val();
+			
+			var departamento = $('#departamento').val();
+			var municipio = $('#municipio').val();
+			var corregimiento = $('#corregimiento').val();
+
+			var telefono = $('#telefono').val();
+			var fax = $('#fax').val();
+			var web = $('#web').val();
+			var email = $('#email').val();
+			var facebook = $('#facebook').val();
+			var twitter = $('#twitter').val();
+
+			//---- Card 2 ------ Representante Legal
+			var nombre_repLegal = $('#nombre_repLegal').val();
+			var cargo_repLegal = $('#cargo_repLegal').val();
+			var direccion_repLegal = $('#direccion_repLegal').val();
+			var ciudad_repLegal = $('#ciudad_repLegal').val();
+			var telefono_repLegal = $('#telefono_repLegal').val();
+			var celular_repLegal = $('#celular_repLegal').val();
+			var email_repLegal = $('#email_repLegal').val();
+
+			//---- Card 3 ------ Contacto de Entidad
+			var nombres_contacto = $('#nombres_contacto').val();
+			var cargo_contacto = $('#cargo_contacto').val();
+			var direccion_contacto = $('#direccion_contacto').val();
+			var ciudad_contacto = $('#ciudad_contacto').val();
+			var telefono_contacto = $('#telefono_contacto').val();
+			var celular_contacto = $('#celular_contacto').val();
+			var email_contacto = $('#email_contacto').val();
+
+			//---- Card 4 ------ Operacion
+			var anios_operacion = $('#anios_operacion').val();
+			var tOrganizacion_operacion = $('#tOrganizacion_operacion').val();
+			var tOrganizacionotra_operacion = $('#tOrganizacionotra_operacion').val();
+			var aEconomica_operacion = $('#aEconomica_operacion').val();
+			var aEconomicaOtra_operacion = $('#aEconomicaOtra_operacion').val();
+			var codigoCiuu_operacion = $('#codigoCiuu_operacion').val();
+
+			//---- Card 5 ------ Organizacion
+			var tamano_organizacion = $('#tamano_organizacion_radios input[name=tamano_organizacion]:checked').val();
+			// Trabajadores
+			var empleoDirecto_trabajadores = $('#empleoDirecto_trabajadores').val();
+			var empleoIndirecto_trabajadores = $('#empleoIndirecto_trabajadores').val();
+			var tecnicos_trabajadores = $('#tecnicos_trabajadores').val();
+			var tecnologos_trabajadores = $('#tecnologos_trabajadores').val();
+			var profesionales_trabajadores = $('#profesionales_trabajadores').val();
+			var especializados_trabajadores = $('#especializados_trabajadores').val();
+			var maestrias_trabajadores = $('#maestrias_trabajadores').val();
+			var doctores_trabajadores = $('#doctores_trabajadores').val();
+
+			//---- Card 6 ------- Descripciones
+			var descProductos_mercado = $('#descProductos_mercado').val();
+			var descProveedores_mercado = $('#descProveedores_mercado').val();
+			var descClientes_mercado = $('#descClientes_mercado').val();
+
+			var ventasAnio1_mercado = $('#ventasAnio1_mercado').val();
+			var ventasAnio2_mercado = $('#ventasAnio2_mercado').val();
+			var ventasAnio3_mercado = $('#ventasAnio3_mercado').val();
+			// ---- Para alcance del mercado ----
+			var alcance_mercado = "";
+			{% for alcance in alcances %}
+				var alcance__ = $('#alcance_mercado{{ alcance.id }}').is(':checked');
+				if(alcance__){
+					var alcanceValue = $('#alcance_mercado{{ alcance.id }}').val();
+					alcance_mercado += alcanceValue +"-";
+				}
+			{% endfor %}
+			alcance_mercadoSplitted = alcance_mercado.substring(0, alcance_mercado.length-1);
+			
+			//---- Card 7 ------- Sistema de Gestión
+			var calidad_sistemaGestion = $("#calidad_sistemaGestion").val();
+			var seguridadInd_sistemaGestion = $("#seguridadInd_sistemaGestion").val();
+			var ambiental_sistemaGestion = $("#ambiental_sistemaGestion").val();
+			var otro_sistemaGestion = $("#otro_sistemaGestion").val();
+			var implementacion_sistemaGestion = $("#implementacion_sistemaGestion").val();
+
+			//---- Card 8 ------- Investigación e innovación
+			
+			var departamento_ii = returnValueCheckbox('#departamento_ii');
+			var asesor_ii = returnValueCheckbox('#asesor_ii');
+			var asesorEspecifique_ii = $('#asesorEspecifique_ii').val();
+			var firma_ii = returnValueCheckbox('#firma_ii');
+			var firmaEspecifique_ii = $('#firmaEspecifique_ii').val();
+			var alianza_ii = returnValueCheckbox('#alianza_ii');
+			var alianzaEspecifique_ii = $('#alianzaEspecifique_ii').val();
+			var noAplica_ii = returnValueCheckbox('#noAplica_ii');
+			var patentes = $('input[name="patentes_ii"]:checked').val();
+			var patentes_descripcion = $('#enunciePatentes_ii').val();
+
+			var competitividad_ii = "";
+			{% for competitividad in competitividades %}
+				var competitivo__ = $('#competitividad_ii{{ competitividad.id }}').is(':checked');
+				if(competitivo__){
+					var competitivoValue = $('#competitividad_ii{{ competitividad.id }}').val();
+					competitividad_ii += competitivoValue + "-";
+				}
+			{% endfor %}
+			competitividad_iiSplitted = competitividad_ii.substring(0, competitividad_ii.length-1);
+			var competitividadOtra_ii = $('#competitividadOtra_ii').val();
+
+			//---- Card 9 --------- Distinciones
+			// Para la distincion 1
+			var reconocimiento1 = $('#reconocimiento_distinciones1').val();
+			var fecha_distincion1 = $('#fecha_distinciones1').val();
+			var alcance_distincion1 = $('#alcance_distinciones1').val();
+			// Para la distincion 2
+			var reconocimiento2 = $('#reconocimiento_distinciones2').val();
+			var fecha_distincion2 = $('#fecha_distinciones2').val();
+			var alcance_distincion2 = $('#alcance_distinciones2').val();
+			// Para la distincion 3
+			var reconocimiento3 = $('#reconocimiento_distinciones3').val();
+			var fecha_distincion3 = $('#fecha_distinciones3').val();
+			var alcance_distincion3 = $('#alcance_distinciones3').val();
+			// Para la distincion 4
+			var reconocimiento4 = $('#reconocimiento_distinciones4').val();
+			var fecha_distincion4 = $('#fecha_distinciones4').val();
+			var alcance_distincion4 = $('#alcance_distinciones4').val();
+			// Para la distincion 5
+			var reconocimiento5 = $('#reconocimiento_distinciones5').val();
+			var fecha_distincion5 = $('#fecha_distinciones5').val();
+			var alcance_distincion5 = $('#alcance_distinciones5').val();
+
+			//---- Card 10 --------- Participación
+			var razon_participacion = "";
+			{% for razon in razones %}
+				var razon__ = $('#razon_participacion{{ razon.id }}').is(':checked');
+				if(razon__){
+					var razonValue = $('#razon_participacion{{ razon.id }}').val();
+					razon_participacion += razonValue + "-";
+				}
+			{% endfor %}
+			razon_participacionSplitted = razon_participacion.substring(0, razon_participacion.length-1);
+			var razon_participacionOtra = $('#razonOtra_participacion').val();
+			var categoria_participacion = $('#categoria_participacion').val();
+			var canalesRecepcion_participacion = "";
+			{% for canal in canales %}
+				var canal__ = $('#canal_recepcion{{ canal.id }}').is(':checked');
+				if(canal__){
+					var canalValue = $('#canal_recepcion{{ canal.id }}').val();
+					canalesRecepcion_participacion += canalValue + "-";
+				}
+			{% endfor %}
+			canalesRecepcionSplitted = canalesRecepcion_participacion.substring(0, canalesRecepcion_participacion.length-1);
+			var canal_recepcionOtra = $('#canalOtra_recepcion').val();
+
+			// ---- Card 10 ---------- Participación Detalles
+			// Detalle de Empresa Innovadora
+			var meritoEI_a = $('#meritoEI_a').val();
+			var meritoEI_b = $('#meritoEI_b').val();
+			var meritoEI_c = $('#meritoEI_c').val();
+			var meritoEI_d = $('#meritoEI_d').val();
+			var meritoEI_e = $('#meritoEI_e').val();
+			var meritoEI_f = $('#meritoEI_f').val();
+			var meritoEI_g = $('#meritoEI_g').val();
+			var meritoEI_h = $('#meritoEI_h').val();
+			var meritoEI_i = $('#meritoEI_i').val();
+			var meritoEI_j = $('#meritoEI_j').val();
+			
+			// Detalle de Responsabilidad Social
+			var meritoRSE_a = $('#meritoRSE_a').val();
+			var meritoRSE_b = $('#meritoRSE_b').val();
+			var meritoRSE_c = $('#meritoRSE_c').val();
+			var meritoRSE_d = $('#meritoRSE_d').val();
+			var meritoRSE_e = $('#meritoRSE_e').val();
+
+			// Detalle de Empresa de Salud
+			var meritoES_a = $('#meritoES_a').val();
+			var meritoES_b = $('#meritoES_b').val();
+			var meritoES_c = $('#meritoES_c').val();
+			var meritoES_d = $('#meritoES_d').val();
+
+			// Detalle de Empresa Industrial-Manufacturera
+			var meritoEIM_a = $('#meritoEIM_a').val();
+			var meritoEIM_b = $('#meritoEIM_b').val();
+			var meritoEIM_c = $('#meritoEIM_c').val();
+
+			// Detalle de Esfuerzo Exportador
+			var meritoEE_a = $('#meritoEE_a').val();
+			var meritoEE_b = $('#meritoEE_b').val();
+			var meritoEE_c = $('#meritoEE_c').val();
+			var meritoEE_d = "";
+			{% for modalidad in modalidadesEExportador %}
+				var modalidad__ = $('#meritoEE_d{{ modalidad.id }}').is(':checked');
+				if(modalidad__){
+					var modalidadValue = $('#meritoEE_d{{ modalidad.id }}').val();
+					meritoEE_d += modalidadValue + "-";
+				}
+			{% endfor %}
+			meritoEE_dSplitted = meritoEE_d.substring(0, meritoEE_d.length-1);
+
+			var meritoEE_d_otra = $('#meritoEE_d_otra').val();
+			var meritoEE_e = $('#meritoEE_e').val();
+			var meritoEE_f = $('#meritoEE_f').val();
+			var meritoEE_g = $('input[name="meritoEE_g"]:checked').val();
+			var meritoEE_h = $('#meritoEE_h').val();
+
+			// Detalle de Empresa Comercial
+			var meritoEC_a = $('#meritoEC_a').val();
+			var meritoEC_b = $('#meritoEC_b').val();
+			var meritoEC_c = $('#meritoEC_c').val();
+			var meritoEC_d = $('#meritoEC_d').val();
+			var meritoEC_e = $('#meritoEC_e').val();
+
+			// Detalle de Empresa de Servicio
+			var meritoEDS_a = $('#meritoEDS_a').val();
+			var meritoEDS_b = $('#meritoEDS_b').val();
+			var meritoEDS_c = $('#meritoEDS_c').val();
+			var meritoEDS_d = $('#meritoEDS_d').val();
+			var meritoEDS_e = $('#meritoEDS_e').val();
+			var meritoEDS_f = $('#meritoEDS_f').val();
+
+			// Detalle de Empresa Agroindustial-Agropecuaria
+			var meritoEAA_a = $('#meritoEAA_a').val();
+			var meritoEAA_b = $('#meritoEAA_b').val();
+			var meritoEAA_c = $('#meritoEAA_c').val();
+			var meritoEAA_d = $('#meritoEAA_d').val();
+			var meritoEAA_e = $('#meritoEAA_e').val();
+			var meritoEAA_f = $('#meritoEAA_f').val();
+
+			$.post('{% url "Entidad.views.registrarEntidad" %}', {
+						'razon_social':razon_social, 
+						'nit_rut':nit_rut, 
+						'domicilio':domicilio, 
+						'departamento':departamento, 
+						'municipio':municipio, 
+						'corregimiento':corregimiento, 
+						'telefono':telefono, 
+						'fax':fax, 
+						'web':web, 
+						'email':email, 
+						'facebook':facebook, 
+						'twitter':twitter,
+						// --- Representante Legal ----
+						'nombre_repLegal':nombre_repLegal, 
+						'cargo_repLegal':cargo_repLegal, 
+						'direccion_repLegal':direccion_repLegal, 
+						'ciudad_repLegal':ciudad_repLegal, 
+						'telefono_repLegal':telefono_repLegal, 
+						'celular_repLegal':celular_repLegal, 
+						'email_repLegal':email_repLegal,
+						// --- Contacto empresarial ----
+						'nombres_contacto':nombres_contacto,
+						'cargo_contacto':cargo_contacto,
+						'direccion_contacto':direccion_contacto,
+						'ciudad_contacto':ciudad_contacto,
+						'telefono_contacto':telefono_contacto,
+						'celular_contacto':celular_contacto,
+						'email_contacto':email_contacto,
+						// --- Operacion ----  DESDE AQUI EMPIEZA EL MODEL PERFILENTIDADMERITO
+						'anios_operacion':anios_operacion,
+						'tOrganizacion_operacion':tOrganizacion_operacion,
+						'tOrganizacionotra_operacion':tOrganizacionotra_operacion,
+						'aEconomica_operacion':aEconomica_operacion,
+						'aEconomicaOtra_operacion':aEconomicaOtra_operacion,
+						'codigoCiuu_operacion':codigoCiuu_operacion,
+						// --- Organizacion ---
+						'empleoDirecto_trabajadores': empleoDirecto_trabajadores,
+						'empleoIndirecto_trabajadores': empleoIndirecto_trabajadores,
+						'tecnicos_trabajadores': tecnicos_trabajadores,
+						'tecnologos_trabajadores': tecnologos_trabajadores,
+						'profesionales_trabajadores': profesionales_trabajadores,
+						'especializados_trabajadores': especializados_trabajadores,
+						'maestrias_trabajadores': maestrias_trabajadores,
+						'doctores_trabajadores': doctores_trabajadores,
+						'tamano_organizacion':tamano_organizacion,
+						// --- Descripciones ---
+						'descProductos_mercado': descProductos_mercado,
+						'descProveedores_mercado': descProveedores_mercado,
+						'descClientes_mercado': descClientes_mercado,
+						// --- Mercado ----
+						'anio_venta_1': ventasAnio1_mercado,
+						'anio_venta_2': ventasAnio2_mercado,
+						'anio_venta_3': ventasAnio3_mercado,
+						'alcances':alcance_mercadoSplitted,
+						// --- Sistema de gestión ----
+						'calidad':calidad_sistemaGestion,
+						'seguridad_industrial':seguridadInd_sistemaGestion,
+						'ambiental':ambiental_sistemaGestion,
+						'otro':otro_sistemaGestion,
+						'implementacion':implementacion_sistemaGestion,
+						// --- Investifacion e innovacion ----
+						'departamento_idi': departamento_ii,
+						'asesor_externo': asesor_ii,
+						'asesor_externo_especifique': asesorEspecifique_ii,
+						'firma_consultora': firma_ii,
+						'firma_consultora_especifique': firmaEspecifique_ii,
+						'alianza': alianza_ii,
+						'alianza_especifique': alianzaEspecifique_ii,
+						'no_aplica': noAplica_ii,
+						'patentes':patentes,
+						'patentes_descripcion':patentes_descripcion,
+						'competitividad':competitividad_iiSplitted,
+						'razones_participacion':razon_participacionSplitted,
+						'competitividad_especifique':competitividadOtra_ii,
+						// --- Distinciones ----
+						'reconocimiento1':reconocimiento1,
+						'fecha_distincion1':fecha_distincion1,
+						'alcance_distincion1':alcance_distincion1,
+						'reconocimiento2':reconocimiento2,
+						'fecha_distincion2':fecha_distincion2,
+						'alcance_distincion2':alcance_distincion2,
+						'reconocimiento3':reconocimiento3,
+						'fecha_distincion3':fecha_distincion3,
+						'alcance_distincion3':alcance_distincion3,
+						'reconocimiento4':reconocimiento4,
+						'fecha_distincion4':fecha_distincion4,
+						'alcance_distincion4':alcance_distincion4,
+						'reconocimiento5':reconocimiento5,
+						'fecha_distincion5':fecha_distincion5,
+						'alcance_distincion5':alcance_distincion5,
+						// --- Participacion ----
+						'razones_participacion_especifique':razon_participacionOtra,
+						'categoria_participacion':categoria_participacion,
+						'canales_recepcion':canalesRecepcionSplitted,
+						'canal_recepcion_especifique':canal_recepcionOtra,
+						// --- Detalle de categoría ----
+						// Detalle merito Empresa Innovadora
+						'meritoEI_a':meritoEI_a,
+						'meritoEI_b':meritoEI_b,
+						'meritoEI_c':meritoEI_c,
+						'meritoEI_d':meritoEI_d,
+						'meritoEI_e':meritoEI_e,
+						'meritoEI_f':meritoEI_f,
+						'meritoEI_g':meritoEI_g,
+						'meritoEI_h':meritoEI_h,
+						'meritoEI_i':meritoEI_i,
+						'meritoEI_j':meritoEI_j,
+						// Detalle merito Responsabilidad Social
+						'meritoRSE_a':meritoRSE_a,
+						'meritoRSE_b':meritoRSE_b,
+						'meritoRSE_c':meritoRSE_c,
+						'meritoRSE_d':meritoRSE_d,
+						'meritoRSE_e':meritoRSE_e,
+						// Detalle merito Empresa de Salud
+						'meritoES_a':meritoES_a,
+						'meritoES_b':meritoES_b,
+						'meritoES_c':meritoES_c,
+						'meritoES_d':meritoES_d,
+						// Detalle merito Empresa Industrial-Manufacturera
+						'meritoEIM_a':meritoEIM_a,
+						'meritoEIM_b':meritoEIM_b,
+						'meritoEIM_c':meritoEIM_c,
+						// Detalle merito Esfuerzo Exportador
+						'meritoEE_a':meritoEE_a,
+						'meritoEE_b':meritoEE_b,
+						'meritoEE_c':meritoEE_c,
+						'meritoEE_d':meritoEE_dSplitted,
+						'meritoEE_d_otra':meritoEE_d_otra,
+						'meritoEE_e':meritoEE_e,
+						'meritoEE_f':meritoEE_f,
+						'meritoEE_g':meritoEE_g,
+						'meritoEE_h':meritoEE_h,
+						// Detalle merito Empresa Comercial
+						'meritoEC_a':meritoEC_a,
+						'meritoEC_b':meritoEC_b,
+						'meritoEC_c':meritoEC_c,
+						'meritoEC_d':meritoEC_d,
+						'meritoEC_e':meritoEC_e,
+						// Detalle merito Empresa de Servicio
+						'meritoEDS_a':meritoEDS_a,
+						'meritoEDS_b':meritoEDS_b,
+						'meritoEDS_c':meritoEDS_c,
+						'meritoEDS_d':meritoEDS_d,
+						'meritoEDS_e':meritoEDS_e,
+						'meritoEDS_f':meritoEDS_f,
+						// Detalle merito Agroindustrial-Agropecuaria
+						'meritoEAA_a':meritoEAA_a,
+						'meritoEAA_b':meritoEAA_b,
+						'meritoEAA_c':meritoEAA_c,
+						'meritoEAA_d':meritoEAA_d,
+						'meritoEAA_e':meritoEAA_e,
+						'meritoEAA_f':meritoEAA_f
+
+					}, function(response){
+				if(response == 1){
+					alert("Cambios guardados con éxito");
+				}else if(response == 2){
+					alert("Cambios actualizados con éxito");
+				}
+			});
+		}
+
+
+
+		function aEconomicaSelect(){
+			if($('#aEconomica_operacion').val() == 6){
+				$('#aEconomicaOtra_operacion').css('display', 'block');
+			}else{
+				$('#aEconomicaOtra_operacion').css('display', 'none');
+			}	
+		}
+
+		function tOrganizacionSelect(){
+			if($('#tOrganizacion_operacion').val() == 6){
+				$('#tOrganizacionotra_operacion').css('display', 'block');
+			}else{
+				$('#tOrganizacionotra_operacion').css('display', 'none');
+			}
+		}
+
+		function returnValueCheckbox(id){
+			if($(id).is(':checked')){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		function returnValueRadio(name){
+			if($('input[name='+name+']:checked')){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+
+
+		function carga(){
+			$('#departamento').change();
+
+			var valorEmpleadosDirecto = $('#empleoDirecto_trabajadores').val();
+			var valorEmpleadosIndirecto = $('#empleoIndirecto_trabajadores').val();
+			var totalTrabajadores = parseInt(valorEmpleadosDirecto) + parseInt(valorEmpleadosIndirecto);
+			if (isNaN(totalTrabajadores)){
+				$('#totalTrabajadores').val(0);	
+			}else{
+				$('#totalTrabajadores').val(totalTrabajadores);
+			}
+		}
+	</script>
+
+</body>
+</html>

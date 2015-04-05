@@ -40,7 +40,7 @@ class FuenteInline(admin.StackedInline):
 class AlertasInline(admin.StackedInline):
 	model = Alertas
 	extra = 1
-	suit_classes = 'suit-tab suit-tab-alertas'	
+	suit_classes = 'suit-tab suit-tab-alertas'
 
 class PagosProyectoInline(admin.StackedInline):
 	model = PagosProyecto

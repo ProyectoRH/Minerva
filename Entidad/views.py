@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from Departamento.models import Departamento
@@ -11,6 +11,9 @@ from Municipio.models import Municipio
 from Corregimiento.models import Corregimiento
 from datetime import datetime
 from Distinciones.models import Distincion
+from EmprendedorPremio.models import Emprendedor, EntidadEmprendedor, DistincionesEmprendedor, AdjuntosEmprendedor
+from EmpresarioBenemerito.models import Gremio, EmpresarioBenemerito
+from AdjuntosEntidad.models import AdjuntoEntidadMerito
 import json
 import time
 # Create your views here.
@@ -18,8 +21,18 @@ import time
 def formularioRegistro(request):
 	return render(request, 'formulario-registro.html', {})
 
+@csrf_exempt
+def logout_view(request):
+    logout(request)
+    return HttpResponse(1)
+
+
+@login_required(login_url='/usuarios/registroEntidad/')
 def home(request):
 	anio_actual = time.strftime("%Y")
+	anio_actual1 = int(anio_actual) - 1
+	anio_actual2 = int(anio_actual) - 2
+	anio_actual3 = int(anio_actual) - 3
 
 	departamentos = Departamento.objects.all()
 	actividades_economicas = ActividadEconomica.objects.all()
@@ -28,14 +41,17 @@ def home(request):
 
 	alcance_mercado = AlcanceMercado.objects.all()
 	competitividades = Competitividad.objects.all()
-	razones_participacion = RazonesParticipacion.objects.all()
-	canales_recepcion = CanalRecepcion.objects.all()
+	razones_participacion = RazonesParticipacion.objects.all().order_by('pk')
+	canales_recepcion = CanalRecepcion.objects.all().order_by('pk')
 
 	modalidades_e_exportador = MeritoEsfExportModalidad.objects.all()
 	entidad = ""
 	if request.user.is_authenticated and request.user.is_active and request.user != "AnonymousUser":
 		print request.user
 		entidad = Entidad.objects.filter(perfil_usuario = request.user)
+		emprendedor_premio = Emprendedor.objects.filter(perfil_usuario = request.user)
+		gremio_usuario = Gremio.objects.filter(usuario = request.user)
+
 
 	representanteLegal_entidad = ""
 	contacto_entidad = ""
@@ -43,6 +59,8 @@ def home(request):
 	trabajadores_entidad = ""
 	descripciones_entidad = ""
 	distinciones = []
+	adjuntos_entidadPremio = ""
+	otrosAdjuntos_entidadPremio = ""
 	# Meritos
 	meritoEI = ""
 	meritoRSE = ""
@@ -53,25 +71,41 @@ def home(request):
 	meritoEDS = ""
 	meritoEAA = ""
 
-	if len(entidad) > 0:
-		representanteLegal_entidad = RepresentanteLegal.objects.filter(entidad = entidad[0])
-		contacto_entidad = ContactosEntidad.objects.filter(entidad = entidad[0])
-		perfil_entidad_merito = PerfilEntidadMerito.objects.filter(entidad = entidad[0])
-		trabajadores_entidad = Trabajadores.objects.filter(entidad = entidad[0])
-		descripciones_entidad = Descripciones.objects.filter(entidad = entidad[0])
-		distinciones = Distincion.objects.filter(entidad = entidad[0]).order_by('pk')
-		# Meritos
-		meritoEI = MeritoEmpresaIndustrial.objects.filter(entidad = entidad[0])
-		meritoRSE = MeritoResponsabilidadSocial.objects.filter(entidad = entidad[0])
-		meritoES = MeritoEmpresaSalud.objects.filter(entidad = entidad[0])
-		meritoEIM = MeritoEmpresaIndustrial.objects.filter(entidad = entidad[0])
-		meritoEE = MeritoEsfuerzoExportador.objects.filter(entidad = entidad[0])
-		meritoEC = MeritoEmpresaComercial.objects.filter(entidad = entidad[0])
-		meritoEDS = MeritoEmpresaServicio.objects.filter(entidad = entidad[0])
-		meritoEAA = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad[0])
+	# Emprendedor
+	distinciones_emprendedor = []
+	entidad_emprendedor = ""
+	adjuntos_emprendedor = ""
 
+	empresarios_benemerito = ""
+	if len(entidad) > 0:
+		representanteLegal_entidad = RepresentanteLegal.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		contacto_entidad = ContactosEntidad.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		perfil_entidad_merito = PerfilEntidadMerito.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		trabajadores_entidad = Trabajadores.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		descripciones_entidad = Descripciones.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		distinciones = Distincion.objects.filter(entidad = entidad[0], creacion__year = anio_actual).order_by('pk')
+		# Meritos
+		meritoEI = MeritoEmpresaInnovadora.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoRSE = MeritoResponsabilidadSocial.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoES = MeritoEmpresaSalud.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoEIM = MeritoEmpresaIndustrial.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoEE = MeritoEsfuerzoExportador.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoEC = MeritoEmpresaComercial.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoEDS = MeritoEmpresaServicio.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		meritoEAA = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad[0], creacion__year = anio_actual)
+		# Adjuntos
+		adjuntos_entidadPremio = AdjuntoEntidadMerito.objects.filter(entidad = entidad[0], fecha_subida__year = anio_actual)
+		otrosAdjuntos_entidadPremio = AdjuntoEntidadMerito.objects.filter(entidad = entidad[0], tipo_adjunto = 10, fecha_subida__year = anio_actual)
+	if len(emprendedor_premio) > 0:
+		entidad_emprendedor = EntidadEmprendedor.objects.filter(emprendedor = emprendedor_premio[0])
+		distinciones_emprendedor = DistincionesEmprendedor.objects.filter(emprendedor = emprendedor_premio[0], creacion__year = anio_actual)
+		adjuntos_emprendedor = AdjuntosEmprendedor.objects.filter(emprendedor = emprendedor_premio[0], creacion__year = anio_actual)
 	
-	return render(request, 'inicio.html', {'departamentos':departamentos, 'actividades_eco':actividades_economicas, 'tipos_org':tipos_organizacion, 'entidad':entidad, 'perfil':perfil_entidad_merito, 'representante':representanteLegal_entidad, 'contacto':contacto_entidad, 'trabajadores':trabajadores_entidad, 'descripciones':descripciones_entidad, 'tamanos':tamanos_organizacion, 'alcances':alcance_mercado, 'competitividades':competitividades, 'razones':razones_participacion, 'canales':canales_recepcion, 'modalidadesEExportador':modalidades_e_exportador, 'merito_entidad_innovadora':meritoEI, 'merito_responsabilidad':meritoRSE, 'merito_empresa_salud':meritoES, 'merito_industrial':meritoEIM, 'merito_exportador':meritoEE, 'merito_empresa_comercial':meritoEC, 'merito_empresa_servicio':meritoEDS, 'merito_empresa_agro':meritoEAA, 'distinciones':distinciones})
+
+	if len(gremio_usuario) > 0:
+		empresarios_benemerito = EmpresarioBenemerito.objects.filter(perfil_gremio = gremio_usuario[0])
+
+	return render(request, 'inicio.html', {'anio_actual1':anio_actual1, 'anio_actual2':anio_actual2, 'anio_actual3':anio_actual3, 'departamentos':departamentos, 'actividades_eco':actividades_economicas, 'tipos_org':tipos_organizacion, 'entidad':entidad, 'perfil':perfil_entidad_merito, 'representante':representanteLegal_entidad, 'contacto':contacto_entidad, 'trabajadores':trabajadores_entidad, 'descripciones':descripciones_entidad, 'tamanos':tamanos_organizacion, 'alcances':alcance_mercado, 'competitividades':competitividades, 'razones':razones_participacion, 'canales':canales_recepcion, 'modalidadesEExportador':modalidades_e_exportador, 'merito_entidad_innovadora':meritoEI, 'merito_responsabilidad':meritoRSE, 'merito_empresa_salud':meritoES, 'merito_industrial':meritoEIM, 'merito_exportador':meritoEE, 'merito_empresa_comercial':meritoEC, 'merito_empresa_servicio':meritoEDS, 'merito_empresa_agro':meritoEAA, 'distinciones':distinciones, 'adjuntosEmpresa':adjuntos_entidadPremio, 'otrosAdjuntosEntidad':otrosAdjuntos_entidadPremio, 'emprendedor':emprendedor_premio, 'entidad_emprendedor':entidad_emprendedor, 'distinciones_emp': distinciones_emprendedor, 'adjuntosEmprendedor':adjuntos_emprendedor, 'empresarios':empresarios_benemerito, 'gremio':gremio_usuario})
 	
 
 @csrf_exempt
@@ -81,15 +115,55 @@ def registroPeticion(request):
 		apellido = request.POST.get("apellido")
 		email = request.POST.get("email")
 		password = request.POST.get("password")
-			
+		tipo_usuario = request.POST.get("tipo_usuario")
+
+		# Para el gremio, si es gremio
+		nombre_gremio = request.POST.get("nombre_gremio")
+		direccion_gremio = request.POST.get("direccion_gremio")
+		nombre_presidente_gremio = request.POST.get("nombre_presidente_gremio")
+		telefono_presidente_gremio = request.POST.get("telefono_presidente_gremio")
+		try:
+			telefono_presidente_gremio = int(telefono_gerente_gremio)
+		except:
+			telefono_gerente_gremio = 0
+
+		email_presidente_gremio = request.POST.get("email_presidente_gremio")
+		nombre_gerente_gremio = request.POST.get("nombre_gerente_gremio")
+		telefono_gerente_gremio = request.POST.get("telefono_gerente_gremio")
+		try:
+			telefono_gerente_gremio = int(telefono_gerente_gremio)
+		except:
+			telefono_gerente_gremio = 0
+		email_gerente_gremio = request.POST.get("email_gerente_gremio")
+
 		user_filter = User.objects.filter(email = email)
 		if len(user_filter) == 0:
 			user = User.objects.create_user(email, email, password)
 			print user
+			print tipo_usuario
 			user.first_name = nombre
 			user.last_name = apellido
-			user.groups.add(Group.objects.get(name='ContactoPremio'))
+			if tipo_usuario == "gremio":
+				user.groups.add(Group.objects.get(name='GremioPremio'))
+			elif tipo_usuario == "empresa":
+				user.groups.add(Group.objects.get(name='ContactoPremioEmpresa'))
+			elif tipo_usuario == "emprendedor":
+				user.groups.add(Group.objects.get(name='ContactoPremioEmprendedor'))
 			user.save()
+
+			if tipo_usuario == "gremio":
+				gremio = Gremio(
+					usuario = user,
+					nombre_gremio = nombre_gremio,
+					direccion = direccion_gremio,
+					nombre_presidente = nombre_presidente_gremio,
+					telefono_presidente = telefono_presidente_gremio,
+					email_presidente = email_presidente_gremio,
+					nombre_director = nombre_gerente_gremio,
+					telefono_director = telefono_gerente_gremio,
+					email_director = email_gerente_gremio
+				)
+				gremio.save()
 
 			return HttpResponse(1)
 			
@@ -244,7 +318,6 @@ def registrarEntidad(request):
 		seguridad_industrial = request.POST.get("seguridad_industrial")
 		ambiental = request.POST.get("ambiental")
 		otro = request.POST.get("otro")
-		implementacion = request.POST.get("implementacion")
 
 		# ------- card Investigacion e innovacion
 		departamento_idi = request.POST.get("departamento_idi")
@@ -291,33 +364,12 @@ def registrarEntidad(request):
 		competitividadArr = competitividad.split("-")
 		competitividad_especifique = request.POST.get("competitividad_especifique")
 
-		# ------- card Distinciones
-		# Distincion 1
-		reconocimiento1 = request.POST.get("reconocimiento1")
-		fecha_distincion1 = request.POST.get("fecha_distincion1")
-		alcance_distincion1 = request.POST.get("alcance_distincion1")
-		# Distincion 2
-		reconocimiento2 = request.POST.get("reconocimiento2")
-		fecha_distincion2 = request.POST.get("fecha_distincion2")
-		alcance_distincion2 = request.POST.get("alcance_distincion2")
-		# Distincion 3
-		reconocimiento3 = request.POST.get("reconocimiento3")
-		fecha_distincion3 = request.POST.get("fecha_distincion3")
-		alcance_distincion3 = request.POST.get("alcance_distincion3")
-		# Distincion 4
-		reconocimiento4 = request.POST.get("reconocimiento4")
-		fecha_distincion4 = request.POST.get("fecha_distincion4")
-		alcance_distincion4 = request.POST.get("alcance_distincion4")
-		# Distincion 5
-		reconocimiento5 = request.POST.get("reconocimiento5")
-		fecha_distincion5 = request.POST.get("fecha_distincion5")
-		alcance_distincion5 = request.POST.get("alcance_distincion5")
 		# ------- card Participacion
 		razones_participacion = request.POST.get("razones_participacion")
 		razones_participacionArr = razones_participacion.split("-")
 		razones_participacion_especifique = request.POST.get("razones_participacion_especifique")
 
-		categoria_participacion = request.POST.get("categoria_participacion")
+		#categoria_participacion = request.POST.get("categoria_participacion")
 
 		canales_recepcion = request.POST.get("canales_recepcion")
 		canales_recepcionArr = canales_recepcion.split("-")
@@ -352,7 +404,15 @@ def registrarEntidad(request):
 		meritoEIM_c = request.POST.get("meritoEIM_c")
 		# ESFUERZO EXPORTADOR
 		meritoEE_a = request.POST.get("meritoEE_a")
+		try:
+			meritoEE_a = int(meritoEE_a)
+		except:
+			meritoEE_a = 0
 		meritoEE_b = request.POST.get("meritoEE_b")
+		try:
+			meritoEE_b = int(meritoEE_b)
+		except:
+			meritoEE_b = 0
 		meritoEE_c = request.POST.get("meritoEE_c")
 		meritoEE_d = request.POST.get("meritoEE_d")
 		meritoEE_dArr = meritoEE_d.split("-")
@@ -360,7 +420,15 @@ def registrarEntidad(request):
 		meritoEE_e = request.POST.get("meritoEE_e")
 		meritoEE_f = request.POST.get("meritoEE_f")
 		meritoEE_g = request.POST.get("meritoEE_g")
+		try:
+			meritoEE_g = int(meritoEE_g)
+		except:
+			meritoEE_g = 0
 		meritoEE_h = request.POST.get("meritoEE_h")
+		try:
+			meritoEE_h = int(meritoEE_h)
+		except:
+			meritoEE_h = 0
 		# EMRPESA COMERCIAL
 		meritoEC_a = request.POST.get("meritoEC_a")
 		meritoEC_b = request.POST.get("meritoEC_b")
@@ -392,19 +460,16 @@ def registrarEntidad(request):
 		if corregimiento:
 			corregimientoObj = Corregimiento.objects.get(pk = corregimiento)
 		# ----------------------------------------------------------------------------
-		
 		# -------- Para tipo de organizacion y para actividad economica que vienen en POST ---
 		tipo_organizacion_operacion = TipoOrganizacion.objects.get(pk = tOrganizacion_operacion)
 		actividad_economica_operacion = ActividadEconomica.objects.get(pk = aEconomica_operacion)
 		# ------------------------------------------------------------------------------------
-
 		# -------- Para tamano de la organizacion -------
 		if tamano_organizacion:
 			tamano_organizacionObj = TamanoOrganizacion.objects.get(pk = tamano_organizacion)
 		else:
 			tamano_organizacionObj = None
-		entidad_update = Entidad.objects.filter(nit = nit_rut)
-		entidad_users = Entidad.objects.filter(perfil_usuario = request.user)
+		entidad_update = Entidad.objects.filter(nit = nit_rut, perfil_usuario = request.user)
 		# ---- Objetos que deben ser traídos y consultados -------
 		if len(entidad_update) > 0:
 			representanteLegal_update = RepresentanteLegal.objects.filter(entidad = entidad_update[0])
@@ -416,8 +481,7 @@ def registrarEntidad(request):
 			trabajadores_update = Trabajadores.objects.filter(entidad = entidad_update[0])
 
 			descripciones_update = Descripciones.objects.filter(entidad = entidad_update[0])
-
-		if len(entidad_update) == 0 or len(entidad_users) == 0:
+		if len(entidad_update) == 0:
 			new_entidad = Entidad(perfil_usuario = request.user,nit = nit_rut,razon_social = razon_social,direccion = domicilio,url_web = web,telefono = telefono,nota_seguimiento = "",email = email,departamento = departamentoObj, municipio = municipioObj, corregimiento = corregimientoObj, facebook = facebook, twitter = twitter, fax = fax)
 			new_entidad.save()
 			print "entidad creada"
@@ -481,7 +545,6 @@ def registrarEntidad(request):
 					seguridad_industrial = seguridad_industrial,
 					ambiental = ambiental,
 					otro = otro,
-					implementacion = implementacion,
 					departamento_idi = int(departamento_idi),
 					asesor_externo = int(asesor_externo),
 					asesor_externo_especifique = asesor_externo_especifique,
@@ -494,11 +557,10 @@ def registrarEntidad(request):
 					patentes_descripcion = patentes_descripcion,
 					competitividad_especifique = competitividad_especifique,
 					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique,
-					categoria = categoria_participacion
+					canal_recepcion_especifique = canal_recepcion_especifique
 				)
 			new_PerfilMeritoEmpresarial.save()
-
+			print "point - perfil creado sin checkbox"
 			new_PerfilMeritoEmpresarial.alcance_mercado = {}
 			for alcance in alcances_mercadoArr:
 				alcanceObj = AlcanceMercado.objects.get(pk = alcance)
@@ -521,157 +583,101 @@ def registrarEntidad(request):
 
 			print "point - perfil creado"
 
-			if categoria_participacion == "meritoEI":
-				new_empresaInnovadora = MeritoEmpresaInnovadora(
-					entidad = new_entidad,
-					descripcion_a = meritoEI_a,
-					descripcion_b = meritoEI_b,
-					descripcion_c = meritoEI_c,
-					descripcion_d = meritoEI_d,
-					descripcion_e = meritoEI_e,
-					descripcion_f = meritoEI_f,
-					descripcion_g = meritoEI_g,
-					descripcion_h = meritoEI_h,
-					descripcion_i = meritoEI_i,
-					descripcion_j = meritoEI_j 
-				)
-				new_empresaInnovadora.save()
+			new_empresaInnovadora = MeritoEmpresaInnovadora(
+				entidad = new_entidad,
+				descripcion_a = meritoEI_a,
+				descripcion_b = meritoEI_b,
+				descripcion_c = meritoEI_c,
+				descripcion_d = meritoEI_d,
+				descripcion_e = meritoEI_e,
+				descripcion_f = meritoEI_f,
+				descripcion_g = meritoEI_g,
+				descripcion_h = meritoEI_h,
+				descripcion_i = meritoEI_i,
+				descripcion_j = meritoEI_j 
+			)
+			new_empresaInnovadora.save()
 
-			elif categoria_participacion == "meritoRSE":
-				new_empresaResponsabilidad = MeritoResponsabilidadSocial(
-					entidad = new_entidad,
-					descripcion_a = meritoRSE_a,
-					descripcion_b = meritoRSE_b,
-					descripcion_c = meritoRSE_c,
-					descripcion_d = meritoRSE_d,
-					descripcion_e = meritoRSE_e
-				)
-				new_empresaResponsabilidad.save()
+
+			new_empresaResponsabilidad = MeritoResponsabilidadSocial(
+				entidad = new_entidad,
+				descripcion_a = meritoRSE_a,
+				descripcion_b = meritoRSE_b,
+				descripcion_c = meritoRSE_c,
+				descripcion_d = meritoRSE_d,
+				descripcion_e = meritoRSE_e
+			)
+			new_empresaResponsabilidad.save()
+
+			new_empresaSalud = MeritoEmpresaSalud(
+				entidad = new_entidad,
+				descripcion_a = meritoES_a,
+				descripcion_b = meritoES_b,
+				descripcion_c = meritoES_c,
+				descripcion_d = meritoES_d
+			)
+			new_empresaSalud.save()
 			
-			elif categoria_participacion == "meritoES":
-				new_empresaSalud = MeritoEmpresaSalud(
-					entidad = new_entidad,
-					descripcion_a = meritoES_a,
-					descripcion_b = meritoES_b,
-					descripcion_c = meritoES_c,
-					descripcion_d = meritoES_d
-				)
-				new_empresaSalud.save()
+			new_empresaIndustrial = MeritoEmpresaIndustrial(
+				entidad = new_entidad,
+				descripcion_a = meritoEIM_a,
+				descripcion_b = meritoEIM_b,
+				descripcion_c = meritoEIM_c
+			)
+			new_empresaIndustrial.save()
 
-			elif categoria_participacion == "meritoEIM":
-				new_empresaIndustrial = MeritoEmpresaIndustrial(
-					entidad = new_entidad,
-					descripcion_a = meritoEIM_a,
-					descripcion_b = meritoEIM_b,
-					descripcion_c = meritoEIM_c
-				)
-				new_empresaIndustrial.save()
+			new_esfuerzoExportador = MeritoEsfuerzoExportador(
+				entidad = new_entidad,
+				descripcion_a = meritoEE_a,
+				descripcion_b = meritoEE_b,
+				descripcion_c = meritoEE_c,
+				descripcion_d_otra = meritoEE_d_otra,
+				descripcion_e = meritoEE_e,
+				descripcion_f = meritoEE_f,
+				descripcion_g = int(meritoEE_g),
+				descripcion_h = meritoEE_h
+			)
+			new_esfuerzoExportador.save()
+			new_esfuerzoExportador.descripcion_d = {}
+			for modalidad in meritoEE_dArr:
+				modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
+				new_esfuerzoExportador.descripcion_d.add(modalidadObj)
 
-			elif categoria_participacion == "meritoEE":
-				new_esfuerzoExportador = MeritoEsfuerzoExportador(
-					entidad = new_entidad,
-					descripcion_a = meritoEE_a,
-					descripcion_b = meritoEE_b,
-					descripcion_c = meritoEE_c,
-					descripcion_d_otra = meritoEE_d_otra,
-					descripcion_e = meritoEE_e,
-					descripcion_f = meritoEE_f,
-					descripcion_g = int(meritoEE_g),
-					descripcion_h = meritoEE_h
-				)
-				new_esfuerzoExportador.save()
-				new_esfuerzoExportador.descripcion_d = {}
-				for modalidad in meritoEE_dArr:
-					modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
-					new_esfuerzoExportador.descripcion_d.add(modalidadObj)
 
-			elif categoria_participacion == "meritoEC":
-				new_empresaComercial = MeritoEmpresaComercial(
-					entidad = new_entidad,
-					descripcion_a = meritoEC_a,
-					descripcion_b = meritoEC_b,
-					descripcion_c = meritoEC_c,
-					descripcion_d = meritoEC_d,
-					descripcion_e = meritoEC_e
-				)
-				new_empresaComercial.save()
+			new_empresaComercial = MeritoEmpresaComercial(
+				entidad = new_entidad,
+				descripcion_a = meritoEC_a,
+				descripcion_b = meritoEC_b,
+				descripcion_c = meritoEC_c,
+				descripcion_d = meritoEC_d,
+				descripcion_e = meritoEC_e
+			)
+			new_empresaComercial.save()
+			
 
-			elif categoria_participacion == "meritoEDS":
-				new_empresaServicio = MeritoEmpresaServicio(
-					entidad = new_entidad,
-					descripcion_a = meritoEDS_a,
-					descripcion_b = meritoEDS_b,
-					descripcion_c = meritoEDS_c,
-					descripcion_d = meritoEDS_d,
-					descripcion_e = meritoEDS_e,
-					descripcion_f = meritoEDS_f
-				)
-				new_empresaServicio.save()
+			new_empresaServicio = MeritoEmpresaServicio(
+				entidad = new_entidad,
+				descripcion_a = meritoEDS_a,
+				descripcion_b = meritoEDS_b,
+				descripcion_c = meritoEDS_c,
+				descripcion_d = meritoEDS_d,
+				descripcion_e = meritoEDS_e,
+				descripcion_f = meritoEDS_f
+			)
+			new_empresaServicio.save()
+			
+			new_empresaAgro = MeritoEmpresaAgroindustrial(
+				entidad = new_entidad,
+				descripcion_a = meritoEAA_a,
+				descripcion_b = meritoEAA_b,
+				descripcion_c = meritoEAA_c,
+				descripcion_d = meritoEAA_d,
+				descripcion_e = meritoEAA_e,
+				descripcion_f = meritoEAA_f
+			)
+			new_empresaAgro.save()
 
-			elif categoria_participacion == "meritoEAA":
-				new_empresaAgro = MeritoEmpresaAgroindustrial(
-					entidad = new_entidad,
-					descripcion_a = meritoEAA_a,
-					descripcion_b = meritoEAA_b,
-					descripcion_c = meritoEAA_c,
-					descripcion_d = meritoEAA_d,
-					descripcion_e = meritoEAA_e,
-					descripcion_f = meritoEAA_f
-				)
-				new_empresaAgro.save()
-
-			# Para distincion 1
-			if reconocimiento1 != "" and fecha_distincion1 != "" and alcance_distincion1 != "":
-				alcanceObj1 = AlcanceMercado.objects.get(pk = alcance_distincion1)
-				fecha = datetime.strptime(fecha_distincion1, "%Y-%m-%d")
-				distincion1 = Distincion(entidad = new_entidad, reconocimiento = reconocimiento1, fecha = fecha, alcance = alcanceObj1)
-				distincion1.save()
-				print "distincion1 guardada"
-			# Para distincion 2
-			if reconocimiento2 != "" and fecha_distincion2 != "" and alcance_distincion2 != "":
-				alcanceObj2 = AlcanceMercado.objects.get(pk = alcance_distincion2)
-				distincion2 = Distincion(
-					entidad = new_entidad,
-					reconocimiento = reconocimiento2,
-					fecha = fecha_distincion2,
-					alcance = alcanceObj2
-				)
-				distincion2.save()
-
-			# Para distincion 3
-			if reconocimiento3 != "" and fecha_distincion3 != "" and alcance_distincion3 != "":
-				alcanceObj3 = AlcanceMercado.objects.get(pk = alcance_distincion3)
-				distincion3 = Distincion(
-					entidad = new_entidad,
-					reconocimiento = reconocimiento3,
-					fecha = fecha_distincion3,
-					alcance = alcanceObj3
-				)
-				distincion3.save()
-
-			# Para distincion 4
-			if reconocimiento4 != "" and fecha_distincion4 != "" and alcance_distincion4 != "":
-				alcanceObj4 = AlcanceMercado.objects.get(pk = alcance_distincion4)
-				distincion4 = Distincion(
-					entidad = new_entidad,
-					reconocimiento = reconocimiento4,
-					fecha = fecha_distincion4,
-					alcance = alcanceObj4
-				)
-				distincion4.save()
-
-			# Para distincion 5
-			if reconocimiento5 != "" and fecha_distincion5 != "" and alcance_distincion5 != "":
-				alcanceObj5 = AlcanceMercado.objects.get(pk = alcance_distincion5)
-				distincion5 = Distincion(
-					entidad = new_entidad,
-					reconocimiento = reconocimiento5,
-					fecha = fecha_distincion5,
-					alcance = alcanceObj5
-				)
-				distincion5.save()
-
-			return HttpResponse(1)
+			return HttpResponse(new_entidad.pk)
 		else:
 			print "actualizar entidad"
 			print departamentoObj
@@ -725,7 +731,8 @@ def registrarEntidad(request):
 					email = email_contacto)
 
 			if len(perfil_merito) == 0:
-
+				print "point - perfil a crear"
+				print entidad_update[0]
 				new_PerfilMeritoEmpresarial = PerfilEntidadMerito(
 					entidad = entidad_update[0],
 					anios_operacion = int(anios_operacion),
@@ -742,7 +749,6 @@ def registrarEntidad(request):
 					seguridad_industrial = seguridad_industrial,
 					ambiental = ambiental,
 					otro = otro,
-					implementacion = implementacion,
 					departamento_idi = int(departamento_idi),
 					asesor_externo = int(asesor_externo),
 					asesor_externo_especifique = asesor_externo_especifique,
@@ -755,10 +761,9 @@ def registrarEntidad(request):
 					patentes_descripcion = patentes_descripcion,
 					competitividad_especifique = competitividad_especifique,
 					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique,
-					categoria = categoria_participacion)
+					canal_recepcion_especifique = canal_recepcion_especifique)
 				new_PerfilMeritoEmpresarial.save()
-				
+				print "point - perfil creado"
 				new_PerfilMeritoEmpresarial.alcance_mercado = {}
 				for alcance in alcances_mercadoArr:
 					alcanceObj = AlcanceMercado.objects.get(pk = alcance)
@@ -779,7 +784,8 @@ def registrarEntidad(request):
 					canalObj = CanalRecepcion.objects.get(pk = canal)
 					new_PerfilMeritoEmpresarial.canal_recepcion.add(canalObj)			
 
-			else:				
+			else:
+				print "perfil actualizada 1"			
 				perfil_merito.update(
 					entidad = entidad_update[0],
 					anios_operacion = int(anios_operacion),
@@ -796,7 +802,6 @@ def registrarEntidad(request):
 					seguridad_industrial = seguridad_industrial,
 					ambiental = ambiental,
 					otro = otro,
-					implementacion = implementacion,
 					departamento_idi = int(departamento_idi),
 					asesor_externo = int(asesor_externo),
 					asesor_externo_especifique = asesor_externo_especifique,
@@ -809,28 +814,33 @@ def registrarEntidad(request):
 					patentes_descripcion = patentes_descripcion,
 					competitividad_especifique = competitividad_especifique,
 					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique,
-					categoria = categoria_participacion
+					canal_recepcion_especifique = canal_recepcion_especifique
 				)
+				print "perfil actualizada 2"			
 				perfil_merito[0].alcance_mercado = {}
 				for alcance in alcances_mercadoArr:
-					alcanceObj = AlcanceMercado.objects.get(pk = alcance)
-					perfil_merito[0].alcance_mercado.add(alcanceObj)
+					if alcance != "":
+						alcanceObj = AlcanceMercado.objects.get(pk = alcance)
+						perfil_merito[0].alcance_mercado.add(alcanceObj)
 
 				perfil_merito[0].competitividad = {}
 				for competitividad in competitividadArr:
-					competitividadObj = Competitividad.objects.get(pk = competitividad)
-					perfil_merito[0].competitividad.add(competitividadObj)
+					if competitividad != "":
+						competitividadObj = Competitividad.objects.get(pk = competitividad)
+						perfil_merito[0].competitividad.add(competitividadObj)
 				
 				perfil_merito[0].razones_participacion = {}
 				for razon in razones_participacionArr:
-					razonObj = RazonesParticipacion.objects.get(pk = razon)
-					perfil_merito[0].razones_participacion.add(razonObj)
+					if razon != "":
+						razonObj = RazonesParticipacion.objects.get(pk = razon)
+						perfil_merito[0].razones_participacion.add(razonObj)
 
 				perfil_merito[0].canal_recepcion = {}
 				for canal in canales_recepcionArr:
-					canalObj = CanalRecepcion.objects.get(pk = canal)
-					perfil_merito[0].canal_recepcion.add(canalObj)
+					if canal != "":
+						canalObj = CanalRecepcion.objects.get(pk = canal)
+						perfil_merito[0].canal_recepcion.add(canalObj)
+				print "todo lo de perfil"
 
 			if len(trabajadores_update) == 0:
 				new_Trabajadores = Trabajadores(
@@ -845,6 +855,7 @@ def registrarEntidad(request):
 					trabajadores_doctorado = int(doctores_trabajadores)
 				)
 				new_Trabajadores.save()
+				print "point - trabajadores creado"
 			else:
 				trabajadores_update.update(
 					entidad = entidad_update[0],
@@ -857,6 +868,7 @@ def registrarEntidad(request):
 					trabajadores_maestria = int(maestrias_trabajadores),
 					trabajadores_doctorado = int(doctores_trabajadores)
 				)
+				print "point - trabajadores actualizados"
 
 			if len(descripciones_update) == 0:
 				new_Descripciones = Descripciones(
@@ -866,6 +878,7 @@ def registrarEntidad(request):
 					clientes_principales = descClientes_mercado
 				)
 				new_Descripciones.save()
+				print "point - descripciones creadas"
 			else:
 				descripciones_update.update(
 					entidad = entidad_update[0],
@@ -873,257 +886,230 @@ def registrarEntidad(request):
 					proveedores_principales = descProveedores_mercado,
 					clientes_principales = descClientes_mercado
 				)
+				print "point - descripciones actualizadas"
 
-			if categoria_participacion == "meritoEI":
-				empresaInnovadora_update = MeritoEmpresaInnovadora.objects.filter(entidad = entidad_update[0])
-				if len(empresaInnovadora_update) == 0:
-					new_empresaInnovadora = MeritoEmpresaInnovadora(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEI_a,
-						descripcion_b = meritoEI_b,
-						descripcion_c = meritoEI_c,
-						descripcion_d = meritoEI_d,
-						descripcion_e = meritoEI_e,
-						descripcion_f = meritoEI_f,
-						descripcion_g = meritoEI_g,
-						descripcion_h = meritoEI_h,
-						descripcion_i = meritoEI_i,
-						descripcion_j = meritoEI_j 
-					)
-					new_empresaInnovadora.save()
-				else:
-					empresaInnovadora_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEI_a,
-						descripcion_b = meritoEI_b,
-						descripcion_c = meritoEI_c,
-						descripcion_d = meritoEI_d,
-						descripcion_e = meritoEI_e,
-						descripcion_f = meritoEI_f,
-						descripcion_g = meritoEI_g,
-						descripcion_h = meritoEI_h,
-						descripcion_i = meritoEI_i,
-						descripcion_j = meritoEI_j)
 
-			elif categoria_participacion == "meritoRSE":
-				empresaResponsabilidad_update = MeritoResponsabilidadSocial.objects.filter(entidad = entidad_update[0])
-				if len(empresaResponsabilidad_update) == 0:
-					new_empresaResponsabilidad = MeritoResponsabilidadSocial(
-						entidad = entidad_update[0],
-						descripcion_a = meritoRSE_a,
-						descripcion_b = meritoRSE_b,
-						descripcion_c = meritoRSE_c,
-						descripcion_d = meritoRSE_d,
-						descripcion_e = meritoRSE_e
-					)
-					new_empresaResponsabilidad.save()
-				else:
-					empresaResponsabilidad_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoRSE_a,
-						descripcion_b = meritoRSE_b,
-						descripcion_c = meritoRSE_c,
-						descripcion_d = meritoRSE_d,
-						descripcion_e = meritoRSE_e)
+			empresaInnovadora_update = MeritoEmpresaInnovadora.objects.filter(entidad = entidad_update[0])
+			if len(empresaInnovadora_update) == 0:
+				new_empresaInnovadora = MeritoEmpresaInnovadora(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEI_a,
+					descripcion_b = meritoEI_b,
+					descripcion_c = meritoEI_c,
+					descripcion_d = meritoEI_d,
+					descripcion_e = meritoEI_e,
+					descripcion_f = meritoEI_f,
+					descripcion_g = meritoEI_g,
+					descripcion_h = meritoEI_h,
+					descripcion_i = meritoEI_i,
+					descripcion_j = meritoEI_j 
+				)
+				new_empresaInnovadora.save()
+			else:
+				empresaInnovadora_update.update(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEI_a,
+					descripcion_b = meritoEI_b,
+					descripcion_c = meritoEI_c,
+					descripcion_d = meritoEI_d,
+					descripcion_e = meritoEI_e,
+					descripcion_f = meritoEI_f,
+					descripcion_g = meritoEI_g,
+					descripcion_h = meritoEI_h,
+					descripcion_i = meritoEI_i,
+					descripcion_j = meritoEI_j)
+
+
+
+			empresaResponsabilidad_update = MeritoResponsabilidadSocial.objects.filter(entidad = entidad_update[0])
+			if len(empresaResponsabilidad_update) == 0:
+				new_empresaResponsabilidad = MeritoResponsabilidadSocial(
+					entidad = entidad_update[0],
+					descripcion_a = meritoRSE_a,
+					descripcion_b = meritoRSE_b,
+					descripcion_c = meritoRSE_c,
+					descripcion_d = meritoRSE_d,
+					descripcion_e = meritoRSE_e
+				)
+				new_empresaResponsabilidad.save()
+			else:
+				empresaResponsabilidad_update.update(
+					entidad = entidad_update[0],
+					descripcion_a = meritoRSE_a,
+					descripcion_b = meritoRSE_b,
+					descripcion_c = meritoRSE_c,
+					descripcion_d = meritoRSE_d,
+					descripcion_e = meritoRSE_e)
+
+			empresaSalud_update = MeritoEmpresaSalud.objects.filter(entidad = entidad_update[0])
+			if len(empresaSalud_update) == 0:
+				new_empresaSalud = MeritoEmpresaSalud(
+					entidad = entidad_update[0],
+					descripcion_a = meritoES_a,
+					descripcion_b = meritoES_b,
+					descripcion_c = meritoES_c,
+					descripcion_d = meritoES_d
+				)
+				new_empresaSalud.save()
+			else:
+				empresaSalud_update.update(
+					entidad = entidad_update[0],
+					descripcion_a = meritoES_a,
+					descripcion_b = meritoES_b,
+					descripcion_c = meritoES_c,
+					descripcion_d = meritoES_d)	
 			
-			elif categoria_participacion == "meritoES":
-				empresaSalud_update = MeritoEmpresaSalud.objects.filter(entidad = entidad_update[0])
-				if len(empresaSalud_update) == 0:
-					new_empresaSalud = MeritoEmpresaSalud(
-						entidad = entidad_update[0],
-						descripcion_a = meritoES_a,
-						descripcion_b = meritoES_b,
-						descripcion_c = meritoES_c,
-						descripcion_d = meritoES_d
-					)
-					new_empresaSalud.save()
-				else:
-					empresaSalud_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoES_a,
-						descripcion_b = meritoES_b,
-						descripcion_c = meritoES_c,
-						descripcion_d = meritoES_d)
 
-			elif categoria_participacion == "meritoEIM":
-				empresaIndustrial_update = MeritoEmpresaIndustrial.objects.filter(entidad = entidad_update[0])
-				if len(empresaIndustrial_update) == 0:
-					new_empresaIndustrial = MeritoEmpresaIndustrial(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEIM_a,
-						descripcion_b = meritoEIM_b,
-						descripcion_c = meritoEIM_c
-					)
-					new_empresaIndustrial.save()
-				else:
-					empresaIndustrial_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEIM_a,
-						descripcion_b = meritoEIM_b,
-						descripcion_c = meritoEIM_c)
+			empresaIndustrial_update = MeritoEmpresaIndustrial.objects.filter(entidad = entidad_update[0])
+			if len(empresaIndustrial_update) == 0:
+				new_empresaIndustrial = MeritoEmpresaIndustrial(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEIM_a,
+					descripcion_b = meritoEIM_b,
+					descripcion_c = meritoEIM_c
+				)
+				new_empresaIndustrial.save()
+			else:
+				empresaIndustrial_update.update(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEIM_a,
+					descripcion_b = meritoEIM_b,
+					descripcion_c = meritoEIM_c)
 
-			elif categoria_participacion == "meritoEE":
-				esfuerzoExportador_update = MeritoEsfuerzoExportador.objects.filter(entidad = entidad_update[0])
-				if len(esfuerzoExportador_update) == 0:
-					new_esfuerzoExportador = MeritoEsfuerzoExportador(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEE_a,
-						descripcion_b = meritoEE_b,
-						descripcion_c = meritoEE_c,
-						descripcion_d_otra = meritoEE_d_otra,
-						descripcion_e = meritoEE_e,
-						descripcion_f = meritoEE_f,
-						descripcion_g = int(meritoEE_g),
-						descripcion_h = meritoEE_h
-					)
-					new_esfuerzoExportador.save()
-					new_esfuerzoExportador.descripcion_d = {}
+
+			esfuerzoExportador_update = MeritoEsfuerzoExportador.objects.filter(entidad = entidad_update[0])
+			if len(esfuerzoExportador_update) == 0:
+				print "crear esfuerzo e"
+				new_esfuerzoExportador = MeritoEsfuerzoExportador(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEE_a,
+					descripcion_b = meritoEE_b,
+					descripcion_c = meritoEE_c,
+					descripcion_d_otra = meritoEE_d_otra,
+					descripcion_e = meritoEE_e,
+					descripcion_f = meritoEE_f,
+					descripcion_g = int(meritoEE_g),
+					descripcion_h = meritoEE_h
+				)
+
+				new_esfuerzoExportador.save()
+				print "merito saved"
+				new_esfuerzoExportador.descripcion_d = {}
+				if len(new_esfuerzoExportador) > 0:
 					for modalidad in meritoEE_dArr:
 						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
 						new_esfuerzoExportador.descripcion_d.add(modalidadObj)
-				else:
-					esfuerzoExportador_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEE_a,
-						descripcion_b = meritoEE_b,
-						descripcion_c = meritoEE_c,
-						descripcion_d_otra = meritoEE_d_otra,
-						descripcion_e = meritoEE_e,
-						descripcion_f = meritoEE_f,
-						descripcion_g = int(meritoEE_g),
-						descripcion_h = meritoEE_h)
-					esfuerzoExportador_update[0].descripcion_d = {}
-					for modalidad in meritoEE_dArr:
-						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
-						esfuerzoExportador_update[0].descripcion_d.add(modalidadObj)
 
-			elif categoria_participacion == "meritoEC":
-				empresaComercial_update = MeritoEmpresaComercial.objects.filter(entidad = entidad_update[0])
-				if len(empresaComercial_update) == 0:
-					new_empresaComercial = MeritoEmpresaComercial(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEC_a,
-						descripcion_b = meritoEC_b,
-						descripcion_c = meritoEC_c,
-						descripcion_d = meritoEC_d,
-						descripcion_e = meritoEC_e
-					)
-					new_empresaComercial.save()
-				else:
-					empresaComercial_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEC_a,
-						descripcion_b = meritoEC_b,
-						descripcion_c = meritoEC_c,
-						descripcion_d = meritoEC_d,
-						descripcion_e = meritoEC_e)
-
-			elif categoria_participacion == "meritoEDS":
-				empresaServicio_update = MeritoEmpresaServicio.objects.filter(entidad = entidad_update[0])
-				if len(empresaServicio_update) == 0:
-					new_empresaServicio = MeritoEmpresaServicio(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEDS_a,
-						descripcion_b = meritoEDS_b,
-						descripcion_c = meritoEDS_c,
-						descripcion_d = meritoEDS_d,
-						descripcion_e = meritoEDS_e,
-						descripcion_f = meritoEDS_f
-					)
-					new_empresaServicio.save()
-				else:
-					empresaServicio_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEDS_a,
-						descripcion_b = meritoEDS_b,
-						descripcion_c = meritoEDS_c,
-						descripcion_d = meritoEDS_d,
-						descripcion_e = meritoEDS_e,
-						descripcion_f = meritoEDS_f)
-
-			elif categoria_participacion == "meritoEAA":
-				empresaAgro_update = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad_update[0])
-				if len(empresaAgro_update) == 0:
-					new_empresaAgro = MeritoEmpresaAgroindustrial(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEAA_a,
-						descripcion_b = meritoEAA_b,
-						descripcion_c = meritoEAA_c,
-						descripcion_d = meritoEAA_d,
-						descripcion_e = meritoEAA_e,
-						descripcion_f = meritoEAA_f
-					)
-					new_empresaAgro.save()
-				else:
-					empresaAgro_update.update(
-						entidad = entidad_update[0],
-						descripcion_a = meritoEAA_a,
-						descripcion_b = meritoEAA_b,
-						descripcion_c = meritoEAA_c,
-						descripcion_d = meritoEAA_d,
-						descripcion_e = meritoEAA_e,
-						descripcion_f = meritoEAA_f)
-
-			# Para distincion 1
-			distinciones_update = Distincion.objects.filter(entidad = entidad_update[0])
-
-			if reconocimiento1 != "" and fecha_distincion1 != "" and alcance_distincion1 != "":
-				alcanceObj1 = AlcanceMercado.objects.get(pk = alcance_distincion1)
-				distincion1 = Distincion(
+			print "empresa comercial"
+			empresaComercial_update = MeritoEmpresaComercial.objects.filter(entidad = entidad_update[0])
+			if len(empresaComercial_update) == 0:
+				new_empresaComercial = MeritoEmpresaComercial(
 					entidad = entidad_update[0],
-					reconocimiento = reconocimiento1,
-					fecha = fecha_distincion1,
-					alcance = alcanceObj1
+					descripcion_a = meritoEC_a,
+					descripcion_b = meritoEC_b,
+					descripcion_c = meritoEC_c,
+					descripcion_d = meritoEC_d,
+					descripcion_e = meritoEC_e
 				)
-				distincion1.save()
-
-			# Para distincion 2
-			if reconocimiento2 != "" and fecha_distincion2 != "" and alcance_distincion2 != "":
-				alcanceObj2 = AlcanceMercado.objects.get(pk = alcance_distincion2)
-				distincion2 = Distincion(
+				new_empresaComercial.save()
+			else:
+				empresaComercial_update.update(
 					entidad = entidad_update[0],
-					reconocimiento = reconocimiento2,
-					fecha = fecha_distincion2,
-					alcance = alcanceObj2
-				)
-				distincion2.save()
+					descripcion_a = meritoEC_a,
+					descripcion_b = meritoEC_b,
+					descripcion_c = meritoEC_c,
+					descripcion_d = meritoEC_d,
+					descripcion_e = meritoEC_e)
 
-			# Para distincion 3
-			if reconocimiento3 != "" and fecha_distincion3 != "" and alcance_distincion3 != "":
-				alcanceObj3 = AlcanceMercado.objects.get(pk = alcance_distincion3)
-				distincion3 = Distincion(
+			print "empresa servicios"
+			empresaServicio_update = MeritoEmpresaServicio.objects.filter(entidad = entidad_update[0])
+			if len(empresaServicio_update) == 0:
+				new_empresaServicio = MeritoEmpresaServicio(
 					entidad = entidad_update[0],
-					reconocimiento = reconocimiento3,
-					fecha = fecha_distincion3,
-					alcance = alcanceObj3
+					descripcion_a = meritoEDS_a,
+					descripcion_b = meritoEDS_b,
+					descripcion_c = meritoEDS_c,
+					descripcion_d = meritoEDS_d,
+					descripcion_e = meritoEDS_e,
+					descripcion_f = meritoEDS_f
 				)
-				distincion3.save()
-
-			# Para distincion 4
-			if reconocimiento4 != "" and fecha_distincion4 != "" and alcance_distincion4 != "":
-				alcanceObj4 = AlcanceMercado.objects.get(pk = alcance_distincion4)
-				distincion4 = Distincion(
+				new_empresaServicio.save()
+			else:
+				empresaServicio_update.update(
 					entidad = entidad_update[0],
-					reconocimiento = reconocimiento4,
-					fecha = fecha_distincion4,
-					alcance = alcanceObj4
-				)
-				distincion4.save()
+					descripcion_a = meritoEDS_a,
+					descripcion_b = meritoEDS_b,
+					descripcion_c = meritoEDS_c,
+					descripcion_d = meritoEDS_d,
+					descripcion_e = meritoEDS_e,
+					descripcion_f = meritoEDS_f)
 
-			# Para distincion 5
-			if reconocimiento5 != "" and fecha_distincion5 != "" and alcance_distincion5 != "":
-				alcanceObj5 = AlcanceMercado.objects.get(pk = alcance_distincion5)
-				distincion5 = Distincion(
+			print "empresa agro"
+			empresaAgro_update = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad_update[0])
+			if len(empresaAgro_update) == 0:
+				new_empresaAgro = MeritoEmpresaAgroindustrial(
 					entidad = entidad_update[0],
-					reconocimiento = reconocimiento5,
-					fecha = fecha_distincion5,
-					alcance = alcanceObj5
+					descripcion_a = meritoEAA_a,
+					descripcion_b = meritoEAA_b,
+					descripcion_c = meritoEAA_c,
+					descripcion_d = meritoEAA_d,
+					descripcion_e = meritoEAA_e,
+					descripcion_f = meritoEAA_f
 				)
-				distincion5.save()
-
-			return HttpResponse(2)
-				
+				new_empresaAgro.save()
+			else:
+				empresaAgro_update.update(
+					entidad = entidad_update[0],
+					descripcion_a = meritoEAA_a,
+					descripcion_b = meritoEAA_b,
+					descripcion_c = meritoEAA_c,
+					descripcion_d = meritoEAA_d,
+					descripcion_e = meritoEAA_e,
+					descripcion_f = meritoEAA_f)
 		
+				
+			print "point - merito actualizado o creado"
+
+			return HttpResponse(entidad_update[0].pk)
+				
+@csrf_exempt
+def crearDistincion(request):
+	anio_actual = time.strftime("%Y")
+	if request.method == 'POST':
+		distincion_reconocimiento = request.POST.get("reconocimiento")
+		distincion_fecha = request.POST.get("fecha")
+		distincion_alcances = request.POST.get("alcance")
+		entidad_nit = request.POST.get("entidad_nit")
+
+		print request.POST
+
+		entidad = Entidad.objects.get(nit = entidad_nit)
+		alcance = AlcanceMercado.objects.get(pk = distincion_alcances)
+
+		print entidad
+		print alcance
+		print distincion_reconocimiento
+		print distincion_fecha
+
+		distincion = Distincion(
+			entidad = entidad,
+			reconocimiento = distincion_reconocimiento,
+			fecha = distincion_fecha,
+			alcance = alcance)
+		distincion.save()
+		
+		return HttpResponse(distincion.pk)
+
+@csrf_exempt
+def eliminarDistincion(request):
+	if request.method == 'POST':
+		distincion_id = request.POST.get("id")
+
+		distincion = Distincion.objects.get(pk = distincion_id)
+		distincion.delete()
+
+		return HttpResponse(1)
+
 
 @csrf_exempt
 def chainedMunicipio(request):
@@ -1166,3 +1152,80 @@ def chainedCorregimiento(request):
 
 		return HttpResponse(corregimientos_json)
 
+@csrf_exempt
+def crearAdjuntoEmpresa(request, tipo):
+
+	if request.method == 'POST':
+		entidad_update = Entidad.objects.filter(perfil_usuario = request.user)
+		tipo = int(tipo)
+		adjunto_update = AdjuntoEntidadMerito.objects.filter(entidad = entidad_update[0], tipo_adjunto = tipo)
+
+		if len(adjunto_update) == 0:
+			adjuntoEntidad = AdjuntoEntidadMerito(entidad = entidad_update[0])
+			adjuntoEntidad.tipo_adjunto = tipo
+			adjuntoEntidad.adjunto = request.FILES.values()[0]
+			adjuntoEntidad.save()
+		else:
+			adjunto_update[0].entidad = entidad_update[0]
+			adjunto_update[0].tipo_adjunto = tipo
+			adjunto_update[0].adjunto = request.FILES.values()[0]
+			adjunto_update[0].save()
+
+		return HttpResponse(1)
+
+	else:
+		return HttpResponse(0)
+
+@csrf_exempt
+def crearAdjuntoOtrosEmpresa(request, tipo):
+	if request.method == 'POST':
+		tipo = int(tipo)
+		entidad_update = Entidad.objects.filter(perfil_usuario = request.user)
+
+		adjuntoOtro = AdjuntoEntidadMerito(entidad = entidad_update[0])
+		adjuntoOtro.tipo_adjunto = tipo
+		adjuntoOtro.adjunto = request.FILES.values()[0]
+		adjuntoOtro.save()
+
+		return HttpResponse(1)
+
+@csrf_exempt
+def consultarAdjuntosOtrosEmpresa(request):
+	if request.method == 'POST':
+		entidad_update = Entidad.objects.filter(perfil_usuario = request.user)
+		tipo = 10 #Tipo de adjunto otros
+		adjuntosOtros = AdjuntoEntidadMerito.objects.filter(entidad = entidad_update[0], tipo_adjunto = tipo)
+
+		adjuntosArr = []
+		if len(adjuntosOtros) > 0:
+			for adjunto in adjuntosOtros:
+				adjuntosDict = {}
+				adjuntosDict["id"] = adjunto.pk
+				adjuntosDict["adjunto"] = "%s" % (adjunto.adjunto)
+				adjuntosArr.append(adjuntosDict)
+
+			adjuntosJson = json.dumps(adjuntosArr)
+
+			return HttpResponse(adjuntosJson)
+@csrf_exempt
+def borrarAdjuntosOtroEmpresa(request):
+	if request.method == 'POST':
+		adjunto_id = request.POST.get("id")
+
+		adjunto = AdjuntoEntidadMerito.objects.get(pk = adjunto_id)
+		adjunto.delete()
+
+		return HttpResponse(1)
+
+@csrf_exempt
+def consultarAdjuntoEmpresa(request, tipo):
+	if request.method == 'POST':
+		entidad_update = Entidad.objects.filter(perfil_usuario = request.user)
+		tipo = int(tipo)
+		adjuntos = AdjuntoEntidadMerito.objects.filter(entidad = entidad_update[0], tipo_adjunto = tipo)		
+		if len(adjuntos) > 0:
+			response = "%s" % (adjuntos[0].adjunto)
+
+		return HttpResponse(response)
+	else:
+		return HttpResponse(0)

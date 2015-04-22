@@ -15,4 +15,13 @@ urlpatterns = patterns('',
     url(r'^usuarios/', include('Entidad.urls')),
     url(r'^redactor/', include('redactor.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^password/reset/$', 'django.contrib.auth.views.password_reset', 
+        {'post_reset_redirect' : '/password/reset/done/'}, name="password_reset"),
+
+    url(r'^password/reset/done/$', 'django.contrib.auth.views.password_reset_done'),
+
+    url(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', 
+        {'post_reset_redirect' : '/password/done/'}),
+    
+    url(r'^password/done/$', 'django.contrib.auth.views.password_reset_complete'),
+)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

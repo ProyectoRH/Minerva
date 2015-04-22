@@ -28,6 +28,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Variables de entorno
+DBNAME = os.environ.get('dbname') 
+DBUSER = os.environ.get('dbuser') 
+DBPASS = os.environ.get('dbpass') 
+DBHOST = os.environ.get('dbhost') 
 
 
 # Application definition
@@ -66,6 +71,10 @@ INSTALLED_APPS = (
     'GrupoInvestigacion',
     'Vistas',
     'Distinciones',
+    'EmprendedorPremio',
+    'EmpresarioBenemerito',
+    'AdjuntosEntidad',
+    'password_reset',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,10 +98,10 @@ WSGI_APPLICATION = 'Minerva.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'minervadb',
-        'USER': 'jpestana',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'NAME': DBNAME,
+        'USER': DBUSER,
+        'PASSWORD': DBPASS,
+        'HOST': DBHOST,
         'PORT': '5432',
     }
 }
@@ -116,6 +125,8 @@ USE_TZ = True
 #USE_DJANGO_JQUERY = False
 
 #JQUERY_URL = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = "214958080"
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP+( 
    'django.core.context_processors.request',

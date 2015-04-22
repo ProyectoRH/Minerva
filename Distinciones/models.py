@@ -7,6 +7,7 @@ class Distincion(models.Model):
 	reconocimiento = models.CharField(max_length=255, null=True, blank=True)
 	fecha = models.DateField(null=True, blank=True)
 	alcance = models.ForeignKey(AlcanceMercado, null=True, blank=True)
+	creacion = models.DateField(auto_now_add=True)
 
 	def __unicode__(self):
 		return "%s - %s" % (self.entidad.razon_social, self.reconocimiento)

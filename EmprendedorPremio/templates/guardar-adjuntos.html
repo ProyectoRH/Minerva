@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Guardar Adjuntos</title>
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+</head>
+<body>
+	<div class="col-md-12">
+		<form action="{% url 'EmprendedorPremio.views.guardarAdjuntos' %}" class="formulario" enctype="multipart/form-data">
+			<div class="form-group">
+	    		<label for="hoja_vida_file">Hoja de vida actualizada</label>
+	    		<input type="file" name="hoja_vida_file" id="hoja_vida_file" />
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="diploma_grado">Fotocopia del acta o diploma de grado (Pregrado o Postgrado)</label>
+	    		<input type="file" name="diploma_grado" id="diploma_grado" />
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="certificado_laboral">Certificado laboral actualizado</label>
+	    		<input type="file" name="certificado_laboral" id="certificado_laboral" />
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="carta_intencion">Carta de intención del participante. (<a href="#" style="color:#36A256;">Descargar formato</a>)</label>
+	    		<input type="file" name="carta_intencion" id="carta_intencion" />
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="carta_intencion">Fotografía del participante en formato digital y de alta resolución</label>
+	    		<input type="file" name="carta_intencion" id="carta_intencion" />
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="carta_intencion">Vídeo testimonial (Máx:250Mb)</label>
+	    		<input type="file" name="carta_intencion" id="carta_intencion" />
+	    	</div>
+
+	    	<!-- Si tiene su propia empresa, se despliegan estos campos -->
+	    	<div id="empresa_emprendedor_existe">
+	    		<div class="form-group">
+		    		<label for="certificado_existencia">Certificado de existencia y representación legal, actualizados a la fecha</label>
+		    		<input type="file" name="certificado_existencia" id="certificado_existencia" />
+		    	</div>
+				<hr />
+		    	
+	    		<h4>Estados Financieros</h4>
+	    		<div class="form-group">
+		    		<label for="estado_financiero2012">Hasta diciembre del 2012</label>
+		    		<input type="file" name="estado_financiero2012" id="estado_financiero2012" />
+		    	</div>
+		    	<div class="form-group">
+		    		<label for="estado_financiero2013">Hasta diciembre del 2013</label>
+		    		<input type="file" name="estado_financiero2013" id="estado_financiero2013" />
+		    	</div>
+				<div class="form-group">
+		    		<label for="estado_financiero2014">Hasta diciembre del 2014</label>
+		    		<input type="file" name="estado_financiero2014" id="estado_financiero2014" />
+		    	</div>
+	    	
+				<hr />
+				<div class="form-group">
+					<label for="presentacion_empresa">Presentación de la empresa</label>
+					<input type="file" name="presentacion_empresa" id="presentacion_empresa" />
+				</div>
+
+				<div class="form-group">
+					<label for="portafolio_servicios">Portafolio de servicios</label>
+					<input type="file" name="portafolio_servicios" id="portafolio_servicios" />
+				</div>
+		    	<div class="form-group">
+					<label for="logo_empresa_file">Logo de la empresa en alta resolución (Formato ilustrador)</label>
+					<input type="file" name="logo_empresa_file" id="logo_empresa_file" />
+				</div>
+	    	</div>
+		</form>
+	</div>
+	
+
+	<script src="{% static 'js/jquery-2.1.3.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script>
+</body>
+</html>

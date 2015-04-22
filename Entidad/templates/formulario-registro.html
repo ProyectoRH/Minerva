@@ -76,6 +76,48 @@
 								<input type="password" id="password2" name="password2" class="form-control" required />
 							</div>
 							<div class="form-group">
+								<label for="tipo_usuario">Seleccione el tipo de usuario</label>
+								<select name="tipo_usuario" id="tipo_usuario" class="form-control">
+									<option value="emprendedor">Emprendedor Bolivariano</option>
+									<option value="empresa">Empresa</option>
+									<option value="gremio">Gremio</option>
+								</select>
+							</div>
+							<div id="informacion_gremio" style="display:none">
+								<div class="form-group">
+									<label for="nombre_gremio">Nombre del gremio</label>
+									<input type="text" name="nombre_gremio" id="nombre_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="direccion_gremio">Dirección</label>
+									<input type="text" name="direccion_gremio" id="direccion_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="nombre_presidente_gremio">Nombre del presidente de la junta directiva</label>
+									<input type="text" name="nombre_presidente_gremio" id="nombre_presidente_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="telefono_presidente_gremio">Teléfono</label>
+									<input type="text" name="telefono_presidente_gremio" id="telefono_presidente_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="email_presidente_gremio">E-mail</label>
+									<input type="text" name="email_presidente_gremio" id="email_presidente_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="nombre_gerente_gremio">Nombre del director(a) ejecutivo o gerente</label>
+									<input type="text" name="nombre_gerente_gremio" id="nombre_gerente_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="telefono_gerente_gremio">Teléfono</label>
+									<input type="text" name="telefono_gerente_gremio" id="telefono_gerente_gremio" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="email_gerente_gremio">E-mail</label>
+									<input type="text" name="email_gerente_gremio" id="email_gerente_gremio" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
 								<input type="submit" class="form-control btn btn-success" value="Registrarse" />
 							</div>
 
@@ -90,7 +132,9 @@
 				      <strong>Credenciales incorrectas</strong> Si aún no tienes una cuenta, regístrate.
 				    </div>
 				<div class="panel panel-default">
-
+					<div class="panel-head">
+						<h2 class="text-center">Login</h2>
+					</div>
 					<div class="panel-body">
 						<form action="#" method="post" class="formulario" id="formularioLogin">
 							{% csrf_token %}
@@ -105,6 +149,7 @@
 							<div class="form-group">
 								<input type="submit" class="form-control btn btn-success" value="Iniciar Sesión" />
 							</div>
+							<a href="{% url 'django.contrib.auth.views.password_reset' %}">Olvidaste tu contraseña?</a>
 						</form>
 					</div>
 				</div>
@@ -118,6 +163,15 @@
 	<script>
 
 		$(document).ready(function(){
+			$('#tipo_usuario').change(function(){
+				if($(this).val() == "gremio"){
+					$('#informacion_gremio').css('display', 'block');
+				}else{
+					$('#informacion_gremio').css('display', 'none');
+				}
+			});
+
+
 			$('#formulario_registro').validate({
 				rules: {
 				    password: "required",
@@ -140,9 +194,20 @@
 					var apellido = $('#apellido').val();
 					var password = $('#password').val();
 					var email = $('#email').val();
+					var tipo_usuario = $('#tipo_usuario').val();
+
+					// Para los datos del gremio
+					var nombre_gremio = $('#nombre_gremio').val();
+					var direccion_gremio = $('#direccion_gremio').val();
+					var nombre_presidente_gremio = $('#nombre_presidente_gremio').val();
+					var telefono_presidente_gremio = $('#telefono_presidente_gremio').val();
+					var email_presidente_gremio = $('#email_presidente_gremio').val();
+					var nombre_gerente_gremio = $('#nombre_gerente_gremio').val();
+					var telefono_gerente_gremio = $('#telefono_gerente_gremio').val();
+					var email_gerente_gremio = $('#email_gerente_gremio').val();
 
 
-					$.post("{% url 'Entidad.views.registroPeticion' %}", {'nombre': nombre,'apellido': apellido,'email':email, 'password':password}, function(response){
+					$.post("{% url 'Entidad.views.registroPeticion' %}", {'nombre': nombre,'apellido': apellido,'email':email, 'password':password, 'tipo_usuario':tipo_usuario, 'nombre_gremio':nombre_gremio, 'direccion_gremio':direccion_gremio, 'nombre_presidente_gremio':nombre_presidente_gremio, 'telefono_presidente_gremio':telefono_presidente_gremio, 'email_presidente_gremio':email_presidente_gremio, 'nombre_gerente_gremio':nombre_gerente_gremio, 'telefono_gerente_gremio':telefono_gerente_gremio, 'email_gerente_gremio':email_gerente_gremio}, function(response){
 						if(response == 0){
 							$('#myModalExistente').modal('show');
 							setTimeout(function(){

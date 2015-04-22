@@ -93,11 +93,11 @@ class PerfilEntidadMerito(models.Model):
 
 	#--- Tipo de organizacion ----
 	tipo_organizacion = models.ForeignKey(TipoOrganizacion, blank=True, null=True)
-	tipo_organizacion_otra = models.CharField(max_length=200, blank=True, help_text='Especifique otro tipo', null=True)
+	tipo_organizacion_otra = models.TextField(blank=True, help_text='Especifique otro tipo', null=True)
 
 	#--- Actividad economica ----
 	actividad_economica = models.ForeignKey(ActividadEconomica, blank=True, null=True)
-	actividad_economica_otra = models.CharField(max_length=200, blank=True, help_text='Especifique otra', null=True)
+	actividad_economica_otra = models.TextField(blank=True, help_text='Especifique otra', null=True)
 
 	codigo_ciiu = models.CharField(max_length=100, blank=True, null=True)
 	tamano_organizacion = models.ForeignKey(TamanoOrganizacion, blank=True, null=True)
@@ -105,27 +105,26 @@ class PerfilEntidadMerito(models.Model):
 	
 	#--- Por qué el producto es competitivo ----
 	competitividad = models.ManyToManyField(Competitividad, blank=True, default=None, null=True)
-	competitividad_especifique = models.CharField(max_length=200, blank=True, help_text='Especifique', default=None, null=True)
+	competitividad_especifique = models.TextField(blank=True, help_text='Especifique', default=None, null=True)
 
 	#--- Razon por la cual participa ----
 	razones_participacion = models.ManyToManyField(RazonesParticipacion, blank=True, default=None, null=True)
-	razones_participacion_especifique = models.CharField(max_length=200, blank=True, help_text='Especifique otro', default=None, null=True)
+	razones_participacion_especifique = models.TextField(blank=True, help_text='Especifique otro', default=None, null=True)
 	
 	#--- Medio por el cual se entero ----
 	canal_recepcion = models.ManyToManyField(CanalRecepcion, blank=True, default=None, null=True)
-	canal_recepcion_especifique = models.CharField(max_length=200, blank=True, help_text='Especifique otro', default=None, null=True)
+	canal_recepcion_especifique = models.TextField(blank=True, help_text='Especifique otro', default=None, null=True)
 
 	# ------ Valor de ventas por año -------
-	anio_venta_1 = models.IntegerField(blank=True, default=None, null=True)
-	anio_venta_2 = models.IntegerField(blank=True, default=None, null=True)
-	anio_venta_3 = models.IntegerField(blank=True, default=None, null=True)
+	anio_venta_1 = models.CharField(max_length=200, blank=True, null=True)
+	anio_venta_2 = models.CharField(max_length=200, blank=True, null=True)
+	anio_venta_3 = models.CharField(max_length=200, blank=True, null=True)
 
 	#------ Sistema de gestión ----
-	calidad = models.CharField(max_length=255, help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
-	seguridad_industrial = models.CharField(max_length=255, help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
-	ambiental = models.CharField(max_length=255, help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
-	otro = models.CharField(max_length=255, help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
-	implementacion = models.CharField(verbose_name=u'En implementación', max_length=255, help_text='Especifique el porcentaje de avance si lo tiene' ,blank=True, default=None, null=True)
+	calidad = models.TextField(help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
+	seguridad_industrial = models.TextField(help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
+	ambiental = models.TextField(help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
+	otro = models.TextField(help_text='Especifique norma y año de especificación si lo tiene' ,blank=True, default=None, null=True)
 
 	#------ Investigacion e innovacion
 	departamento_idi = models.BooleanField(default=False)
@@ -150,11 +149,20 @@ class PerfilEntidadMerito(models.Model):
 		('meritoEDS', 'Mérito a la Empresa de Servicios'),
 		('meritoEAA', 'Mérito a la Empresa Agroindustrial-Agropecuaria'),
 	)
-	categoria = models.CharField(max_length=255, verbose_name=u'Categoría de participación', choices=CATEGORIAS, default=None, blank=True, null=True)
+	#categoria = models.CharField(max_length=255, verbose_name=u'Categoría de participación', choices=CATEGORIAS, default=None, blank=True, null=True)
 	creacion = models.DateField(auto_now_add=True)
 	# --------------------------------------
 	def __unicode__(self):
 		return self.entidad.razon_social
+
+class AdjuntosEntidad(models.Model):
+	entidad = models.ForeignKey(Entidad)
+	archivo = models.FileField(upload_to='static/Premio/uploads_empresas/')
+	descripcion = models.TextField()
+	fecha_subida = models.DateField(auto_now_add=True)
+
+	def __unicode__(self):
+		return self.archivo
 
 class Trabajadores(models.Model):
 	entidad = models.OneToOneField(Entidad)
@@ -273,7 +281,7 @@ class MeritoEsfuerzoExportador(models.Model):
 	descripcion_a = models.IntegerField(blank=True, null=True, default=None, verbose_name=u'Mencione el año en el cual la empresa inició a exportar*')
 	descripcion_b = models.IntegerField(blank=True, null=True, default=None, verbose_name=u'Indique el porcentaje de exportaciones de la empresa, de acuerdo a las ventas totales en el último año*')
 	descripcion_c = models.TextField(blank=True, null=True, default=None, verbose_name=u'Mencione los paises con los cuales establece relaciones comerciales, especifique el porcentaje de exportaciones realizadas a cada país en el último año.*')
-	descripcion_d = models.ManyToManyField(MeritoEsfExportModalidad ,verbose_name=u'Seleccione la modalidad de internacionalización que utiliza la empresa.')
+	descripcion_d = models.ManyToManyField(MeritoEsfExportModalidad, blank=True, null=True, verbose_name=u'Seleccione la modalidad de internacionalización que utiliza la empresa.')
 	descripcion_d_otra = models.CharField(max_length=255, blank=True, verbose_name=u'Si otra, especifique')
 	descripcion_e = models.TextField(blank=True, null=True, default=None, verbose_name=u'Indique el valor de las exportaciones y/o importaciones no tradicionales en el último año en valor FOB (Free On Board)* Entiéndase como valor FOB (Free On Board: Término de comercialización internacional que indica el precio de la mercancía a bordo de la nave o aeronave. Sin incluir fletes, seguros y otros gastos de manipulación después de embarcada la mercancía. El valor debe ser expresado en pesos colombianos - COP)')
 	descripcion_f = models.TextField(blank=True, null=True, default=None, verbose_name=u'Describa los productos exportados en el último año y mencione el valor exportado en pesos colombianos - COP')

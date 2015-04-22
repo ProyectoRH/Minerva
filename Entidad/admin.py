@@ -78,5 +78,6 @@ admin.site.register(Competitividad)
 admin.site.register(RazonesParticipacion)
 admin.site.register(CanalRecepcion)
 admin.site.register(Trabajadores)
+admin.site.register(AdjuntosEntidad)
 
 

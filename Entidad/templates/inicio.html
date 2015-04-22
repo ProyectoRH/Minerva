@@ -2688,7 +2688,13 @@
 			$('#uploadTrgEmpresaOtros').load(function(response){
 				$.post("{% url 'Entidad.views.consultarAdjuntosOtrosEmpresa' %}", {}, function(response){
 					response = JSON.parse(response);
-					$('#tablaAdjuntosOtros').html('');
+					var htmlInitial = '<tr>';
+						htmlInitial += '<td colspan="2">';
+						htmlInitial += '<input type="file" name="adjuntosOtrosEmpresa" id="adjuntosOtrosEmpresa">';
+						htmlInitial += '</td>';
+						htmlInitial += '</tr>';
+
+					$('#tablaAdjuntosOtros').html(htmlInitial);
 					$.each(response, function(key, value){
 						var valor = "", indice = "";
 						$.each(value, function(k, v){

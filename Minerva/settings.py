@@ -28,11 +28,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Variables de entorno
-DBNAME = os.environ.get('dbname') 
-DBUSER = os.environ.get('dbuser') 
-DBPASS = os.environ.get('dbpass') 
-DBHOST = os.environ.get('dbhost') 
+# # Variables de entorno
+# DBNAME = os.environ.get('dbname') 
+# DBUSER = os.environ.get('dbuser') 
+# DBPASS = os.environ.get('dbpass') 
+# DBHOST = os.environ.get('dbhost') 
 
 
 # Application definition
@@ -98,10 +98,10 @@ WSGI_APPLICATION = 'Minerva.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DBNAME,
-        'USER': DBUSER,
-        'PASSWORD': DBPASS,
-        'HOST': DBHOST,
+        'NAME': 'minerva20db',
+        'USER': 'minervaus20',
+        'PASSWORD': '?"i5=&{-a"3M',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

@@ -171,7 +171,7 @@
 					{% endif %}
 
 					<div class="btn-settings pull-right">
-						<a href="#" style="color:green;" target="_blank">Ayuda <i class="glyphicon glyphicon-question-sign" style="font-size: 12pt;top:3px;"></i></a>
+						<a href="mailto:pmeritoempresarial@unisimonbolivar.edu.co" style="color:green;" target="_blank">Ayuda <i class="glyphicon glyphicon-question-sign" style="font-size: 12pt;top:3px;"></i></a>
 						<a href="#" style="color:green;" onclick="ensureLogout();">Cerrar Sesión <i class="glyphicon glyphicon-off"></i></a>
 					</div>
 
@@ -2132,7 +2132,7 @@
 			    			<div class="form-group">
 					    		<label for="hoja_vida_file" style="display:block;">Hoja de vida actualizada</label>
 					    		<input type="file" name="hoja_vida_file" id="hoja_vida_file" style="display:inline-block;" />
-					    		<input type="submit" name="submit" value="Subir" class="btn btn-success btn-xs" style="display:inline-block;" />
+					    		<input type="submit" name="submit" value="Subir" onclick="localStorage.setItem('val_div',1);"  class="btn btn-success btn-xs" style="display:inline-block;" />
 					    	</div>
 					    	<div id="archivoCargado1">
 					    		{% if adjuntosEmprendedor %}
@@ -3524,7 +3524,7 @@
 				'canal_recepcionOtra_emp':canal_recepcionOtra
 			}, function(response){
 				if(response == 1){
-					alert("Cambios guardados con éxito");
+					//alert("Cambios guardados con éxito");
 				}else if(response == 2){
 					//alert("Cambios actualizados con éxito");
 				}

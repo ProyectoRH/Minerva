@@ -43,7 +43,7 @@ class Emprendedor(models.Model):
 	vinculacion_laboral = models.CharField(max_length=255, blank=True, null=True)
 	otra = models.CharField(max_length=255, blank=True, null=True)
 
-	empresa_existe = models.BooleanField(default=False)
+	empresa_existe = models.BooleanField(verbose_name=u"Tiene empresa?", default=False)
 	perfil_profesional = models.TextField(blank=True, null=True)
 
 	canal_recepcion = models.ManyToManyField(CanalRecepcion, blank=True, null=True)

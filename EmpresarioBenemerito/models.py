@@ -40,6 +40,10 @@ class EmpresarioBenemerito(models.Model):
 	gestion_empresarial = models.TextField(blank=True, null=True)
 	emprendimiento = models.TextField(blank=True, null=True)
 
+	class Meta:
+		verbose_name='Postulado'
+		verbose_name_plural = 'Postulados'
+
 	def __unicode__(self):
 		return self.nombre_empresario
 

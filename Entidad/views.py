@@ -34,7 +34,7 @@ def home(request):
 	anio_actual2 = int(anio_actual) - 2
 	anio_actual3 = int(anio_actual) - 3
 
-	departamentos = Departamento.objects.all()
+	departamentos = Departamento.objects.all().order_by('pk')
 	actividades_economicas = ActividadEconomica.objects.all()
 	tipos_organizacion = TipoOrganizacion.objects.all()
 	tamanos_organizacion = TamanoOrganizacion.objects.all()

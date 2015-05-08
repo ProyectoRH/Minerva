@@ -929,7 +929,7 @@
 					
 					<!-- Participación -->
 				    <div class="wizard-card" data-cardname="card10">
-				    	<h3>Participación</h3>
+				    	<h3>¿Cómo se enteró?</h3>
 
 				    	<div class="form-group">
 				    		<label for="razon">Seleccione las principales razones por las cuales su empresa desea participar  en el "Premio al Mérito Empresarial - Universidad Simón Bolívar"</label>
@@ -969,7 +969,7 @@
 					
 					<!-- Detalles de categoría -->
 				    <div class="wizard-card" data-cardname="card11" class="card11" style="display:none;">
-				    	<h3>Detalles de la categoría</h3>
+				    	<h3>Categorías</h3>
 						<div class="form-group">
 				    		<label for="categoria_participacion">Seleccione y llene la información de las categorías en las que desea participar</label>
 				    	</div>
@@ -2369,7 +2369,9 @@
 
 						<div class="form-group">
 							<label for="tipo_empresario">Seleccione la categoría en la que desea postular al empresario</label>
-							<select name="tipo_empresario" id="tipo_empresario" class="form-control">
+							<select name="tipo_empresario" id="tipo_empresario" class="form-control" data-validate="validarEntidad">
+								<option value="" selected="selected">Seleccione tipo de empresario</option>
+								<option value="" disabled>------------</option>
 								<option value="benemerito">Empresario Benemérito</option>
 								<option value="anio">Empresario del año</option>
 							</select>
@@ -2377,7 +2379,7 @@
 						<hr />
 						<div class="form-group">
 							<label for="nombre_empresario">Nombre del empresario</label>
-							<input type="text" name="nombre_empresario" id="nombre_empresario" class="form-control">
+							<input type="text" name="nombre_empresario" id="nombre_empresario" class="form-control" data-validate="validarEntidad">
 						</div>
 						<div class="form-group">
 							<label for="direccion_empresario">Dirección de contacto</label>
@@ -2397,7 +2399,7 @@
 						</div>
 						<div class="form-group">
 							<label for="email_empresario">Correo electrónico</label>
-							<input type="email" name="email_empresario" id="email_empresario" class="form-control">
+							<input type="email" name="email_empresario" id="email_empresario" class="form-control" data-validate="validarEntidad">
 						</div>
 					</div>
 
@@ -2874,12 +2876,12 @@
 						{% endif %}
 						if (codigoMunicipio != null && codigoMunicipio != ""){
 							if(codigoMunicipio == val){
-								$('#municipio').append('<option value="'+val+'" selected>'+name+'</option>');	
+								$('#municipio').prepend('<option value="'+val+'" selected>'+name+'</option>');	
 							}else{
-								$('#municipio').append('<option value="'+val+'">'+name+'</option>');
+								$('#municipio').prepend('<option value="'+val+'">'+name+'</option>');
 							}
 						}else{
-							$('#municipio').append('<option value="'+val+'">'+name+'</option>');	
+							$('#municipio').prepend('<option value="'+val+'">'+name+'</option>');	
 						}
 						
 					});
@@ -2908,12 +2910,12 @@
 						{% endif %}
 						if (codigoCorregimiento != null && codigoCorregimiento != ""){
 							if(codigoCorregimiento == val){
-								$('#corregimiento').append('<option value="'+val+'" selected>'+name+'</option>');		
+								$('#corregimiento').prepend('<option value="'+val+'" selected>'+name+'</option>');		
 							}else{
-								$('#corregimiento').append('<option value="'+val+'">'+name+'</option>');
+								$('#corregimiento').prepend('<option value="'+val+'">'+name+'</option>');
 							}
 						}else{
-							$('#corregimiento').append('<option value="'+val+'">'+name+'</option>');
+							$('#corregimiento').prepend('<option value="'+val+'">'+name+'</option>');
 						}
 					});
 					

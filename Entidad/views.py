@@ -194,6 +194,8 @@ def registrarEntidad(request):
 	if request.method == 'POST':
 		razon_social = request.POST.get("razon_social")
 		nit_rut = request.POST.get("nit_rut")
+		if nit_rut == "" or nit_rut == " ":
+			nit_rut = None
 		domicilio = request.POST.get("domicilio")
 		
 		departamento = request.POST.get("departamento")
@@ -443,12 +445,13 @@ def registrarEntidad(request):
 		meritoEDS_e = request.POST.get("meritoEDS_e")
 		meritoEDS_f = request.POST.get("meritoEDS_f")
 		# EMPRESA AGROINDUSTRIAL-AGROPECUARIA
-		meritoEAA_a =  request.POST.get("meritoEAA_a")
-		meritoEAA_b =  request.POST.get("meritoEAA_b")
-		meritoEAA_c =  request.POST.get("meritoEAA_c")
-		meritoEAA_d =  request.POST.get("meritoEAA_d")
-		meritoEAA_e =  request.POST.get("meritoEAA_e")
-		meritoEAA_f =  request.POST.get("meritoEAA_f")
+		meritoEAA_a = request.POST.get("meritoEAA_a")
+		meritoEAA_b = request.POST.get("meritoEAA_b")
+		meritoEAA_c = request.POST.get("meritoEAA_c")
+		meritoEAA_d = request.POST.get("meritoEAA_d")
+		meritoEAA_e = request.POST.get("meritoEAA_e")
+		meritoEAA_f = request.POST.get("meritoEAA_f")
+
 
 		# -------- Para departamento, municipio y corregimiento que vienen en POST ---
 		if departamento:
@@ -461,15 +464,25 @@ def registrarEntidad(request):
 			corregimientoObj = Corregimiento.objects.get(pk = corregimiento)
 		# ----------------------------------------------------------------------------
 		# -------- Para tipo de organizacion y para actividad economica que vienen en POST ---
-		tipo_organizacion_operacion = TipoOrganizacion.objects.get(pk = tOrganizacion_operacion)
-		actividad_economica_operacion = ActividadEconomica.objects.get(pk = aEconomica_operacion)
+		if tOrganizacion_operacion:
+			tipo_organizacion_operacion = TipoOrganizacion.objects.get(pk = tOrganizacion_operacion)
+		else:
+			tipo_organizacion_operacion = None
+
+		if aEconomica_operacion:
+			actividad_economica_operacion = ActividadEconomica.objects.get(pk = aEconomica_operacion)
+		else:
+			actividad_economica_operacion = None
 		# ------------------------------------------------------------------------------------
 		# -------- Para tamano de la organizacion -------
 		if tamano_organizacion:
 			tamano_organizacionObj = TamanoOrganizacion.objects.get(pk = tamano_organizacion)
 		else:
 			tamano_organizacionObj = None
-		entidad_update = Entidad.objects.filter(nit = nit_rut, perfil_usuario = request.user)
+		entidad_update = ""
+
+		if nit_rut != None and nit_rut != "":
+			entidad_update = Entidad.objects.filter(nit = nit_rut, perfil_usuario = request.user)
 		# ---- Objetos que deben ser traídos y consultados -------
 		if len(entidad_update) > 0:
 			representanteLegal_update = RepresentanteLegal.objects.filter(entidad = entidad_update[0])
@@ -481,291 +494,90 @@ def registrarEntidad(request):
 			trabajadores_update = Trabajadores.objects.filter(entidad = entidad_update[0])
 
 			descripciones_update = Descripciones.objects.filter(entidad = entidad_update[0])
-		if len(entidad_update) == 0:
-			new_entidad = Entidad(perfil_usuario = request.user,nit = nit_rut,razon_social = razon_social,direccion = domicilio,url_web = web,telefono = telefono,nota_seguimiento = "",email = email,departamento = departamentoObj, municipio = municipioObj, corregimiento = corregimientoObj, facebook = facebook, twitter = twitter, fax = fax)
-			new_entidad.save()
-			print "entidad creada"
-			new_RepresentanteLegal = RepresentanteLegal(
-					entidad = new_entidad,
-					nombres = nombre_repLegal,
-					cargo = cargo_repLegal,
-					ciudad = ciudad_repLegal,
-					direccion = direccion_repLegal,
-					telefono = telefono_repLegal,
-					celular = celular_repLegal,
-					email = email_repLegal)
-			new_RepresentanteLegal.save()
-			print "point - representante creado"
-			new_Contacto = ContactosEntidad(
-					entidad = new_entidad,
-					nombres = nombres_contacto,
-					cargo = cargo_contacto,
-					ciudad = direccion_contacto,
-					direccion = ciudad_contacto,
-					telefono = telefono_contacto,
-					celular = celular_contacto,
-					email = email_contacto
-				)
-			new_Contacto.save()
-			print "point - contacto creado"
-			new_trabajadores = Trabajadores(
-					entidad = new_entidad,
-					trabajadores_directos = int(empleoDirecto_trabajadores),
-					trabajadores_indirectos = int(empleoIndirecto_trabajadores),
-					trabajadores_tecnico = int(tecnicos_trabajadores),
-					trabajadores_tecnologo = int(tecnologos_trabajadores),
-					trabajadores_profesional = int(profesionales_trabajadores),
-					trabajadores_profesional_esp = int(especializados_trabajadores),
-					trabajadores_maestria = int(maestrias_trabajadores),
-					trabajadores_doctorado = int(doctores_trabajadores)
-				)
-			new_trabajadores.save()
-			print "point - trabajadores creado"
-			new_descripciones = Descripciones(
-					entidad = new_entidad,
-					descripcion_productos = descProductos_mercado,
-					proveedores_principales = descProveedores_mercado,
-					clientes_principales = descClientes_mercado
-				)
-			new_descripciones.save()
-			print "point - descripciones creado"
-			new_PerfilMeritoEmpresarial = PerfilEntidadMerito(
-					entidad = new_entidad,
-					anios_operacion = int(anios_operacion),
-					tipo_organizacion = tipo_organizacion_operacion,
-					tipo_organizacion_otra = tOrganizacionotra_operacion,
-					actividad_economica = actividad_economica_operacion,
-					actividad_economica_otra = aEconomicaOtra_operacion,
-					codigo_ciiu = codigoCiuu_operacion,
-					tamano_organizacion = tamano_organizacionObj,
-					anio_venta_1 = anio_venta1,
-					anio_venta_2 = anio_venta2,
-					anio_venta_3 = anio_venta3,
-					calidad = calidad,
-					seguridad_industrial = seguridad_industrial,
-					ambiental = ambiental,
-					otro = otro,
-					departamento_idi = int(departamento_idi),
-					asesor_externo = int(asesor_externo),
-					asesor_externo_especifique = asesor_externo_especifique,
-					firma_consultora = int(firma_consultora),
-					firma_consultora_especifique = firma_consultora_especifique,
-					alianza = int(alianza),
-					alianza_especifique = alianza_especifique,
-					no_aplica = int(no_aplica),
-					patentes = int(patentes),
-					patentes_descripcion = patentes_descripcion,
-					competitividad_especifique = competitividad_especifique,
-					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique
-				)
-			new_PerfilMeritoEmpresarial.save()
-			print "point - perfil creado sin checkbox"
-			new_PerfilMeritoEmpresarial.alcance_mercado = {}
-			for alcance in alcances_mercadoArr:
-				alcanceObj = AlcanceMercado.objects.get(pk = alcance)
-				new_PerfilMeritoEmpresarial.alcance_mercado.add(alcanceObj)
-
-			new_PerfilMeritoEmpresarial.competitividad = {}
-			for competitividad in competitividadArr:
-				competitividadObj = Competitividad.objects.get(pk = competitividad)
-				new_PerfilMeritoEmpresarial.competitividad.add(competitividadObj)
-			
-			new_PerfilMeritoEmpresarial.razones_participacion = {}
-			for razon in razones_participacionArr:
-				razonObj = RazonesParticipacion.objects.get(pk = razon)
-				new_PerfilMeritoEmpresarial.razones_participacion.add(razonObj)
-
-			new_PerfilMeritoEmpresarial.canal_recepcion = {}
-			for canal in canales_recepcionArr:
-				canalObj = CanalRecepcion.objects.get(pk = canal)
-				new_PerfilMeritoEmpresarial.canal_recepcion.add(canalObj)
-
-			print "point - perfil creado"
-
-			new_empresaInnovadora = MeritoEmpresaInnovadora(
-				entidad = new_entidad,
-				descripcion_a = meritoEI_a,
-				descripcion_b = meritoEI_b,
-				descripcion_c = meritoEI_c,
-				descripcion_d = meritoEI_d,
-				descripcion_e = meritoEI_e,
-				descripcion_f = meritoEI_f,
-				descripcion_g = meritoEI_g,
-				descripcion_h = meritoEI_h,
-				descripcion_i = meritoEI_i,
-				descripcion_j = meritoEI_j 
-			)
-			new_empresaInnovadora.save()
-
-
-			new_empresaResponsabilidad = MeritoResponsabilidadSocial(
-				entidad = new_entidad,
-				descripcion_a = meritoRSE_a,
-				descripcion_b = meritoRSE_b,
-				descripcion_c = meritoRSE_c,
-				descripcion_d = meritoRSE_d,
-				descripcion_e = meritoRSE_e
-			)
-			new_empresaResponsabilidad.save()
-
-			new_empresaSalud = MeritoEmpresaSalud(
-				entidad = new_entidad,
-				descripcion_a = meritoES_a,
-				descripcion_b = meritoES_b,
-				descripcion_c = meritoES_c,
-				descripcion_d = meritoES_d
-			)
-			new_empresaSalud.save()
-			
-			new_empresaIndustrial = MeritoEmpresaIndustrial(
-				entidad = new_entidad,
-				descripcion_a = meritoEIM_a,
-				descripcion_b = meritoEIM_b,
-				descripcion_c = meritoEIM_c
-			)
-			new_empresaIndustrial.save()
-
-			new_esfuerzoExportador = MeritoEsfuerzoExportador(
-				entidad = new_entidad,
-				descripcion_a = meritoEE_a,
-				descripcion_b = meritoEE_b,
-				descripcion_c = meritoEE_c,
-				descripcion_d_otra = meritoEE_d_otra,
-				descripcion_e = meritoEE_e,
-				descripcion_f = meritoEE_f,
-				descripcion_g = int(meritoEE_g),
-				descripcion_h = meritoEE_h
-			)
-			new_esfuerzoExportador.save()
-			new_esfuerzoExportador.descripcion_d = {}
-			for modalidad in meritoEE_dArr:
-				modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
-				new_esfuerzoExportador.descripcion_d.add(modalidadObj)
-
-
-			new_empresaComercial = MeritoEmpresaComercial(
-				entidad = new_entidad,
-				descripcion_a = meritoEC_a,
-				descripcion_b = meritoEC_b,
-				descripcion_c = meritoEC_c,
-				descripcion_d = meritoEC_d,
-				descripcion_e = meritoEC_e
-			)
-			new_empresaComercial.save()
-			
-
-			new_empresaServicio = MeritoEmpresaServicio(
-				entidad = new_entidad,
-				descripcion_a = meritoEDS_a,
-				descripcion_b = meritoEDS_b,
-				descripcion_c = meritoEDS_c,
-				descripcion_d = meritoEDS_d,
-				descripcion_e = meritoEDS_e,
-				descripcion_f = meritoEDS_f
-			)
-			new_empresaServicio.save()
-			
-			new_empresaAgro = MeritoEmpresaAgroindustrial(
-				entidad = new_entidad,
-				descripcion_a = meritoEAA_a,
-				descripcion_b = meritoEAA_b,
-				descripcion_c = meritoEAA_c,
-				descripcion_d = meritoEAA_d,
-				descripcion_e = meritoEAA_e,
-				descripcion_f = meritoEAA_f
-			)
-			new_empresaAgro.save()
-
-			return HttpResponse(new_entidad.pk)
-		else:
-			print "actualizar entidad"
-			print departamentoObj
-			print municipioObj
-			entidad_update.update(perfil_usuario = request.user,nit = nit_rut,razon_social = razon_social,direccion = domicilio,url_web = web,telefono = telefono,nota_seguimiento = "",email = email,departamento = departamentoObj, municipio = municipioObj, corregimiento = corregimientoObj, facebook = facebook, twitter = twitter, fax = fax)
-
-			print "entidad actualizada"
-			if len(representanteLegal_update) == 0:
+		if nit_rut != "" and nit_rut != None:
+			if len(entidad_update) == 0:
+				new_entidad = Entidad(perfil_usuario = request.user,nit = nit_rut,razon_social = razon_social,direccion = domicilio,url_web = web,telefono = telefono,nota_seguimiento = "",email = email,departamento = departamentoObj, municipio = municipioObj, corregimiento = corregimientoObj, facebook = facebook, twitter = twitter, fax = fax)
+				new_entidad.save()
+				print "entidad creada"
 				new_RepresentanteLegal = RepresentanteLegal(
-					entidad = entidad_update[0],
-					nombres = nombre_repLegal,
-					cargo = cargo_repLegal,
-					ciudad = ciudad_repLegal,
-					direccion = direccion_repLegal,
-					telefono = telefono_repLegal,
-					celular = celular_repLegal,
-					email = email_repLegal)
+						entidad = new_entidad,
+						nombres = nombre_repLegal,
+						cargo = cargo_repLegal,
+						ciudad = ciudad_repLegal,
+						direccion = direccion_repLegal,
+						telefono = telefono_repLegal,
+						celular = celular_repLegal,
+						email = email_repLegal)
 				new_RepresentanteLegal.save()
-			else:
-				representanteLegal_update.update(
-					entidad = entidad_update[0],
-					nombres = nombre_repLegal,
-					cargo = cargo_repLegal,
-					ciudad = ciudad_repLegal,
-					direccion = direccion_repLegal,
-					telefono = telefono_repLegal,
-					celular = celular_repLegal,
-					email = email_repLegal)
-
-			if len(contacto_update) == 0:
+				print "point - representante creado"
 				new_Contacto = ContactosEntidad(
-					entidad = entidad_update[0],
-					nombres = nombres_contacto,
-					cargo = cargo_contacto,
-					ciudad = direccion_contacto,
-					direccion = ciudad_contacto,
-					telefono = telefono_contacto,
-					celular = celular_contacto,
-					email = email_contacto
-				)
+						entidad = new_entidad,
+						nombres = nombres_contacto,
+						cargo = cargo_contacto,
+						ciudad = direccion_contacto,
+						direccion = ciudad_contacto,
+						telefono = telefono_contacto,
+						celular = celular_contacto,
+						email = email_contacto
+					)
 				new_Contacto.save()
-			else:
-				contacto_update.update(
-					entidad = entidad_update[0],
-					nombres = nombres_contacto,
-					cargo = cargo_contacto,
-					ciudad = direccion_contacto,
-					direccion = ciudad_contacto,
-					telefono = telefono_contacto,
-					celular = celular_contacto,
-					email = email_contacto)
-
-			if len(perfil_merito) == 0:
-				print "point - perfil a crear"
-				print entidad_update[0]
+				print "point - contacto creado"
+				new_trabajadores = Trabajadores(
+						entidad = new_entidad,
+						trabajadores_directos = int(empleoDirecto_trabajadores),
+						trabajadores_indirectos = int(empleoIndirecto_trabajadores),
+						trabajadores_tecnico = int(tecnicos_trabajadores),
+						trabajadores_tecnologo = int(tecnologos_trabajadores),
+						trabajadores_profesional = int(profesionales_trabajadores),
+						trabajadores_profesional_esp = int(especializados_trabajadores),
+						trabajadores_maestria = int(maestrias_trabajadores),
+						trabajadores_doctorado = int(doctores_trabajadores)
+					)
+				new_trabajadores.save()
+				print "point - trabajadores creado"
+				new_descripciones = Descripciones(
+						entidad = new_entidad,
+						descripcion_productos = descProductos_mercado,
+						proveedores_principales = descProveedores_mercado,
+						clientes_principales = descClientes_mercado
+					)
+				new_descripciones.save()
+				print "point - descripciones creado"
 				new_PerfilMeritoEmpresarial = PerfilEntidadMerito(
-					entidad = entidad_update[0],
-					anios_operacion = int(anios_operacion),
-					tipo_organizacion = tipo_organizacion_operacion,
-					tipo_organizacion_otra = tOrganizacionotra_operacion,
-					actividad_economica = actividad_economica_operacion,
-					actividad_economica_otra = aEconomicaOtra_operacion,
-					codigo_ciiu = codigoCiuu_operacion,
-					tamano_organizacion = tamano_organizacionObj,
-					anio_venta_1 = anio_venta1,
-					anio_venta_2 = anio_venta2,
-					anio_venta_3 = anio_venta3,
-					calidad = calidad,
-					seguridad_industrial = seguridad_industrial,
-					ambiental = ambiental,
-					otro = otro,
-					departamento_idi = int(departamento_idi),
-					asesor_externo = int(asesor_externo),
-					asesor_externo_especifique = asesor_externo_especifique,
-					firma_consultora = int(firma_consultora),
-					firma_consultora_especifique = firma_consultora_especifique,
-					alianza = int(alianza),
-					alianza_especifique = alianza_especifique,
-					no_aplica = int(no_aplica),
-					patentes = int(patentes),
-					patentes_descripcion = patentes_descripcion,
-					competitividad_especifique = competitividad_especifique,
-					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique)
+						entidad = new_entidad,
+						anios_operacion = int(anios_operacion),
+						tipo_organizacion = tipo_organizacion_operacion,
+						tipo_organizacion_otra = tOrganizacionotra_operacion,
+						actividad_economica = actividad_economica_operacion,
+						actividad_economica_otra = aEconomicaOtra_operacion,
+						codigo_ciiu = codigoCiuu_operacion,
+						tamano_organizacion = tamano_organizacionObj,
+						anio_venta_1 = anio_venta1,
+						anio_venta_2 = anio_venta2,
+						anio_venta_3 = anio_venta3,
+						calidad = calidad,
+						seguridad_industrial = seguridad_industrial,
+						ambiental = ambiental,
+						otro = otro,
+						departamento_idi = int(departamento_idi),
+						asesor_externo = int(asesor_externo),
+						asesor_externo_especifique = asesor_externo_especifique,
+						firma_consultora = int(firma_consultora),
+						firma_consultora_especifique = firma_consultora_especifique,
+						alianza = int(alianza),
+						alianza_especifique = alianza_especifique,
+						no_aplica = int(no_aplica),
+						patentes = int(patentes),
+						patentes_descripcion = patentes_descripcion,
+						competitividad_especifique = competitividad_especifique,
+						razones_participacion_especifique = razones_participacion_especifique,
+						canal_recepcion_especifique = canal_recepcion_especifique
+					)
 				new_PerfilMeritoEmpresarial.save()
-				print "point - perfil creado"
+				print "point - perfil creado sin checkbox"
 				new_PerfilMeritoEmpresarial.alcance_mercado = {}
 				for alcance in alcances_mercadoArr:
+					print alcances_mercadoArr
 					alcanceObj = AlcanceMercado.objects.get(pk = alcance)
 					new_PerfilMeritoEmpresarial.alcance_mercado.add(alcanceObj)
 
@@ -782,117 +594,12 @@ def registrarEntidad(request):
 				new_PerfilMeritoEmpresarial.canal_recepcion = {}
 				for canal in canales_recepcionArr:
 					canalObj = CanalRecepcion.objects.get(pk = canal)
-					new_PerfilMeritoEmpresarial.canal_recepcion.add(canalObj)			
+					new_PerfilMeritoEmpresarial.canal_recepcion.add(canalObj)
 
-			else:
-				print "perfil actualizada 1"			
-				perfil_merito.update(
-					entidad = entidad_update[0],
-					anios_operacion = int(anios_operacion),
-					tipo_organizacion = tipo_organizacion_operacion,
-					tipo_organizacion_otra = tOrganizacionotra_operacion,
-					actividad_economica = actividad_economica_operacion,
-					actividad_economica_otra = aEconomicaOtra_operacion,
-					codigo_ciiu = codigoCiuu_operacion,
-					tamano_organizacion = tamano_organizacionObj,
-					anio_venta_1 = anio_venta1,
-					anio_venta_2 = anio_venta2,
-					anio_venta_3 = anio_venta3,
-					calidad = calidad,
-					seguridad_industrial = seguridad_industrial,
-					ambiental = ambiental,
-					otro = otro,
-					departamento_idi = int(departamento_idi),
-					asesor_externo = int(asesor_externo),
-					asesor_externo_especifique = asesor_externo_especifique,
-					firma_consultora = int(firma_consultora),
-					firma_consultora_especifique = firma_consultora_especifique,
-					alianza = int(alianza),
-					alianza_especifique = alianza_especifique,
-					no_aplica = int(no_aplica),
-					patentes = int(patentes),
-					patentes_descripcion = patentes_descripcion,
-					competitividad_especifique = competitividad_especifique,
-					razones_participacion_especifique = razones_participacion_especifique,
-					canal_recepcion_especifique = canal_recepcion_especifique
-				)
-				print "perfil actualizada 2"			
-				perfil_merito[0].alcance_mercado = {}
-				for alcance in alcances_mercadoArr:
-					if alcance != "":
-						alcanceObj = AlcanceMercado.objects.get(pk = alcance)
-						perfil_merito[0].alcance_mercado.add(alcanceObj)
+				print "point - perfil creado"
 
-				perfil_merito[0].competitividad = {}
-				for competitividad in competitividadArr:
-					if competitividad != "":
-						competitividadObj = Competitividad.objects.get(pk = competitividad)
-						perfil_merito[0].competitividad.add(competitividadObj)
-				
-				perfil_merito[0].razones_participacion = {}
-				for razon in razones_participacionArr:
-					if razon != "":
-						razonObj = RazonesParticipacion.objects.get(pk = razon)
-						perfil_merito[0].razones_participacion.add(razonObj)
-
-				perfil_merito[0].canal_recepcion = {}
-				for canal in canales_recepcionArr:
-					if canal != "":
-						canalObj = CanalRecepcion.objects.get(pk = canal)
-						perfil_merito[0].canal_recepcion.add(canalObj)
-				print "todo lo de perfil"
-
-			if len(trabajadores_update) == 0:
-				new_Trabajadores = Trabajadores(
-					entidad = entidad_update[0],
-					trabajadores_directos = int(empleoDirecto_trabajadores),
-					trabajadores_indirectos = int(empleoIndirecto_trabajadores),
-					trabajadores_tecnico = int(tecnicos_trabajadores),
-					trabajadores_tecnologo = int(tecnologos_trabajadores),
-					trabajadores_profesional = int(profesionales_trabajadores),
-					trabajadores_profesional_esp = int(especializados_trabajadores),
-					trabajadores_maestria = int(maestrias_trabajadores),
-					trabajadores_doctorado = int(doctores_trabajadores)
-				)
-				new_Trabajadores.save()
-				print "point - trabajadores creado"
-			else:
-				trabajadores_update.update(
-					entidad = entidad_update[0],
-					trabajadores_directos = int(empleoDirecto_trabajadores),
-					trabajadores_indirectos = int(empleoIndirecto_trabajadores),
-					trabajadores_tecnico = int(tecnicos_trabajadores),
-					trabajadores_tecnologo = int(tecnologos_trabajadores),
-					trabajadores_profesional = int(profesionales_trabajadores),
-					trabajadores_profesional_esp = int(especializados_trabajadores),
-					trabajadores_maestria = int(maestrias_trabajadores),
-					trabajadores_doctorado = int(doctores_trabajadores)
-				)
-				print "point - trabajadores actualizados"
-
-			if len(descripciones_update) == 0:
-				new_Descripciones = Descripciones(
-					entidad = entidad_update[0],
-					descripcion_productos = descProductos_mercado,
-					proveedores_principales = descProveedores_mercado,
-					clientes_principales = descClientes_mercado
-				)
-				new_Descripciones.save()
-				print "point - descripciones creadas"
-			else:
-				descripciones_update.update(
-					entidad = entidad_update[0],
-					descripcion_productos = descProductos_mercado,
-					proveedores_principales = descProveedores_mercado,
-					clientes_principales = descClientes_mercado
-				)
-				print "point - descripciones actualizadas"
-
-
-			empresaInnovadora_update = MeritoEmpresaInnovadora.objects.filter(entidad = entidad_update[0])
-			if len(empresaInnovadora_update) == 0:
 				new_empresaInnovadora = MeritoEmpresaInnovadora(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEI_a,
 					descripcion_b = meritoEI_b,
 					descripcion_c = meritoEI_c,
@@ -905,26 +612,10 @@ def registrarEntidad(request):
 					descripcion_j = meritoEI_j 
 				)
 				new_empresaInnovadora.save()
-			else:
-				empresaInnovadora_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoEI_a,
-					descripcion_b = meritoEI_b,
-					descripcion_c = meritoEI_c,
-					descripcion_d = meritoEI_d,
-					descripcion_e = meritoEI_e,
-					descripcion_f = meritoEI_f,
-					descripcion_g = meritoEI_g,
-					descripcion_h = meritoEI_h,
-					descripcion_i = meritoEI_i,
-					descripcion_j = meritoEI_j)
 
 
-
-			empresaResponsabilidad_update = MeritoResponsabilidadSocial.objects.filter(entidad = entidad_update[0])
-			if len(empresaResponsabilidad_update) == 0:
 				new_empresaResponsabilidad = MeritoResponsabilidadSocial(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoRSE_a,
 					descripcion_b = meritoRSE_b,
 					descripcion_c = meritoRSE_c,
@@ -932,56 +623,26 @@ def registrarEntidad(request):
 					descripcion_e = meritoRSE_e
 				)
 				new_empresaResponsabilidad.save()
-			else:
-				empresaResponsabilidad_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoRSE_a,
-					descripcion_b = meritoRSE_b,
-					descripcion_c = meritoRSE_c,
-					descripcion_d = meritoRSE_d,
-					descripcion_e = meritoRSE_e)
 
-			empresaSalud_update = MeritoEmpresaSalud.objects.filter(entidad = entidad_update[0])
-			if len(empresaSalud_update) == 0:
 				new_empresaSalud = MeritoEmpresaSalud(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoES_a,
 					descripcion_b = meritoES_b,
 					descripcion_c = meritoES_c,
 					descripcion_d = meritoES_d
 				)
 				new_empresaSalud.save()
-			else:
-				empresaSalud_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoES_a,
-					descripcion_b = meritoES_b,
-					descripcion_c = meritoES_c,
-					descripcion_d = meritoES_d)	
-			
-
-			empresaIndustrial_update = MeritoEmpresaIndustrial.objects.filter(entidad = entidad_update[0])
-			if len(empresaIndustrial_update) == 0:
+				
 				new_empresaIndustrial = MeritoEmpresaIndustrial(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEIM_a,
 					descripcion_b = meritoEIM_b,
 					descripcion_c = meritoEIM_c
 				)
 				new_empresaIndustrial.save()
-			else:
-				empresaIndustrial_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoEIM_a,
-					descripcion_b = meritoEIM_b,
-					descripcion_c = meritoEIM_c)
 
-
-			esfuerzoExportador_update = MeritoEsfuerzoExportador.objects.filter(entidad = entidad_update[0])
-			if len(esfuerzoExportador_update) == 0:
-				print "crear esfuerzo e"
 				new_esfuerzoExportador = MeritoEsfuerzoExportador(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEE_a,
 					descripcion_b = meritoEE_b,
 					descripcion_c = meritoEE_c,
@@ -991,20 +652,15 @@ def registrarEntidad(request):
 					descripcion_g = int(meritoEE_g),
 					descripcion_h = meritoEE_h
 				)
-
 				new_esfuerzoExportador.save()
-				print "merito saved"
 				new_esfuerzoExportador.descripcion_d = {}
-				if len(new_esfuerzoExportador) > 0:
-					for modalidad in meritoEE_dArr:
-						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
-						new_esfuerzoExportador.descripcion_d.add(modalidadObj)
+				for modalidad in meritoEE_dArr:
+					modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
+					new_esfuerzoExportador.descripcion_d.add(modalidadObj)
 
-			print "empresa comercial"
-			empresaComercial_update = MeritoEmpresaComercial.objects.filter(entidad = entidad_update[0])
-			if len(empresaComercial_update) == 0:
+
 				new_empresaComercial = MeritoEmpresaComercial(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEC_a,
 					descripcion_b = meritoEC_b,
 					descripcion_c = meritoEC_c,
@@ -1012,20 +668,10 @@ def registrarEntidad(request):
 					descripcion_e = meritoEC_e
 				)
 				new_empresaComercial.save()
-			else:
-				empresaComercial_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoEC_a,
-					descripcion_b = meritoEC_b,
-					descripcion_c = meritoEC_c,
-					descripcion_d = meritoEC_d,
-					descripcion_e = meritoEC_e)
+				
 
-			print "empresa servicios"
-			empresaServicio_update = MeritoEmpresaServicio.objects.filter(entidad = entidad_update[0])
-			if len(empresaServicio_update) == 0:
 				new_empresaServicio = MeritoEmpresaServicio(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEDS_a,
 					descripcion_b = meritoEDS_b,
 					descripcion_c = meritoEDS_c,
@@ -1034,21 +680,9 @@ def registrarEntidad(request):
 					descripcion_f = meritoEDS_f
 				)
 				new_empresaServicio.save()
-			else:
-				empresaServicio_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoEDS_a,
-					descripcion_b = meritoEDS_b,
-					descripcion_c = meritoEDS_c,
-					descripcion_d = meritoEDS_d,
-					descripcion_e = meritoEDS_e,
-					descripcion_f = meritoEDS_f)
-
-			print "empresa agro"
-			empresaAgro_update = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad_update[0])
-			if len(empresaAgro_update) == 0:
+				
 				new_empresaAgro = MeritoEmpresaAgroindustrial(
-					entidad = entidad_update[0],
+					entidad = new_entidad,
 					descripcion_a = meritoEAA_a,
 					descripcion_b = meritoEAA_b,
 					descripcion_c = meritoEAA_c,
@@ -1057,21 +691,402 @@ def registrarEntidad(request):
 					descripcion_f = meritoEAA_f
 				)
 				new_empresaAgro.save()
-			else:
-				empresaAgro_update.update(
-					entidad = entidad_update[0],
-					descripcion_a = meritoEAA_a,
-					descripcion_b = meritoEAA_b,
-					descripcion_c = meritoEAA_c,
-					descripcion_d = meritoEAA_d,
-					descripcion_e = meritoEAA_e,
-					descripcion_f = meritoEAA_f)
-		
-				
-			print "point - merito actualizado o creado"
 
-			return HttpResponse(entidad_update[0].pk)
+				return HttpResponse(new_entidad.pk)
+			else:
+				print "actualizar entidad"
+				print departamentoObj
+				print municipioObj
+				entidad_update.update(perfil_usuario = request.user,nit = nit_rut,razon_social = razon_social,direccion = domicilio,url_web = web,telefono = telefono,nota_seguimiento = "",email = email,departamento = departamentoObj, municipio = municipioObj, corregimiento = corregimientoObj, facebook = facebook, twitter = twitter, fax = fax)
+
+				print "entidad actualizada"
+				if len(representanteLegal_update) == 0:
+					new_RepresentanteLegal = RepresentanteLegal(
+						entidad = entidad_update[0],
+						nombres = nombre_repLegal,
+						cargo = cargo_repLegal,
+						ciudad = ciudad_repLegal,
+						direccion = direccion_repLegal,
+						telefono = telefono_repLegal,
+						celular = celular_repLegal,
+						email = email_repLegal)
+					new_RepresentanteLegal.save()
+				else:
+					representanteLegal_update.update(
+						entidad = entidad_update[0],
+						nombres = nombre_repLegal,
+						cargo = cargo_repLegal,
+						ciudad = ciudad_repLegal,
+						direccion = direccion_repLegal,
+						telefono = telefono_repLegal,
+						celular = celular_repLegal,
+						email = email_repLegal)
+
+				if len(contacto_update) == 0:
+					new_Contacto = ContactosEntidad(
+						entidad = entidad_update[0],
+						nombres = nombres_contacto,
+						cargo = cargo_contacto,
+						ciudad = direccion_contacto,
+						direccion = ciudad_contacto,
+						telefono = telefono_contacto,
+						celular = celular_contacto,
+						email = email_contacto
+					)
+					new_Contacto.save()
+				else:
+					contacto_update.update(
+						entidad = entidad_update[0],
+						nombres = nombres_contacto,
+						cargo = cargo_contacto,
+						ciudad = direccion_contacto,
+						direccion = ciudad_contacto,
+						telefono = telefono_contacto,
+						celular = celular_contacto,
+						email = email_contacto)
+
+				if len(perfil_merito) == 0:
+					print "point - perfil a crear"
+					print entidad_update[0]
+					new_PerfilMeritoEmpresarial = PerfilEntidadMerito(
+						entidad = entidad_update[0],
+						anios_operacion = int(anios_operacion),
+						tipo_organizacion = tipo_organizacion_operacion,
+						tipo_organizacion_otra = tOrganizacionotra_operacion,
+						actividad_economica = actividad_economica_operacion,
+						actividad_economica_otra = aEconomicaOtra_operacion,
+						codigo_ciiu = codigoCiuu_operacion,
+						tamano_organizacion = tamano_organizacionObj,
+						anio_venta_1 = anio_venta1,
+						anio_venta_2 = anio_venta2,
+						anio_venta_3 = anio_venta3,
+						calidad = calidad,
+						seguridad_industrial = seguridad_industrial,
+						ambiental = ambiental,
+						otro = otro,
+						departamento_idi = int(departamento_idi),
+						asesor_externo = int(asesor_externo),
+						asesor_externo_especifique = asesor_externo_especifique,
+						firma_consultora = int(firma_consultora),
+						firma_consultora_especifique = firma_consultora_especifique,
+						alianza = int(alianza),
+						alianza_especifique = alianza_especifique,
+						no_aplica = int(no_aplica),
+						patentes = int(patentes),
+						patentes_descripcion = patentes_descripcion,
+						competitividad_especifique = competitividad_especifique,
+						razones_participacion_especifique = razones_participacion_especifique,
+						canal_recepcion_especifique = canal_recepcion_especifique)
+					new_PerfilMeritoEmpresarial.save()
+					print "point - perfil creado"
+					new_PerfilMeritoEmpresarial.alcance_mercado = {}
+					for alcance in alcances_mercadoArr:
+						alcanceObj = AlcanceMercado.objects.get(pk = alcance)
+						new_PerfilMeritoEmpresarial.alcance_mercado.add(alcanceObj)
+
+					new_PerfilMeritoEmpresarial.competitividad = {}
+					for competitividad in competitividadArr:
+						competitividadObj = Competitividad.objects.get(pk = competitividad)
+						new_PerfilMeritoEmpresarial.competitividad.add(competitividadObj)
+					
+					new_PerfilMeritoEmpresarial.razones_participacion = {}
+					for razon in razones_participacionArr:
+						razonObj = RazonesParticipacion.objects.get(pk = razon)
+						new_PerfilMeritoEmpresarial.razones_participacion.add(razonObj)
+
+					new_PerfilMeritoEmpresarial.canal_recepcion = {}
+					for canal in canales_recepcionArr:
+						canalObj = CanalRecepcion.objects.get(pk = canal)
+						new_PerfilMeritoEmpresarial.canal_recepcion.add(canalObj)			
+
+				else:
+					print "perfil actualizada 1"			
+					perfil_merito.update(
+						entidad = entidad_update[0],
+						anios_operacion = int(anios_operacion),
+						tipo_organizacion = tipo_organizacion_operacion,
+						tipo_organizacion_otra = tOrganizacionotra_operacion,
+						actividad_economica = actividad_economica_operacion,
+						actividad_economica_otra = aEconomicaOtra_operacion,
+						codigo_ciiu = codigoCiuu_operacion,
+						tamano_organizacion = tamano_organizacionObj,
+						anio_venta_1 = anio_venta1,
+						anio_venta_2 = anio_venta2,
+						anio_venta_3 = anio_venta3,
+						calidad = calidad,
+						seguridad_industrial = seguridad_industrial,
+						ambiental = ambiental,
+						otro = otro,
+						departamento_idi = int(departamento_idi),
+						asesor_externo = int(asesor_externo),
+						asesor_externo_especifique = asesor_externo_especifique,
+						firma_consultora = int(firma_consultora),
+						firma_consultora_especifique = firma_consultora_especifique,
+						alianza = int(alianza),
+						alianza_especifique = alianza_especifique,
+						no_aplica = int(no_aplica),
+						patentes = int(patentes),
+						patentes_descripcion = patentes_descripcion,
+						competitividad_especifique = competitividad_especifique,
+						razones_participacion_especifique = razones_participacion_especifique,
+						canal_recepcion_especifique = canal_recepcion_especifique
+					)
+					print "perfil actualizada 2"			
+					perfil_merito[0].alcance_mercado = {}
+					for alcance in alcances_mercadoArr:
+						if alcance != "":
+							alcanceObj = AlcanceMercado.objects.get(pk = alcance)
+							perfil_merito[0].alcance_mercado.add(alcanceObj)
+
+					perfil_merito[0].competitividad = {}
+					for competitividad in competitividadArr:
+						if competitividad != "":
+							competitividadObj = Competitividad.objects.get(pk = competitividad)
+							perfil_merito[0].competitividad.add(competitividadObj)
+					
+					perfil_merito[0].razones_participacion = {}
+					for razon in razones_participacionArr:
+						if razon != "":
+							razonObj = RazonesParticipacion.objects.get(pk = razon)
+							perfil_merito[0].razones_participacion.add(razonObj)
+
+					perfil_merito[0].canal_recepcion = {}
+					for canal in canales_recepcionArr:
+						if canal != "":
+							canalObj = CanalRecepcion.objects.get(pk = canal)
+							perfil_merito[0].canal_recepcion.add(canalObj)
+					print "todo lo de perfil"
+
+				if len(trabajadores_update) == 0:
+					new_Trabajadores = Trabajadores(
+						entidad = entidad_update[0],
+						trabajadores_directos = int(empleoDirecto_trabajadores),
+						trabajadores_indirectos = int(empleoIndirecto_trabajadores),
+						trabajadores_tecnico = int(tecnicos_trabajadores),
+						trabajadores_tecnologo = int(tecnologos_trabajadores),
+						trabajadores_profesional = int(profesionales_trabajadores),
+						trabajadores_profesional_esp = int(especializados_trabajadores),
+						trabajadores_maestria = int(maestrias_trabajadores),
+						trabajadores_doctorado = int(doctores_trabajadores)
+					)
+					new_Trabajadores.save()
+					print "point - trabajadores creado"
+				else:
+					trabajadores_update.update(
+						entidad = entidad_update[0],
+						trabajadores_directos = int(empleoDirecto_trabajadores),
+						trabajadores_indirectos = int(empleoIndirecto_trabajadores),
+						trabajadores_tecnico = int(tecnicos_trabajadores),
+						trabajadores_tecnologo = int(tecnologos_trabajadores),
+						trabajadores_profesional = int(profesionales_trabajadores),
+						trabajadores_profesional_esp = int(especializados_trabajadores),
+						trabajadores_maestria = int(maestrias_trabajadores),
+						trabajadores_doctorado = int(doctores_trabajadores)
+					)
+					print "point - trabajadores actualizados"
+
+				if len(descripciones_update) == 0:
+					new_Descripciones = Descripciones(
+						entidad = entidad_update[0],
+						descripcion_productos = descProductos_mercado,
+						proveedores_principales = descProveedores_mercado,
+						clientes_principales = descClientes_mercado
+					)
+					new_Descripciones.save()
+					print "point - descripciones creadas"
+				else:
+					descripciones_update.update(
+						entidad = entidad_update[0],
+						descripcion_productos = descProductos_mercado,
+						proveedores_principales = descProveedores_mercado,
+						clientes_principales = descClientes_mercado
+					)
+					print "point - descripciones actualizadas"
+
+
+				empresaInnovadora_update = MeritoEmpresaInnovadora.objects.filter(entidad = entidad_update[0])
+				if len(empresaInnovadora_update) == 0:
+					new_empresaInnovadora = MeritoEmpresaInnovadora(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEI_a,
+						descripcion_b = meritoEI_b,
+						descripcion_c = meritoEI_c,
+						descripcion_d = meritoEI_d,
+						descripcion_e = meritoEI_e,
+						descripcion_f = meritoEI_f,
+						descripcion_g = meritoEI_g,
+						descripcion_h = meritoEI_h,
+						descripcion_i = meritoEI_i,
+						descripcion_j = meritoEI_j 
+					)
+					new_empresaInnovadora.save()
+				else:
+					empresaInnovadora_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEI_a,
+						descripcion_b = meritoEI_b,
+						descripcion_c = meritoEI_c,
+						descripcion_d = meritoEI_d,
+						descripcion_e = meritoEI_e,
+						descripcion_f = meritoEI_f,
+						descripcion_g = meritoEI_g,
+						descripcion_h = meritoEI_h,
+						descripcion_i = meritoEI_i,
+						descripcion_j = meritoEI_j)
+
+
+
+				empresaResponsabilidad_update = MeritoResponsabilidadSocial.objects.filter(entidad = entidad_update[0])
+				if len(empresaResponsabilidad_update) == 0:
+					new_empresaResponsabilidad = MeritoResponsabilidadSocial(
+						entidad = entidad_update[0],
+						descripcion_a = meritoRSE_a,
+						descripcion_b = meritoRSE_b,
+						descripcion_c = meritoRSE_c,
+						descripcion_d = meritoRSE_d,
+						descripcion_e = meritoRSE_e
+					)
+					new_empresaResponsabilidad.save()
+				else:
+					empresaResponsabilidad_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoRSE_a,
+						descripcion_b = meritoRSE_b,
+						descripcion_c = meritoRSE_c,
+						descripcion_d = meritoRSE_d,
+						descripcion_e = meritoRSE_e)
+
+				empresaSalud_update = MeritoEmpresaSalud.objects.filter(entidad = entidad_update[0])
+				if len(empresaSalud_update) == 0:
+					new_empresaSalud = MeritoEmpresaSalud(
+						entidad = entidad_update[0],
+						descripcion_a = meritoES_a,
+						descripcion_b = meritoES_b,
+						descripcion_c = meritoES_c,
+						descripcion_d = meritoES_d
+					)
+					new_empresaSalud.save()
+				else:
+					empresaSalud_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoES_a,
+						descripcion_b = meritoES_b,
+						descripcion_c = meritoES_c,
+						descripcion_d = meritoES_d)	
 				
+
+				empresaIndustrial_update = MeritoEmpresaIndustrial.objects.filter(entidad = entidad_update[0])
+				if len(empresaIndustrial_update) == 0:
+					new_empresaIndustrial = MeritoEmpresaIndustrial(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEIM_a,
+						descripcion_b = meritoEIM_b,
+						descripcion_c = meritoEIM_c
+					)
+					new_empresaIndustrial.save()
+				else:
+					empresaIndustrial_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEIM_a,
+						descripcion_b = meritoEIM_b,
+						descripcion_c = meritoEIM_c)
+
+
+				esfuerzoExportador_update = MeritoEsfuerzoExportador.objects.filter(entidad = entidad_update[0])
+				if len(esfuerzoExportador_update) == 0:
+					print "crear esfuerzo e"
+					new_esfuerzoExportador = MeritoEsfuerzoExportador(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEE_a,
+						descripcion_b = meritoEE_b,
+						descripcion_c = meritoEE_c,
+						descripcion_d_otra = meritoEE_d_otra,
+						descripcion_e = meritoEE_e,
+						descripcion_f = meritoEE_f,
+						descripcion_g = int(meritoEE_g),
+						descripcion_h = meritoEE_h
+					)
+
+					new_esfuerzoExportador.save()
+					print "merito saved"
+					new_esfuerzoExportador.descripcion_d = {}
+					for modalidad in meritoEE_dArr:
+						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
+						new_esfuerzoExportador.descripcion_d.add(modalidadObj)
+
+				print "empresa comercial"
+				empresaComercial_update = MeritoEmpresaComercial.objects.filter(entidad = entidad_update[0])
+				if len(empresaComercial_update) == 0:
+					new_empresaComercial = MeritoEmpresaComercial(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEC_a,
+						descripcion_b = meritoEC_b,
+						descripcion_c = meritoEC_c,
+						descripcion_d = meritoEC_d,
+						descripcion_e = meritoEC_e
+					)
+					new_empresaComercial.save()
+				else:
+					empresaComercial_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEC_a,
+						descripcion_b = meritoEC_b,
+						descripcion_c = meritoEC_c,
+						descripcion_d = meritoEC_d,
+						descripcion_e = meritoEC_e)
+
+				print "empresa servicios"
+				empresaServicio_update = MeritoEmpresaServicio.objects.filter(entidad = entidad_update[0])
+				if len(empresaServicio_update) == 0:
+					new_empresaServicio = MeritoEmpresaServicio(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEDS_a,
+						descripcion_b = meritoEDS_b,
+						descripcion_c = meritoEDS_c,
+						descripcion_d = meritoEDS_d,
+						descripcion_e = meritoEDS_e,
+						descripcion_f = meritoEDS_f
+					)
+					new_empresaServicio.save()
+				else:
+					empresaServicio_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEDS_a,
+						descripcion_b = meritoEDS_b,
+						descripcion_c = meritoEDS_c,
+						descripcion_d = meritoEDS_d,
+						descripcion_e = meritoEDS_e,
+						descripcion_f = meritoEDS_f)
+
+				print "empresa agro"
+				empresaAgro_update = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad_update[0])
+				if len(empresaAgro_update) == 0:
+					new_empresaAgro = MeritoEmpresaAgroindustrial(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEAA_a,
+						descripcion_b = meritoEAA_b,
+						descripcion_c = meritoEAA_c,
+						descripcion_d = meritoEAA_d,
+						descripcion_e = meritoEAA_e,
+						descripcion_f = meritoEAA_f
+					)
+					new_empresaAgro.save()
+				else:
+					empresaAgro_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEAA_a,
+						descripcion_b = meritoEAA_b,
+						descripcion_c = meritoEAA_c,
+						descripcion_d = meritoEAA_d,
+						descripcion_e = meritoEAA_e,
+						descripcion_f = meritoEAA_f)
+			
+					
+				print "point - merito actualizado o creado"
+
+				return HttpResponse(entidad_update[0].pk)
+		else:
+			return HttpResponse(0)
 @csrf_exempt
 def crearDistincion(request):
 	anio_actual = time.strftime("%Y")

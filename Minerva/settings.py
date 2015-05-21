@@ -179,6 +179,6 @@ SUIT_CONFIG = {
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'juanpestana96'
+EMAIL_HOST_USER = 'juanpestana96@gmail.com'
 EMAIL_HOST_PASSWORD = '8094885730'
 DEFAULT_FROM_EMAIL = 'juanpestana96@gmail.com'

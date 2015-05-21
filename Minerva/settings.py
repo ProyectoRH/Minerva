@@ -99,6 +99,7 @@ DATABASES = {
     }
 }
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -139,6 +140,8 @@ STATICFILES_DIRS = (
    os.path.join(BASE_DIR, 'static'),
 )
 
+LOGIN_URL = '/usuarios/registroEntidad'
+
 SUIT_CONFIG = {
     # header
     'ADMIN_NAME': 'BILHA',
@@ -168,3 +171,9 @@ SUIT_CONFIG = {
     # misc
     # 'LIST_PER_PAGE': 15
 }
+
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+#     EMAIL_FILE_PATH = '/Users/juanpestana/Sites/Repositorios/MINERVA/Minerva/mensajes'
+
+DEFAULT_FROM_EMAIL = 'premioalmeritoempresarial@gmail.com'

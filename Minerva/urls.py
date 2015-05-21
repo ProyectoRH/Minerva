@@ -3,7 +3,16 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = patterns('',
+    url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'post_reset_redirect' : '/password_reset/done/'}, name="password_reset"),
+    url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
+    (r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
+    (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
+)
+
+
+urlpatterns += patterns('',
     # Examples:
     # url(r'^$', 'Minerva.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -15,13 +24,4 @@ urlpatterns = patterns('',
     url(r'^usuarios/', include('Entidad.urls')),
     url(r'^redactor/', include('redactor.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^password/reset/$', 'django.contrib.auth.views.password_reset', 
-        {'post_reset_redirect' : '/password/reset/done/'}, name="password_reset"),
-
-    url(r'^password/reset/done/$', 'django.contrib.auth.views.password_reset_done'),
-
-    url(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', 
-        {'post_reset_redirect' : '/password/done/'}),
-    
-    url(r'^password/done/$', 'django.contrib.auth.views.password_reset_complete'),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

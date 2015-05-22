@@ -127,6 +127,15 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP+(
    'django.contrib.auth.context_processors.auth',
 )
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
+TEMPLATE_DIRS = (
+    'templates',
+)
+
 REDACTOR_OPTIONS = {'lang': 'es'}
 REDACTOR_UPLOAD = '/static/uploads/'
 

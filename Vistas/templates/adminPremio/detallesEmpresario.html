@@ -1,0 +1,141 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Detalles de Emprendedor</title>
+
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+<style>
+        .navbar-default {
+            background-color: transparent !important;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'Vistas.views.principalPremio' %}">
+            <img alt="Brand" src="{% static 'img/logo-2.png' %}">
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="margin-top:50px;">
+		<h2>{{ empresario }}<br /><small>{{ empresario.get_tipo_empresario_display }}</small></h2>
+		
+		<div class="col-md-4">
+			<fieldset>
+				<legend>Datos generales</legend>
+				<table class="table">
+					<tr>
+						<td><b>Direccion</b></td>
+						<td>{{ empresario.direccion_contacto }}</td>
+					</tr>
+					<tr>
+						<td><b>Ciudad</b></td>
+						<td>{{ empresario.ciudad }}</td>
+					</tr>
+					<tr>
+						<td><b>Edad</b></td>
+						<td>{{ empresario.edad }}</td>
+					</tr>
+					<tr>
+						<td><b>Teléfono</b></td>
+						<td>{{ empresario.telefono_celular }}</td>
+					</tr>
+					<tr>
+						<td><b>E-mail</b></td>
+						<td>{{ empresario.email }}</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div class="col-md-8">
+			<fieldset>
+				<legend>Organización</legend>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Nombre de la organización</th>
+							<th>Cargos desempeñados</th>
+							<th>Fecha</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for organizacion in organizaciones %}
+							<tr>
+								<td>{{ organizacion.nombre_organizacion }}</td>
+								<td>{{ organizacion.cargos }}</td>
+								<td>{{ organizacion.fecha }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</fieldset>
+
+			<fieldset>
+				<legend>Descripciones</legend>
+				
+				{% if empresario.liderazgo %}
+					<div class="well">
+						<h4>Liderazgo</h4>
+						<p>{{ empresario.liderazgo }}</p>
+					</div>
+				{% endif %}
+
+				{% if empresario.gestion_empresarial %}
+					<div class="well">
+						<h4>Gestión Empresarial</h4>
+						<p>{{ empresario.gestion_empresarial }}</p>
+					</div>
+				{% endif %}
+
+				{% if empresario.emprendimiento %}
+					<div class="well">
+						<h4>Emprendimiento</h4>
+						<p>{{ empresario.emprendimiento }}</p>
+					</div>
+ 				{% endif %}
+
+			</fieldset>
+
+			<fieldset>
+				<legend>Adjuntos</legend>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Adjunto</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for adjunto in adjuntos %}
+							<tr>
+								<td>
+									<script>
+
+										var labels = ["Carta de postulación dirigida al Premio Mérito Empresarial–Universidad Simón Bolívar firmada por el Presidente de la Junta o Directivo de la Entidad o Asociación Gremial", "Curriculum Vitae del empresario(a) a postular", "Foto digital del empresario(a), en alta resolución"];
+
+										document.writeln(labels[{{ adjunto.tipo_adjunto }} - 1]);
+
+									</script>
+									
+
+								</td>
+								<td><a href="/media/{{ adjunto.adjunto }}" class="btn btn-primary">Ver o descargar archivo adjunto</a></td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+	</div>
+	
+
+</body>
+</html>

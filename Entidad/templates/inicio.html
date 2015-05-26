@@ -3427,7 +3427,7 @@
 			// Card 2
 			var empresa_labor_emp = $('#empresa_labor_emp').val();
 			var aEconomica_operacion = $('#aEconomica_operacion_emp_lab').val();
-			var actividad_economica_otra = $('#actividad_economica_otra').val();
+			var actividad_economica_otra = $('#actividad_economica_otra_emp_lab').val();
 			var direccion_empresa_emp = $('#direccion_empresa_emp').val();
 			var telefonos_empresa_emp = $('#telefonos_empresa_emp').val();
 			var fax_empresa_emp = $('#fax_empresa_emp').val();
@@ -3647,6 +3647,10 @@
 
 			{% if not user.is_authenticated or user.is_superuser %}
 				location.href="/usuarios/registroEntidad/";
+			{% endif %}
+
+			{% if request.user.groups.all.0.name == "AdministracionPremio" %}
+				location.href="/premioAdmin";
 			{% endif %}
 
 			$('#departamento').change();

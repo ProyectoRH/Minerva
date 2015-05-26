@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrador para Premio al Mérito Empresarial</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+
+    <style>
+        .navbar-default {
+            background-color: transparent !important;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img alt="Brand" src="{% static 'img/logo-2.png' %}">
+          </a>
+        </div>
+      </div>
+    </nav>
+
+	<div class="container" style="margin-top:50px;">
+		<div class="col-lg-12">
+			
+			
+			<a href="{% url 'Vistas.views.listarEmprendedores' %}" class="btn btn-primary">Emprendedores</a>
+
+			<a href="{% url 'Vistas.views.listarEmpresas' %}" class="btn btn-primary">Empresas</a>
+			<a href="{% url 'Vistas.views.listarGremios' %}" class="btn btn-primary">Gremios</a>
+
+		</div>
+	</div>
+
+	
+</body>
+</html>

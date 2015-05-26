@@ -24,4 +24,5 @@ urlpatterns += patterns('',
     url(r'^usuarios/', include('Entidad.urls')),
     url(r'^redactor/', include('redactor.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
+    url(r'^premioAdmin/', include('Vistas.urls')),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

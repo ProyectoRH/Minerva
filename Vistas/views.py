@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.admin.util import unquote
 from django.template import RequestContext
+from django.contrib.auth.models import User
 from Proyecto.models import Proyecto
 from Fuentes.models import Fuente, TipoRubro
 from PagosProyecto.models import PagosProyecto
@@ -99,7 +101,7 @@ def detallesEmprendedor(request, pk):
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def detallesEntidad(request, pk):
-	entidad = Entidad.objects.get(pk = pk)
+	entidad = Entidad.objects.get(perfil_usuario = User.objects.get(pk = pk))
 	representanteLegal = RepresentanteLegal.objects.get(entidad = entidad)
 	contactoEntidad = ContactosEntidad.objects.get(entidad = entidad)
 	perfilEntidad = PerfilEntidadMerito.objects.get(entidad = entidad)

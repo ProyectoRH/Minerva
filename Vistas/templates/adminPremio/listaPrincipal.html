@@ -79,7 +79,7 @@
 						</tr>
 						{% for entidad in entidades %}
 							<tr>
-								<td><a href="{% url 'Vistas.views.detallesEntidad' entidad.pk %}">{{ entidad.razon_social }}</a></td>
+								<td><a href="{% url 'Vistas.views.detallesEntidad' entidad.perfil_usuario.pk %}">{{ entidad.razon_social }}</a></td>
 								<td>{{ entidad.nit }}</td>
 								<td>{{ entidad.telefono }}</td>
 								<td>{{ entidad.email }}</td>

@@ -75,7 +75,7 @@ def listarEmprendedores(request):
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def listarEmpresas(request):
-	empresas = Entidad.objects.all()
+	empresas = Entidad.objects.exclude(pk = "")
 	return render(request, "adminPremio/listaPrincipal.html", {'entidades':empresas})
 
 @login_required(login_url='/usuarios/registroEntidad/')

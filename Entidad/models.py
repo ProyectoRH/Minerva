@@ -83,6 +83,7 @@ class Entidad(models.Model):
 	fax = models.CharField(max_length=50, blank=True, null=True)
 	facebook = models.CharField(max_length=255, blank=True, null=True)
 	twitter = models.CharField(max_length=255, blank=True, null=True)
+	creacion = models.DateField(auto_now_add=True, blank=True, null=True)
 	def __unicode__(self):
 		return self.razon_social
 

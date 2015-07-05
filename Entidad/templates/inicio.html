@@ -2034,14 +2034,14 @@
 	                            <label for="descripcion_proyecto_emp">Describa el proyecto de creación de su empresa, especificando fuentes de financiamiento, nivel de crecimiento en términos de número de empleados, activos e infraestructura.</label>
 	                            <textarea name="descripcion_proyecto_emp" id="descripcion_proyecto_emp" cols="30" rows="3" class="form-control">{% if entidad_emprendedor.0.descripcion_proyecto %}{{ entidad_emprendedor.0.descripcion_proyecto }}{% endif %}</textarea>
 	                        </div>
-	                        <div class="form-group">
-	                            <label for="descripcion_aporte_empresa_emp">¿Cuál ha sido su aporte en la generación de valor agregado en el producto o servicio de la empresa en que labora?</label>
-	                            <textarea name="descripcion_aporte_empresa_emp" id="descripcion_aporte_empresa_emp" cols="30" rows="3" class="form-control">{% if entidad_emprendedor.0.descripcion_aporte_empresa %}{{ entidad_emprendedor.0.descripcion_aporte_empresa }}{% endif %}</textarea>
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="descripcion_impacto_emp">Describa como su gestión ha generado impacto representativo en la empresa (financiero, tecnológico, humano, mercado, administrativo, productivo, ambiental, otros)</label>
-	                            <textarea name="descripcion_impacto_emp" id="descripcion_impacto_emp" cols="30" rows="3" class="form-control">{% if entidad_emprendedor.0.descripcion_impacto %}{{ entidad_emprendedor.0.descripcion_impacto }}{% endif %}</textarea>
-	                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion_aporte_empresa_emp">¿Cuál ha sido su aporte en la generación de valor agregado en el producto o servicio de la empresa en que labora?</label>
+                            <textarea name="descripcion_aporte_empresa_emp" id="descripcion_aporte_empresa_emp" cols="30" rows="3" class="form-control">{% if entidad_emprendedor.0.descripcion_aporte_empresa %}{{ entidad_emprendedor.0.descripcion_aporte_empresa }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion_impacto_emp">Describa como su gestión ha generado impacto representativo en la empresa (financiero, tecnológico, humano, mercado, administrativo, productivo, ambiental, otros)</label>
+                            <textarea name="descripcion_impacto_emp" id="descripcion_impacto_emp" cols="30" rows="3" class="form-control">{% if entidad_emprendedor.0.descripcion_impacto %}{{ entidad_emprendedor.0.descripcion_impacto }}{% endif %}</textarea>
                         </div>
 					</div>
 
@@ -2199,7 +2199,7 @@
 					    <hr />
 					    <form action="{% url 'EmprendedorPremio.views.crearAdjuntoEmprendedor' 5 %}" method="post" enctype="multipart/form-data" target="uploadTrg">
 					    	<div class="form-group">
-					    		<label for="fotografia_digital" style="display:block;">Fotografía del participante en formato digital y de alta resolución. Si no puede adjuntar el archivo, puede colocar una URL de acceso.</label>
+					    		<label for="fotografia_digital" style="display:block;">Fotografía del participante en formato digital y de alta resolución</label>
 					    		
 					    		<input type="file" name="fotografia_digital" id="fotografia_digital" style="display:inline-block;" />
 					    		<input type="submit" name="submit" value="Subir" onclick="localStorage.setItem('val_div', 5);" class="btn btn-success btn-xs" style="display:inline-block;" />
@@ -2217,7 +2217,7 @@
 					    <hr />
 					    <form action="{% url 'EmprendedorPremio.views.crearAdjuntoEmprendedor' 6 %}" method="post" enctype="multipart/form-data" target="uploadTrg">
 					    	<div class="form-group">
-					    		<label for="video_testimonial" style="display:block;">Vídeo testimonial (Máx:250Mb). Si no puede adjuntar el archivo, puede colocar una URL de acceso.</label>
+					    		<label for="video_testimonial" style="display:block;">Vídeo testimonial (Máx:250Mb).</label>
 					    		
 					    		<input type="file" name="video_testimonial" id="video_testimonial" style="display:inline-block;" />
 					    		<input type="submit" name="submit" value="Subir" onclick="localStorage.setItem('val_div', 6);" class="btn btn-success btn-xs" style="display:inline-block;" />
@@ -2322,7 +2322,7 @@
 							<hr />
 							<form action="{% url 'EmprendedorPremio.views.crearAdjuntoEmprendedor' 12 %}" method="post" enctype="multipart/form-data" target="uploadTrg">
 								<div class="form-group">
-									<label for="portafolio_servicios" style="display:block;">Portafolio de servicios. Si no puede adjuntar el archivo, puede colocar una URL de acceso.</label>
+									<label for="portafolio_servicios" style="display:block;">Portafolio de servicios.</label>
 									
 									<input type="file" name="portafolio_servicios" id="portafolio_servicios" style="display:inline-block;" />
 									<input type="submit" name="submit" value="Subir" onclick="localStorage.setItem('val_div', 12);" class="btn btn-success btn-xs" style="display:inline-block;" />
@@ -2371,7 +2371,7 @@
 							<label for="tipo_empresario">Seleccione la categoría en la que desea postular al empresario</label>
 							<select name="tipo_empresario" id="tipo_empresario" class="form-control" data-validate="validarEntidad">
 								<option value="" selected="selected">Seleccione tipo de empresario</option>
-								<option value="" disabled>------------</option>
+								<option value="none" disabled>------------</option>
 								<option value="benemerito">Empresario Benemérito</option>
 								<option value="anio">Empresario del año</option>
 							</select>
@@ -2598,7 +2598,11 @@
 		$(document).ready(function() {
 			localStorage.setItem('val_div', 0);
 			wizardSerialized();
-			$('#modalListaFaltantes').modal('show');
+			
+			{% if not request.user.groups.all.0.name == "GremioPremio" %}
+				$('#modalListaFaltantes').modal('show');
+			{% endif %}
+
 			wizard.on('submit', function(){
 				location.reload();
 			});
@@ -2749,6 +2753,10 @@
 
 			$('#open-wizardBenemerito').click(function(e){
 				e.preventDefault();
+				console.log("Abrio el wizard");
+				
+				$('#tipo_empresario, #nombre_empresario, #direccion_empresario, #ciudad_empresario, #edad_empresario, #telefono_empresario, #email_empresario').val("");
+
 				$('.wizard-next').attr('onclick', 'saveFormBenemerito()');
 				wizardEmpBenemerito.show();
 			});

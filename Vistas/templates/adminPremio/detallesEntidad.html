@@ -34,9 +34,14 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="{% url 'Vistas.views.principalPremio' %}">
+          <a class="navbar-brand" href="/premioAdmin/">
             <img alt="Brand" src="{% static 'img/logo-2.png' %}">
           </a>
+        </div>
+        <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="#" onclick="ensureLogout();">Cerrar sesión <i class="glyphicon glyphicon-off"></i></a></li>
+          </ul>
         </div>
       </div>
     </nav>
@@ -330,7 +335,8 @@
 							<tr>
 								<td><b>Ventas totales para el año {{ anio_1 }}</b><br />
 									<script>
-										var valor = {{ perfil.anio_venta_1 }};
+										var valor = ""+{{ perfil.anio_venta_1 }};
+										valor = valor.substr(0,valor.length - 2);
 										document.writeln("$"+parseFloat(valor).formatMoney(2));
 									</script>
 								</td>
@@ -338,7 +344,8 @@
 							<tr>
 								<td><b>Ventas totales para el año {{ anio_2 }}</b><br />
 									<script>
-										var valor = {{ perfil.anio_venta_2 }};
+										var valor = ""+{{ perfil.anio_venta_2 }};
+										valor = valor.substr(0,valor.length - 2);
 										document.writeln("$"+parseFloat(valor).formatMoney(2));
 									</script>
 
@@ -347,7 +354,8 @@
 							<tr>
 								<td><b>Ventas totales para el año {{ anio_3 }}</b><br />
 									<script>
-										var valor = {{ perfil.anio_venta_3 }};
+										var valor = ""+{{ perfil.anio_venta_3 }};
+										valor = valor.substr(0,valor.length - 2);
 										document.writeln("$"+parseFloat(valor).formatMoney(2));
 									</script>
 
@@ -573,5 +581,25 @@
 			</fieldset>
 		</div>
 	</div>
+
+
+	<script src="{% static 'js/jquery-2.1.3.js' %}"></script>
+  <script>
+
+    function ensureLogout (){
+      var confirmLogout = confirm("Estás seguro de cerrar sesión");
+      if(confirmLogout == true){
+        $.post("{% url 'Entidad.views.logout_view' %}", {}, function(response){
+          if(response == 1){
+            location.href="/usuarios/registroEntidad/";
+          }
+        });
+      }else{
+
+      }
+    }
+
+
+  </script>
 </body>
 </html>

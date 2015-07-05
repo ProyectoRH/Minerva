@@ -73,17 +73,32 @@ def principalPremio(request):
 @login_required(login_url='/usuarios/registroEntidad/')
 def listarEmprendedores(request):
 	emprendedores = Emprendedor.objects.all()
-	return render(request, "adminPremio/listaPrincipal.html", {'emprendedores':emprendedores})
+	entidades_Emprendedores = EntidadEmprendedor.objects.all()
+	distinciones_emprendedores = DistincionesEmprendedor.objects.all()
+	adjuntos_emprendedores = AdjuntosEmprendedor.objects.all()
+
+	return render(request, "adminPremio/listaPrincipal.html", {'emprendedores':emprendedores, 'entidadEmprendedores':entidades_Emprendedores, 'disticionesEmprendedores':distinciones_emprendedores, 'adjuntosEmprendedores':adjuntos_emprendedores})
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def listarEmpresas(request):
 	empresas = Entidad.objects.exclude(pk = "")
-	return render(request, "adminPremio/listaPrincipal.html", {'entidades':empresas})
+	perfiles_empresas = PerfilEntidadMerito.objects.all()
+	trabajadores_empresas = Trabajadores.objects.all()
+	descripciones_empresas = Descripciones.objects.all()
+	representantes_empresas = RepresentanteLegal.objects.all()
+	contactos_empresas = ContactosEntidad.objects.all()
+	distinciones_empresas = Distincion.objects.all()
+	adjuntos_empresas = AdjuntoEntidadMerito.objects.all()
+
+	return render(request, "adminPremio/listaPrincipal.html", {'entidades':empresas, 'perfilEntidades':perfiles_empresas, 'trabajadoresEntidades':trabajadores_empresas, 'descripcionesEntidades':descripciones_empresas, 'representanteEntidades':representantes_empresas, 'contactoEntidades':contactos_empresas, 'adjuntosEntidades':adjuntos_empresas, 'distincionesEntidades':distinciones_empresas})
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def listarGremios(request):
 	gremios = Gremio.objects.all()
-	return render(request, "adminPremio/listaPrincipal.html", {'gremios':gremios})
+	empresariosBen_gremio = EmpresarioBenemerito.objects.filter(tipo_empresario = "benemerito")
+	empresariosAnio_gremio = EmpresarioBenemerito.objects.filter(tipo_empresario = "anio")
+
+	return render(request, "adminPremio/listaPrincipal.html", {'gremios':gremios, 'empresariosBenemerito':empresariosBen_gremio, 'empresariosAnio':empresariosAnio_gremio})
 
 @login_required(login_url='/usuarios/registroEntidad/')	
 def detallesEmprendedor(request, pk):
@@ -123,7 +138,10 @@ def detallesEntidad(request, pk):
 def detallesGremio(request, pk):
 	gremio = Gremio.objects.get(pk = pk)
 	empresarios = EmpresarioBenemerito.objects.filter(perfil_gremio = gremio)
-	return render(request, "adminPremio/detallesGremio.html", {'gremio':gremio, 'empresarios':empresarios})
+	organizaciones_empresarios = OrganizacionEmpresario.objects.filter(empresario__perfil_gremio = gremio)
+	adjuntos_empresarios = AdjuntosEmpresario.objects.filter(empresario__perfil_gremio = gremio)
+
+	return render(request, "adminPremio/detallesGremio.html", {'gremio':gremio, 'empresarios':empresarios, 'organizacionesEmpresarios':organizaciones_empresarios, 'adjuntosEmpresarios':adjuntos_empresarios})
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def detalleEmpresarioGremio(request, pk):

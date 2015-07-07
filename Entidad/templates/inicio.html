@@ -536,7 +536,7 @@
 				        		<label for="aEconomica_operacion">Actividad Económica</label>
 				        		<select name="aEconomica_operacion" id="aEconomica_operacion" class="form-control">
 				        			{% for actividad in actividades_eco %}
-				        				{% if perfil.0.actividad_economica == actividades %}
+				        				{% if perfil.0.actividad_economica == actividad %}
 				        					<option value="{{ actividad.id }}" selected="selected">{{ actividad.descripcion }}</option>
 				        				{% else %}
 				        					<option value="{{ actividad.id }}">{{ actividad.descripcion }}</option>

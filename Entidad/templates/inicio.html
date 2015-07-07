@@ -107,11 +107,61 @@
 			text-decoration: none;
 			color: #AAB;
 		}
-
+	
+		.division {
+			position: relative;
+		}
+		.division span {
+			position: absolute;
+			top: -16px;
+			left: 50%;
+			background-color: white;
+			padding: 5px;
+		}
+		#modalAyuda a {
+			color:green;
+		}
+		#modalAyuda i {
+			top: 2px;
+		}
 	</style>
 </head>
 <body onload="carga()">
 	
+	<div class="modal fade" id="modalAyuda" tabindex="-1" role="dialog" aria-labelledby="modalAyudaLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modalAyudaLabel">Ayuda <i class="glyphicon glyphicon-question-sign" style="font-size: 12pt;top:3px;"></i></h4>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<p class="text-center">
+								{% if request.user.groups.all.0.name == "GremioPremio" %}
+									<a href="http://premioalmeritoempresarial.com/inscripcion/Instructivo_Gremios_2015.pdf"><i class="glyphicon glyphicon-file"></i> Descargar Manual para Inscripción</a>
+								{% elif request.user.groups.all.0.name == "ContactoPremioEmpresa" %}
+									<a href="http://premioalmeritoempresarial.com/inscripcion/Instructivo_Empresas_2015.pdf"><i class="glyphicon glyphicon-file"></i> Descargar Manual para Inscripción</a>
+								{% elif request.user.groups.all.0.name == "ContactoPremioEmprendedor" %}
+									<a href="http://premioalmeritoempresarial.com/inscripcion/Instructivo_Egresados_2015.pdf"><i class="glyphicon glyphicon-file"></i> Descargar Manual para Inscripción</a>
+								{% endif %}
+							</p>
+							<div class="division">
+								<hr />
+								<span>o</span>
+							</div>
+							<p class="text-center"><a href="mailto:pmeritoempresarial@unisimonbolivar.edu.co"><i class="glyphicon glyphicon-envelope"></i> Enviar correo</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<div class="modal fade" id="modalBenemeritoLista" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -171,7 +221,7 @@
 					{% endif %}
 
 					<div class="btn-settings pull-right">
-						<a href="mailto:pmeritoempresarial@unisimonbolivar.edu.co" style="color:green;" target="_blank">Ayuda <i class="glyphicon glyphicon-question-sign" style="font-size: 12pt;top:3px;"></i></a>
+						<a href="#" data-toggle="modal" data-target="#modalAyuda" style="color:green;">Ayuda <i class="glyphicon glyphicon-question-sign" style="font-size: 12pt;top:3px;"></i></a>
 						<a href="#" style="color:green;" onclick="ensureLogout();">Cerrar Sesión <i class="glyphicon glyphicon-off"></i></a>
 					</div>
 

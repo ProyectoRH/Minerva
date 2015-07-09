@@ -1013,6 +1013,25 @@ def registrarEntidad(request):
 					for modalidad in meritoEE_dArr:
 						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
 						new_esfuerzoExportador.descripcion_d.add(modalidadObj)
+				else:
+					esfuerzoExportador_update.update(
+						entidad = entidad_update[0],
+						descripcion_a = meritoEE_a,
+						descripcion_b = meritoEE_b,
+						descripcion_c = meritoEE_c,
+						descripcion_d_otra = meritoEE_d_otra,
+						descripcion_e = meritoEE_e,
+						descripcion_f = meritoEE_f,
+						descripcion_g = meritoEE_g,
+						descripcion_h = meritoEE_h
+					)
+					esfuerzoExportador_update[0].descripcion_d = {}
+					print meritoEE_dArr
+					for modalidad in meritoEE_dArr:
+						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
+						esfuerzoExportador_update[0].descripcion_d.add(modalidadObj)
+					print "merito EE actualizado"
+
 
 				print "empresa comercial"
 				empresaComercial_update = MeritoEmpresaComercial.objects.filter(entidad = entidad_update[0])

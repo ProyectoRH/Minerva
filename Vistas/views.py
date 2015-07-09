@@ -9,7 +9,7 @@ from Proyecto.models import Proyecto
 from Fuentes.models import Fuente, TipoRubro
 from PagosProyecto.models import PagosProyecto
 from EntidadVsProyecto.models import EntidadVsProyecto
-from Entidad.models import Entidad, RepresentanteLegal, ContactosEntidad, PerfilEntidadMerito, Trabajadores, Descripciones
+from Entidad.models import Entidad, RepresentanteLegal, ContactosEntidad, PerfilEntidadMerito, Trabajadores, Descripciones, MeritoEmpresaInnovadora, MeritoResponsabilidadSocial, MeritoEmpresaSalud, MeritoEmpresaIndustrial, MeritoEsfuerzoExportador, MeritoEmpresaComercial, MeritoEmpresaServicio, MeritoEmpresaAgroindustrial
 
 from EmprendedorPremio.models import Emprendedor, EntidadEmprendedor, DistincionesEmprendedor, AdjuntosEmprendedor
 from Distinciones.models import Distincion
@@ -132,7 +132,19 @@ def detallesEntidad(request, pk):
 	otrosAdjuntosEntidad = AdjuntoEntidadMerito.objects.filter(entidad = entidad, tipo_adjunto = 10)
 
 
-	return render(request, "adminPremio/detallesEntidad.html", {'entidad':entidad, 'representante':representanteLegal, 'contacto':contactoEntidad, 'perfil':perfilEntidad, 'trabajadores':trabajadores, 'descripciones':descripciones, 'anio_1':anio_actual1, 'anio_2':anio_actual2, 'anio_3':anio_actual3, 'distinciones':distinciones, 'adjuntos':adjuntosEntidad, 'otrosAdjuntos':otrosAdjuntosEntidad})
+	##### Para las categorias ############
+	empresa_MeritoInnovadora = MeritoEmpresaInnovadora.objects.filter(entidad = entidad)
+	empresa_MeritoResponsabilidadSocial = MeritoResponsabilidadSocial.objects.filter(entidad = entidad)
+	empresa_MeritoEmpresaSalud = MeritoEmpresaSalud.objects.filter(entidad = entidad)
+	empresa_MeritoEmpresaIndustrial = MeritoEmpresaIndustrial.objects.filter(entidad = entidad)
+	empresa_MeritoEsfuerzoExportador = MeritoEsfuerzoExportador.objects.filter(entidad = entidad)
+	empresa_MeritoEmpresaComercial = MeritoEmpresaComercial.objects.filter(entidad = entidad)
+	empresa_MeritoEmpresaServicio = MeritoEmpresaServicio.objects.filter(entidad = entidad)
+	empresa_MeritoEmpresaAgroindustrial = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad)
+	######################################
+
+
+	return render(request, "adminPremio/detallesEntidad.html", {'entidad':entidad, 'representante':representanteLegal, 'contacto':contactoEntidad, 'perfil':perfilEntidad, 'trabajadores':trabajadores, 'descripciones':descripciones, 'anio_1':anio_actual1, 'anio_2':anio_actual2, 'anio_3':anio_actual3, 'distinciones':distinciones, 'adjuntos':adjuntosEntidad, 'otrosAdjuntos':otrosAdjuntosEntidad, 'empresaMeritoInnovadora':empresa_MeritoInnovadora[0], 'empresaMeritoRSocial':empresa_MeritoResponsabilidadSocial[0], 'empresaSalud':empresa_MeritoEmpresaSalud[0], 'empresaIndustrial':empresa_MeritoEmpresaIndustrial[0], 'empresaEsfuerzoExpo':empresa_MeritoEsfuerzoExportador[0], 'empresaComercial':empresa_MeritoEmpresaComercial[0], 'empresaServicio':empresa_MeritoEmpresaServicio[0], 'empresaAgro':empresa_MeritoEmpresaAgroindustrial[0]})
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def detallesGremio(request, pk):

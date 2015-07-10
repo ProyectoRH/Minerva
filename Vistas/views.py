@@ -141,10 +141,51 @@ def detallesEntidad(request, pk):
 	empresa_MeritoEmpresaComercial = MeritoEmpresaComercial.objects.filter(entidad = entidad)
 	empresa_MeritoEmpresaServicio = MeritoEmpresaServicio.objects.filter(entidad = entidad)
 	empresa_MeritoEmpresaAgroindustrial = MeritoEmpresaAgroindustrial.objects.filter(entidad = entidad)
+
+	if len(empresa_MeritoInnovadora) == 0:
+		empresa_MeritoInnovadora = ""
+	else:
+		empresa_MeritoInnovadora = empresa_MeritoInnovadora[0]
+
+	if len(empresa_MeritoResponsabilidadSocial) == 0:
+		empresa_MeritoResponsabilidadSocial = ""
+	else:
+		empresa_MeritoResponsabilidadSocial = empresa_MeritoResponsabilidadSocial[0]
+
+	if len(empresa_MeritoEmpresaSalud) == 0:
+		empresa_MeritoEmpresaSalud = ""
+	else:
+		empresa_MeritoEmpresaSalud = empresa_MeritoEmpresaSalud[0]
+
+	if len(empresa_MeritoEmpresaIndustrial) == 0:
+		empresa_MeritoEmpresaIndustrial = ""
+	else:
+		empresa_MeritoEmpresaIndustrial = empresa_MeritoEmpresaIndustrial[0]
+
+	if len(empresa_MeritoEsfuerzoExportador) == 0:
+		empresa_MeritoEsfuerzoExportador = ""
+	else:
+		empresa_MeritoEsfuerzoExportador = empresa_MeritoEsfuerzoExportador[0]
+
+	if len(empresa_MeritoEmpresaComercial) == 0:
+		empresa_MeritoEmpresaComercial = ""
+	else:
+		empresa_MeritoEmpresaComercial = empresa_MeritoEmpresaComercial[0]
+
+	if len(empresa_MeritoEmpresaServicio) == 0:
+		empresa_MeritoEmpresaServicio = ""
+	else:
+		empresa_MeritoEmpresaServicio = empresa_MeritoEmpresaServicio[0]
+
+	if len(empresa_MeritoEmpresaAgroindustrial) == 0:
+		empresa_MeritoEmpresaAgroindustrial = ""
+	else:
+		empresa_MeritoEmpresaAgroindustrial = empresa_MeritoEmpresaAgroindustrial[0]
+
 	######################################
 
 
-	return render(request, "adminPremio/detallesEntidad.html", {'entidad':entidad, 'representante':representanteLegal, 'contacto':contactoEntidad, 'perfil':perfilEntidad, 'trabajadores':trabajadores, 'descripciones':descripciones, 'anio_1':anio_actual1, 'anio_2':anio_actual2, 'anio_3':anio_actual3, 'distinciones':distinciones, 'adjuntos':adjuntosEntidad, 'otrosAdjuntos':otrosAdjuntosEntidad, 'empresaMeritoInnovadora':empresa_MeritoInnovadora[0], 'empresaMeritoRSocial':empresa_MeritoResponsabilidadSocial[0], 'empresaSalud':empresa_MeritoEmpresaSalud[0], 'empresaIndustrial':empresa_MeritoEmpresaIndustrial[0], 'empresaEsfuerzoExpo':empresa_MeritoEsfuerzoExportador[0], 'empresaComercial':empresa_MeritoEmpresaComercial[0], 'empresaServicio':empresa_MeritoEmpresaServicio[0], 'empresaAgro':empresa_MeritoEmpresaAgroindustrial[0]})
+	return render(request, "adminPremio/detallesEntidad.html", {'entidad':entidad, 'representante':representanteLegal, 'contacto':contactoEntidad, 'perfil':perfilEntidad, 'trabajadores':trabajadores, 'descripciones':descripciones, 'anio_1':anio_actual1, 'anio_2':anio_actual2, 'anio_3':anio_actual3, 'distinciones':distinciones, 'adjuntos':adjuntosEntidad, 'otrosAdjuntos':otrosAdjuntosEntidad, 'empresaMeritoInnovadora':empresa_MeritoInnovadora, 'empresaMeritoRSocial':empresa_MeritoResponsabilidadSocial, 'empresaSalud':empresa_MeritoEmpresaSalud, 'empresaIndustrial':empresa_MeritoEmpresaIndustrial, 'empresaEsfuerzoExpo':empresa_MeritoEsfuerzoExportador, 'empresaComercial':empresa_MeritoEmpresaComercial, 'empresaServicio':empresa_MeritoEmpresaServicio, 'empresaAgro':empresa_MeritoEmpresaAgroindustrial})
 
 @login_required(login_url='/usuarios/registroEntidad/')
 def detallesGremio(request, pk):

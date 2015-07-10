@@ -731,7 +731,7 @@
 					</div>
 				{% endif %}
 				
-				{% if empresaEsfuerzoExpo.descripcion_a|striptags = '0' and empresaEsfuerzoExpo.descripcion_b|striptags = '0' and empresaEsfuerzoExpo.descripcion_c|length = 0 and empresaEsfuerzoExpo.descripcion_d|length = 0 and empresaEsfuerzoExpo.descripcion_e|length = 0 and empresaEsfuerzoExpo.descripcion_f|length = 0 and empresaEsfuerzoExpo.descripcion_g = False and empresaEsfuerzoExpo.descripcion_h|striptags = '0' %} 
+				{% if empresaEsfuerzoExpo.descripcion_a|striptags = '0' and empresaEsfuerzoExpo.descripcion_b|striptags = '0' and empresaEsfuerzoExpo.descripcion_c|length = 0 and empresaEsfuerzoExpo.descripcion_d.all|length = 0 and empresaEsfuerzoExpo.descripcion_e|length = 0 and empresaEsfuerzoExpo.descripcion_f|length = 0 and empresaEsfuerzoExpo.descripcion_g = False and empresaEsfuerzoExpo.descripcion_h|striptags = '0' %} 
 					{# No pertenece al merito Esfuerzo Exportador #}
 				{% else %}
 					<div class="panel panel-default">

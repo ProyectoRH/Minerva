@@ -364,6 +364,15 @@
 							<th>Adjuntos</th>
 							<th>-</th>
 							<th>Otros Adjuntos</th>
+							<th>-</th>
+							<th>Mérito a la empresa Innovadora</th>
+							<th>Mérito a empresa de Responsabilidad Social</th>
+							<th>Mérito a la empresa de Salud</th>
+							<th>Mérito a la empresa Industrial</th>
+							<th>Mérito al esfuerzo Exportador</th>
+							<th>Mérito a la empresa Comercial</th>
+							<th>Mérito a la empresa de Servicios</th>
+							<th>Mérito a la empresa Agroindustrial - Agropecuaria</th>
 							
 						</tr>
 						{% for entidad in entidades %}
@@ -562,6 +571,89 @@
 									{% for adjunto in adjuntosEntidades %}
 										{% if adjunto.entidad == entidad and adjunto.tipo_adjunto == 10 %}
 											- http://104.131.101.84/media/{{ adjunto.adjunto }}. <br />
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>-</td>
+								<td>
+									{% for merito in empresas_meritoInnovadora %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and  merito.descripcion_b|length == 0 and  merito.descripcion_c|length == 0 and  merito.descripcion_d|length == 0 and  merito.descripcion_e|length == 0 and  merito.descripcion_f|length == 0 and  merito.descripcion_g|length == 0 and  merito.descripcion_h|length == 0 and  merito.descripcion_i|length == 0 and  merito.descripcion_j|length == 0 %} 
+												{# No está inscrito a innovadora #}
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoRSocial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 %}
+												{# No está inscrito #}
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoSalud %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 %}
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoIndustrial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 %}
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoEsfuerzo %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a == 0 and merito.descripcion_b == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d.all|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 and merito.descripcion_g == False and merito.descripcion_h == 0 %} 
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoComercial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 %} 
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoServicio %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length = 0 and merito.descripcion_f|length == 0 %} 
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for merito in empresas_meritoAgro %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 %} 
+											{% else %}
+												<p class="text-center"><strong>X</strong></p>
+											{% endif %}
 										{% endif %}
 									{% endfor %}
 								</td>

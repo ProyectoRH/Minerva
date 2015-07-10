@@ -584,7 +584,7 @@
 			<fieldset>
 				<legend>Categorías</legend>
 				
-				{% if empresaMeritoInnovadora.descripcion_a|length = 0 and  empresaMeritoInnovadora.descripcion_b|length = 0 and  empresaMeritoInnovadora.descripcion_c|length = 0 and  empresaMeritoInnovadora.descripcion_d|length = 0 and  empresaMeritoInnovadora.descripcion_e|length = 0 and  empresaMeritoInnovadora.descripcion_f|length = 0 and  empresaMeritoInnovadora.descripcion_g|length = 0 and  empresaMeritoInnovadora.descripcion_h|length = 0 and  empresaMeritoInnovadora.descripcion_i|length = 0 and  empresaMeritoInnovadora.descripcion_j|length = 0 %} 
+				{% if empresaMeritoInnovadora.descripcion_a|length == 0 and  empresaMeritoInnovadora.descripcion_b|length == 0 and  empresaMeritoInnovadora.descripcion_c|length == 0 and  empresaMeritoInnovadora.descripcion_d|length == 0 and  empresaMeritoInnovadora.descripcion_e|length == 0 and  empresaMeritoInnovadora.descripcion_f|length == 0 and  empresaMeritoInnovadora.descripcion_g|length == 0 and  empresaMeritoInnovadora.descripcion_h|length == 0 and  empresaMeritoInnovadora.descripcion_i|length == 0 and  empresaMeritoInnovadora.descripcion_j|length == 0 %} 
 					{# No pertenece al merito innovadora #}
 				{% else %}
 					<div class="panel panel-default">
@@ -644,7 +644,7 @@
 					</div>
 				{% endif %}
 				
-				{% if empresaMeritoRSocial.descripcion_a|length = 0 and empresaMeritoRSocial.descripcion_b|length = 0 and empresaMeritoRSocial.descripcion_c|length = 0 and empresaMeritoRSocial.descripcion_d|length = 0 and empresaMeritoRSocial.descripcion_e|length = 0 %} 
+				{% if empresaMeritoRSocial.descripcion_a|length == 0 and empresaMeritoRSocial.descripcion_b|length == 0 and empresaMeritoRSocial.descripcion_c|length == 0 and empresaMeritoRSocial.descripcion_d|length == 0 and empresaMeritoRSocial.descripcion_e|length == 0 %} 
 					{# No pertenece al merito de Responsabilidad Social #}					
 				{% else %}
 					<div class="panel panel-default">
@@ -678,7 +678,7 @@
 					</div>
 				{% endif %}
 
-				{% if empresaSalud.descripcion_a|length = 0 and empresaSalud.descripcion_b|length = 0 and empresaSalud.descripcion_c|length = 0 and empresaSalud.descripcion_d|length = 0 %}
+				{% if empresaSalud.descripcion_a|length == 0 and empresaSalud.descripcion_b|length == 0 and empresaSalud.descripcion_c|length == 0 and empresaSalud.descripcion_d|length == 0 %}
 					{# No pertenece al merito de Salud #}
 				{% else %}
 					<div class="panel panel-default">
@@ -707,7 +707,7 @@
 					</div>
 				{% endif %}
 
-				{% if empresaIndustrial.descripcion_a|length = 0 and empresaIndustrial.descripcion_b|length = 0 and empresaIndustrial.descripcion_c|length = 0 %}
+				{% if empresaIndustrial.descripcion_a|length == 0 and empresaIndustrial.descripcion_b|length == 0 and empresaIndustrial.descripcion_c|length == 0 %}
 					{# No pertenece al merito de Industrial #}
 				{% else %}
 					<div class="panel panel-default">
@@ -731,7 +731,7 @@
 					</div>
 				{% endif %}
 				
-				{% if empresaEsfuerzoExpo.descripcion_a|striptags = '0' and empresaEsfuerzoExpo.descripcion_b|striptags = '0' and empresaEsfuerzoExpo.descripcion_c|length = 0 and empresaEsfuerzoExpo.descripcion_d.all|length = 0 and empresaEsfuerzoExpo.descripcion_e|length = 0 and empresaEsfuerzoExpo.descripcion_f|length = 0 and empresaEsfuerzoExpo.descripcion_g = False and empresaEsfuerzoExpo.descripcion_h|striptags = '0' %} 
+				{% if empresaEsfuerzoExpo.descripcion_a == 0 and empresaEsfuerzoExpo.descripcion_b == 0 and empresaEsfuerzoExpo.descripcion_c|length == 0 and empresaEsfuerzoExpo.descripcion_d.all|length == 0 and empresaEsfuerzoExpo.descripcion_e|length == 0 and empresaEsfuerzoExpo.descripcion_f|length == 0 and empresaEsfuerzoExpo.descripcion_g == False and empresaEsfuerzoExpo.descripcion_h == 0 %} 
 					{# No pertenece al merito Esfuerzo Exportador #}
 				{% else %}
 					<div class="panel panel-default">
@@ -758,7 +758,7 @@
 									{{ modalidad.descripcion }},
 								{% endfor %}
 								<br />
-								{% if not empresaEsfuerzoExpo.descripcion_d_otra|length = 0 %}
+								{% if not empresaEsfuerzoExpo.descripcion_d_otra|length == 0 %}
 									{{ empresaEsfuerzoExpo.descripcion_d_otra }}
 								{% endif %}
 							</p>
@@ -790,7 +790,7 @@
 					</div>
 				{% endif %}
 
-				{% if empresaComercial.descripcion_a|length = 0 and empresaComercial.descripcion_b|length = 0 and empresaComercial.descripcion_c|length = 0 and empresaComercial.descripcion_d|length = 0 and empresaComercial.descripcion_e|length = 0 %} 
+				{% if empresaComercial.descripcion_a|length == 0 and empresaComercial.descripcion_b|length == 0 and empresaComercial.descripcion_c|length == 0 and empresaComercial.descripcion_d|length == 0 and empresaComercial.descripcion_e|length == 0 %} 
 					{# No pertenece al merito de Comercial #}					
 				{% else %}
 					<div class="panel panel-default">
@@ -825,7 +825,7 @@
 					</div>
 				{% endif %}
 
-				{% if empresaServicio.descripcion_a|length = 0 and empresaServicio.descripcion_b|length = 0 and empresaServicio.descripcion_c|length = 0 and empresaServicio.descripcion_d|length = 0 and empresaServicio.descripcion_e|length = 0 and empresaServicio.descripcion_f|length = 0 %} 
+				{% if empresaServicio.descripcion_a|length == 0 and empresaServicio.descripcion_b|length == 0 and empresaServicio.descripcion_c|length == 0 and empresaServicio.descripcion_d|length == 0 and empresaServicio.descripcion_e|length = 0 and empresaServicio.descripcion_f|length == 0 %} 
 					{# No pertenece al merito de Servicio #}					
 				{% else %}
 					<div class="panel panel-default">
@@ -865,11 +865,11 @@
 					</div>
 				{% endif %}
 
-				{% if empresaAgro.descripcion_a|length = 0 and empresaAgro.descripcion_b|length = 0 and empresaAgro.descripcion_c|length = 0 and empresaAgro.descripcion_d|length = 0 and empresaAgro.descripcion_e|length = 0 and empresaAgro.descripcion_f|length = 0 %} 
+				{% if empresaAgro.descripcion_a|length == 0 and empresaAgro.descripcion_b|length == 0 and empresaAgro.descripcion_c|length == 0 and empresaAgro.descripcion_d|length == 0 and empresaAgro.descripcion_e|length == 0 and empresaAgro.descripcion_f|length == 0 %} 
 					{# No pertenece al merito de Agroindustrial #}					
 				{% else %}
 					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Agroindustrial</h4></div>
+						<div class="panel-heading"><h4>Categoría de Empresa Agroindustrial - Agropecuaria</h4></div>
 						<div class="panel-body">
 							<p>
 								<strong>¿Cómo ha sido el comportamiento de la producción en su organización durante los últimos 5 años en términos de porcentaje (aumentos o disminuciones). Realice un breve comentario sobre los factores que han incidido en la producción.</strong><br />

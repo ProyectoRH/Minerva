@@ -534,7 +534,7 @@
 								<td>
 									{% for distincion in distincionesEntidades %}
 										{% if distincion.entidad == entidad %}
-											- <strong>{{ distincion.reconocimiento }}</strong>, {{ distincion.fecha }}, {{ distincion.alcance }} <br />
+											<strong>{{ distincion.reconocimiento }}</strong>, {{ distincion.fecha }}, {{ distincion.alcance }};
 										{% endif %}
 									{% endfor %}
 								</td>
@@ -542,7 +542,7 @@
 								<td>
 									{% for adjunto in adjuntosEntidades %}
 										{% if adjunto.entidad == entidad and not adjunto.tipo_adjunto == 10 %}
-											- <strong>
+											<strong>
 											{% if adjunto.tipo_adjunto == 1 %}
 												Certificado de existencia y representación legal
 											{% elif adjunto.tipo_adjunto == 2 %}
@@ -562,7 +562,7 @@
 											{% elif adjunto.tipo_adjunto == 9 %}
 												Carta de intención del representante legal
 											{% endif %}
-											</strong>, http://104.131.101.84/media/{{ adjunto.adjunto }}. <br />
+											</strong>, http://104.131.101.84/media/{{ adjunto.adjunto }}; 
 										{% endif %}
 									{% endfor %}
 								</td>
@@ -570,7 +570,7 @@
 								<td>
 									{% for adjunto in adjuntosEntidades %}
 										{% if adjunto.entidad == entidad and adjunto.tipo_adjunto == 10 %}
-											- http://104.131.101.84/media/{{ adjunto.adjunto }}. <br />
+											http://104.131.101.84/media/{{ adjunto.adjunto }};
 										{% endif %}
 									{% endfor %}
 								</td>

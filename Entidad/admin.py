@@ -46,9 +46,9 @@ class EntidadAdmin(admin.ModelAdmin):
 	]
 	suit_form_tabs = (('general', 'Entidad'), ('trabajadores', 'Trabajadores'), ('descripciones', 'Descripciones'), ('meritoEI','Mérito Empresa Innovadora'), ('meritoRSE','Mérito a la Responsabilidad Social Empresarial'))
 
-	def save_model(self, request, obj, form, change):
-		obj.perfil_usuario = request.user
-		obj.save()
+	# def save_model(self, request, obj, form, change):
+	# 	obj.perfil_usuario = request.user
+	# 	obj.save()
 
 	@property
 	def media(self):

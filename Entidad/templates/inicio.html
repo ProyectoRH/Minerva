@@ -1423,7 +1423,9 @@
 			    	<!-- Adjuntos -->
 				    <div class="wizard-card" data-cardname="card12">
 				    	<h3>Archivos a adjuntar</h3>
-						
+				    	<div class="well">
+							<p style="font-size:18px;text-align:center;">Si va a adjuntar varios archivos, debe hacerlo a través de una carpeta comprimida</p>
+						</div>
 						<iframe id="uploadTrgEmpresa" name="uploadTrgEmpresa" height="0" width="0" frameborder="0" scrolling="yes"></iframe>
 
 						<form action="{% url 'Entidad.views.crearAdjuntoEmpresa' 1 %}" method="post" enctype="multipart/form-data" target="uploadTrgEmpresa">

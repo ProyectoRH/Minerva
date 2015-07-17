@@ -41,7 +41,7 @@ class EntidadAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None, {
 			'classes': ('suit-tab', 'suit-tab-general',),
-			'fields': ['nit','razon_social','direccion','url_web','telefono','nota_seguimiento','email','departamento','municipio','corregimiento','facebook','twitter',]
+			'fields': ['perfil_usuario', 'nit','razon_social','direccion','url_web','telefono','nota_seguimiento','email','departamento','municipio','corregimiento','facebook','twitter',]
 		}),
 	]
 	suit_form_tabs = (('general', 'Entidad'), ('trabajadores', 'Trabajadores'), ('descripciones', 'Descripciones'), ('meritoEI','Mérito Empresa Innovadora'), ('meritoRSE','Mérito a la Responsabilidad Social Empresarial'))

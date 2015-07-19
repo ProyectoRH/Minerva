@@ -27,7 +27,7 @@
 			display: none !important;
 		}
 
-		.fltrow td:nth-child(n+6) {
+		.fltrow td:nth-child(n+7) {
 			display: none;
 		}
 
@@ -41,7 +41,7 @@
 			background-color: rgb(245,245,245);
 		}
 
-		#tabla_entidades tr td:nth-child(n+5), #tabla_entidades tr th:nth-child(n+5){
+		#tabla_entidades tr td:nth-child(n+7), #tabla_entidades tr th:nth-child(n+7){
 			display: none;
 		}
 		#tabla_entidades tr td {
@@ -59,6 +59,11 @@
 		}
 		#tabla_gremios tr th {
 			background-color: rgb(245,245,245);
+		}
+
+		.label {
+			color: #000;
+			border: 1px solid gray;
 		}
 
     </style>
@@ -281,11 +286,12 @@
 							<th>NIT</th>
 							<th>Teléfono</th>
 							<th>E-mail</th>
+							<th>Categorías</th>
+							<th>Departamento</th>
 							<!-- ######################### -->
 							<th>Usuario</th>
 							<th>Dirección</th>
 							<th>URL</th>
-							<th>Departamento</th>
 							<th>Municipio</th>
 							<th>Corregimiento</th>
 							<th>Fax</th>
@@ -381,11 +387,89 @@
 								<td>{{ entidad.nit }}</td>
 								<td>{{ entidad.telefono }}</td>
 								<td>{{ entidad.email }}</td>
+								<td>
+									
+									{% for merito in empresas_meritoInnovadora %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and  merito.descripcion_b|length == 0 and  merito.descripcion_c|length == 0 and  merito.descripcion_d|length == 0 and  merito.descripcion_e|length == 0 and  merito.descripcion_f|length == 0 and  merito.descripcion_g|length == 0 and  merito.descripcion_h|length == 0 and  merito.descripcion_i|length == 0 and  merito.descripcion_j|length == 0 %} 
+												{# No está inscrito a innovadora #}
+											{% else %}
+												<span class="label"><strong>Innovadora</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoRSocial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 %}
+												{# No está inscrito #}
+											{% else %}
+												<span class="label"><strong>Responsabilidad S.</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoSalud %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 %}
+											{% else %}
+												<span class="label"><strong>Salud</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoIndustrial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 %}
+											{% else %}
+												<span class="label"><strong>Industrial</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoEsfuerzo %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a == 0 and merito.descripcion_b == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d.all|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 and merito.descripcion_g == False and merito.descripcion_h == 0 %} 
+											{% else %}
+												<span class="label"><strong>Esf. Esportador</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoComercial %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 %} 
+											{% else %}
+												<span class="label"><strong>Comercial</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoServicio %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length = 0 and merito.descripcion_f|length == 0 %} 
+											{% else %}
+												<span class="label"><strong>Servicio</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									
+									{% for merito in empresas_meritoAgro %}
+										{% if merito.entidad == entidad %}
+											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 %} 
+											{% else %}
+												<span class="label"><strong>Agroindustrial</strong></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+
+
+								</td>
+								<td>{{ entidad.departamento }}</td>
 								<!-- ######################### -->
 								<td>{{ entidad.perfil_usuario }}</td>
 								<td>{{ entidad.direccion }}</td>
 								<td>{{ entidad.url_web }}</td>
-								<td>{{ entidad.departamento }}</td>
 								<td>{{ entidad.municipio }}</td>
 								<td>{{ entidad.corregimiento }}</td>
 								<td>{{ entidad.fax }}</td>
@@ -716,6 +800,8 @@
 	    		rows_counter_text: "Emprendedores: "
 	    	}
 	    	var tableFiltersEntidades = {
+	    		col_5: "select",
+	    		display_all_text: "Departamentos",
 	    		rows_counter: true,
 	    		rows_counter_text: "Empresas: "
 	    	}

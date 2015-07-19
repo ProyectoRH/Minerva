@@ -381,6 +381,7 @@
 							<th>Mérito a la empresa Agroindustrial - Agropecuaria</th>
 							
 						</tr>
+						<script>var contador_inscripcion = 0;</script>
 						{% for entidad in entidades %}
 							<tr>
 								<td><a href="{% url 'Vistas.views.detallesEntidad' entidad.perfil_usuario.pk %}">{{ entidad.razon_social }}</a></td>
@@ -388,13 +389,13 @@
 								<td>{{ entidad.telefono }}</td>
 								<td>{{ entidad.email }}</td>
 								<td>
-									
 									{% for merito in empresas_meritoInnovadora %}
 										{% if merito.entidad == entidad %}
 											{% if merito.descripcion_a|length == 0 and  merito.descripcion_b|length == 0 and  merito.descripcion_c|length == 0 and  merito.descripcion_d|length == 0 and  merito.descripcion_e|length == 0 and  merito.descripcion_f|length == 0 and  merito.descripcion_g|length == 0 and  merito.descripcion_h|length == 0 and  merito.descripcion_i|length == 0 and  merito.descripcion_j|length == 0 %} 
 												{# No está inscrito a innovadora #}
 											{% else %}
 												<span class="label"><strong>Innovadora</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -405,6 +406,7 @@
 												{# No está inscrito #}
 											{% else %}
 												<span class="label"><strong>Responsabilidad S.</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -414,6 +416,7 @@
 											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 %}
 											{% else %}
 												<span class="label"><strong>Salud</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -423,6 +426,7 @@
 											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 %}
 											{% else %}
 												<span class="label"><strong>Industrial</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -431,7 +435,8 @@
 										{% if merito.entidad == entidad %}
 											{% if merito.descripcion_a == 0 and merito.descripcion_b == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d.all|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 and merito.descripcion_g == False and merito.descripcion_h == 0 %} 
 											{% else %}
-												<span class="label"><strong>Esf. Esportador</strong></span>
+												<span class="label"><strong>Esf. Exportador</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -441,6 +446,7 @@
 											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 %} 
 											{% else %}
 												<span class="label"><strong>Comercial</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -450,6 +456,7 @@
 											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length = 0 and merito.descripcion_f|length == 0 %} 
 											{% else %}
 												<span class="label"><strong>Servicio</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
@@ -459,10 +466,11 @@
 											{% if merito.descripcion_a|length == 0 and merito.descripcion_b|length == 0 and merito.descripcion_c|length == 0 and merito.descripcion_d|length == 0 and merito.descripcion_e|length == 0 and merito.descripcion_f|length == 0 %} 
 											{% else %}
 												<span class="label"><strong>Agroindustrial</strong></span>
+												<script>contador_inscripcion++;</script>
 											{% endif %}
 										{% endif %}
 									{% endfor %}
-
+								
 
 								</td>
 								<td>{{ entidad.departamento }}</td>
@@ -743,7 +751,6 @@
 								</td>
 							</tr>
 						{% endfor %}
-						
 					</tbody>
 				</table>
 			{% elif gremios %}
@@ -814,6 +821,10 @@
 	    	setFilterGrid("tabla_entidades", 0, tableFiltersEntidades);
 
 	    	setFilterGrid("tabla_gremios", 0, tableFiltersGremios);
+
+	    	$(function(){
+	    		$('#inf_tabla_entidades').append("Inscripciones: "+contador_inscripcion);
+	    	});
 	    };
 
 

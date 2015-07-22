@@ -1106,17 +1106,29 @@ def registrarEntidad(request):
 				return HttpResponse(entidad_update[0].pk)
 		else:
 			return HttpResponse(0)
+
+def utf8_encode(val):
+    try:
+        tmp = val.decode('utf8')
+    except:
+        try:
+            tmp = val.decode('latin1')
+        except:
+            tmp= val.decode('ascii', 'ignore')
+            tmp = tmp.encode('utf8')    
+    return tmp
+
 @csrf_exempt
 def crearDistincion(request):
 	anio_actual = time.strftime("%Y")
 	if request.method == 'POST':
-		distincion_reconocimiento = request.POST.get("reconocimiento")
+		distincion_reconocimiento = utf8_encode(request.POST.get("reconocimiento"))
 		distincion_fecha = request.POST.get("fecha")
 		distincion_alcances = request.POST.get("alcance")
 		entidad_nit = request.POST.get("entidad_nit")
 
 		print request.POST
-
+		print distincion_reconocimiento
 		entidad = Entidad.objects.get(nit = entidad_nit)
 		alcance = AlcanceMercado.objects.get(pk = distincion_alcances)
 

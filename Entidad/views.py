@@ -1122,13 +1122,16 @@ def utf8_encode(val):
 def crearDistincion(request):
 	anio_actual = time.strftime("%Y")
 	if request.method == 'POST':
-		distincion_reconocimiento = utf8_encode(request.POST.get("reconocimiento"))
+		distincion_reconocimiento = request.POST.get("reconocimiento")
 		distincion_fecha = request.POST.get("fecha")
 		distincion_alcances = request.POST.get("alcance")
 		entidad_nit = request.POST.get("entidad_nit")
 
 		print request.POST
+		
+		distincion_reconocimiento = distincion_reconocimiento.encode('utf-8')
 		print distincion_reconocimiento
+
 		entidad = Entidad.objects.get(nit = entidad_nit)
 		alcance = AlcanceMercado.objects.get(pk = distincion_alcances)
 

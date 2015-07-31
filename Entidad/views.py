@@ -422,6 +422,7 @@ def registrarEntidad(request):
 		meritoEE_e = request.POST.get("meritoEE_e")
 		meritoEE_f = request.POST.get("meritoEE_f")
 		meritoEE_g = request.POST.get("meritoEE_g")
+		print meritoEE_g
 		try:
 			meritoEE_g = int(meritoEE_g)
 		except:
@@ -920,6 +921,7 @@ def registrarEntidad(request):
 						descripcion_j = meritoEI_j 
 					)
 					new_empresaInnovadora.save()
+
 				else:
 					empresaInnovadora_update.update(
 						entidad = entidad_update[0],
@@ -934,7 +936,7 @@ def registrarEntidad(request):
 						descripcion_i = meritoEI_i,
 						descripcion_j = meritoEI_j)
 
-
+					print "empresaInnovadora - actualizar"
 
 				empresaResponsabilidad_update = MeritoResponsabilidadSocial.objects.filter(entidad = entidad_update[0])
 				if len(empresaResponsabilidad_update) == 0:
@@ -955,6 +957,7 @@ def registrarEntidad(request):
 						descripcion_c = meritoRSE_c,
 						descripcion_d = meritoRSE_d,
 						descripcion_e = meritoRSE_e)
+					print "empresaResponsabilidad - actualizar"
 
 				empresaSalud_update = MeritoEmpresaSalud.objects.filter(entidad = entidad_update[0])
 				if len(empresaSalud_update) == 0:
@@ -973,7 +976,7 @@ def registrarEntidad(request):
 						descripcion_b = meritoES_b,
 						descripcion_c = meritoES_c,
 						descripcion_d = meritoES_d)	
-				
+					print "empresaSalud - actualizar"
 
 				empresaIndustrial_update = MeritoEmpresaIndustrial.objects.filter(entidad = entidad_update[0])
 				if len(empresaIndustrial_update) == 0:
@@ -990,9 +993,10 @@ def registrarEntidad(request):
 						descripcion_a = meritoEIM_a,
 						descripcion_b = meritoEIM_b,
 						descripcion_c = meritoEIM_c)
-
+					print "empresaIndustrial - actualizar"
 
 				esfuerzoExportador_update = MeritoEsfuerzoExportador.objects.filter(entidad = entidad_update[0])
+
 				if len(esfuerzoExportador_update) == 0:
 					print "crear esfuerzo e"
 					new_esfuerzoExportador = MeritoEsfuerzoExportador(
@@ -1014,6 +1018,7 @@ def registrarEntidad(request):
 						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
 						new_esfuerzoExportador.descripcion_d.add(modalidadObj)
 				else:
+					print "actualizarEE"
 					esfuerzoExportador_update.update(
 						entidad = entidad_update[0],
 						descripcion_a = meritoEE_a,
@@ -1022,14 +1027,17 @@ def registrarEntidad(request):
 						descripcion_d_otra = meritoEE_d_otra,
 						descripcion_e = meritoEE_e,
 						descripcion_f = meritoEE_f,
-						descripcion_g = meritoEE_g,
+						descripcion_g = int(meritoEE_g),
 						descripcion_h = meritoEE_h
 					)
+					print "esfuerzo actualizar"
 					esfuerzoExportador_update[0].descripcion_d = {}
 					print meritoEE_dArr
-					for modalidad in meritoEE_dArr:
-						modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
-						esfuerzoExportador_update[0].descripcion_d.add(modalidadObj)
+					if meritoEE_dArr:
+						if not meritoEE_dArr[0] == "":
+							for modalidad in meritoEE_dArr:
+								modalidadObj = MeritoEsfExportModalidad.objects.get(pk = modalidad)
+								esfuerzoExportador_update[0].descripcion_d.add(modalidadObj)
 					print "merito EE actualizado"
 
 

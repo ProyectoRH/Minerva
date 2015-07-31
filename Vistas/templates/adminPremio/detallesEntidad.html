@@ -45,1069 +45,875 @@
         </div>
       </div>
     </nav>
-
-    <div class="container" style="margin-top:50px;">
-		<h2>{{ entidad }}<br /><small>NIT. {{ entidad.nit }}</small></h2>
-		
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Datos generales</legend>
-				<table class="table">
-					<tr>
-						<td><b>Usuario</b></td>
-						<td>{{ entidad.perfil_usuario }}</td>
-					</tr>
-					<tr>
-						<td><b>Dirección</b></td>
-						<td>{{ entidad.direccion }}</td>
-					</tr>
-					<tr>
-						<td><b>URL</b></td>
-						<td>{{ entidad.url_web }}</td>
-					</tr>
-					<tr>
-						<td><b>Teléfono</b></td>
-						<td>{{ entidad.telefono }}</td>
-					</tr>
-					<tr>
-						<td><b>E-mail</b></td>
-						<td>{{ entidad.email }}</td>
-					</tr>
-					<tr>
-						<td><b>Departamento</b></td>
-						<td>{{ entidad.departamento }}</td>
-					</tr>
-					<tr>
-						<td><b>Municipio</b></td>
-						<td>{{ entidad.municipio }}</td>
-					</tr>
-					<tr>
-						<td><b>Corregimiento</b></td>
-						<td>{{ entidad.corregimiento }}</td>
-					</tr>
-					<tr>
-						<td><b>FAX</b></td>
-						<td>{{ entidad.fax }}</td>
-					</tr>
-					<tr>
-						<td><b>Facebook</b></td>
-						<td>{{ entidad.facebook }}</td>
-					</tr>
-					<tr>
-						<td><b>Twitter</b></td>
-						<td>{{ entidad.twitter }}</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Representante Legal</legend>
-
-				<table class="table">
-					<tr>
-						<td><b>Nombres</b></td>
-						<td>{{ representante.nombres }}</td>
-					</tr>
-					<tr>
-						<td><b>Cargo</b></td>
-						<td>{{ representante.cargo }}</td>
-					</tr>
-					<tr>
-						<td><b>Ciudad</b></td>
-						<td>{{ representante.ciudad }}</td>
-					</tr>
-					<tr>
-						<td><b>Dirección</b></td>
-						<td>{{ representante.direccion }}</td>
-					</tr>
-					<tr>
-						<td><b>Teléfono</b></td>
-						<td>{{ representante.telefono }}</td>
-					</tr>
-					<tr>
-						<td><b>Celular</b></td>
-						<td>{{ representante.celular }}</td>
-					</tr>
-					<tr>
-						<td><b>E-mail</b></td>
-						<td>{{ representante.email }}</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Contacto</legend>
-
-				<table class="table">
-					<tr>
-						<td><b>Nombres</b></td>
-						<td>{{ contacto.nombres }}</td>
-					</tr>
-					<tr>
-						<td><b>Cargo</b></td>
-						<td>{{ contacto.cargo }}</td>
-					</tr>
-					<tr>
-						<td><b>Ciudad</b></td>
-						<td>{{ contacto.ciudad }}</td>
-					</tr>
-					<tr>
-						<td><b>Dirección</b></td>
-						<td>{{ contacto.direccion }}</td>
-					</tr>
-					<tr>
-						<td><b>Teléfono</b></td>
-						<td>{{ contacto.telefono }}</td>
-					</tr>
-					<tr>
-						<td><b>Celular</b></td>
-						<td>{{ contacto.celular }}</td>
-					</tr>
-					<tr>
-						<td><b>E-mail</b></td>
-						<td>{{ contacto.email }}</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Operación</legend>
-
-				<table class="table">
-					<tr>
-						<td><b>Años de operación</b></td>
-						<td>{{ perfil.anios_operacion }}</td>
-					</tr>
-					<tr>
-						<td><b>Tipo de organización</b></td>
-						<td>
-							{% if perfil.tipo_organizacion.descripcion == "Otra" %}
-								{{ perfil.tipo_organizacion_otra }}
-							{% else %}
-								{{ perfil.tipo_organizacion }}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Actividad Económica</b></td>
-						<td>
-							{% if perfil.actividad_economica.descripcion == "Otra" %}
-								{{ perfil.actividad_economica_otra }}
-							{% else %}
-								{{ perfil.actividad_economica }}
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Código del CIUU</b></td>
-						<td>{{ perfil.codigo_ciiu }}</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
-
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Organización</legend>
-
-				<table class="table">
-					<tr>
-						<td><b>Tamaño de la organización</b></td>
-						<td>
-							<script>
-								var valor = "{{ perfil.tamano_organizacion.descripcion }}";
-								if(valor.indexOf("Pequeña") > -1){
-									document.writeln("Pequeña");
-								}else{
-									if(valor.indexOf("Mediana") > -1){
-										document.writeln("Mediana");
-									}else{
-										if(valor.indexOf("Grande") > -1){
-											document.writeln("Grande");
-										}else{
-											document.writeln("Micro");
-										}
-									}
-								}
-							</script>
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores Directos</b></td>
-						<td>
-							{{ trabajadores.trabajadores_directos }}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores Indirectos</b></td>
-						<td>
-							{{ trabajadores.trabajadores_indirectos }}
-						</td>
-					</tr>
-
-					<tr>
-						<td><b>Trabajadores directos con título de Tecnólogo</b></td>
-						<td>
-							{{ trabajadores.trabajadores_tecnologo }}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores directos Profesionales</b></td>
-						<td>
-							{{ trabajadores.trabajadores_profesional }}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores directos Profesionales Especializados</b></td>
-						<td>
-							{{ trabajadores.trabajadores_profesional_esp }}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores directos con Maestría</b></td>
-						<td>
-							{{ trabajadores.trabajadores_maestria }}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Trabajadores directos con Doctorado</b></td>
-						<td>
-							{{ trabajadores.trabajadores_doctorado }}
-						</td>
-					</tr>					
-				</table>
-			</fieldset>
-		</div>
-	
-		<div class="col-md-12">
-			<fieldset>
-				<legend>Mercado</legend>
-
-				<div class="col-md-6">
-
+    <button class="btn btn-info pull-right" style="margin:20px 100px 0 0;" onclick="imprimir()">Imprimir inscripción</button>
+	<div id="capa_imprimir">
+	    <div class="container" style="margin-top:50px;">
+			<h2>{{ entidad }}<br /><small>NIT. {{ entidad.nit }}</small></h2>
+			
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Datos generales</legend>
 					<table class="table">
-						<thead>
-							<tr>
-								<th>Descripción de sus Productos y/o Servicios</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{ descripciones.descripcion_productos }}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="col-md-6">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Mencione 3 de sus proveedores principales</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{ descripciones.proveedores_principales }}</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Mencione 3 de sus clientes principales</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{ descripciones.clientes_principales }}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="col-md-6">
-					<div class="col-xs-6">
-						<table class="table">
-							<tr>
-								<td><b>Ventas totales para el año {{ anio_1 }}</b><br />
-									<script>
-										var valor = ""+{{ perfil.anio_venta_1 }};
-										valor = valor.substr(0,valor.length - 2);
-										document.writeln("$"+parseFloat(valor).formatMoney(2));
-									</script>
-								</td>
-							</tr>
-							<tr>
-								<td><b>Ventas totales para el año {{ anio_2 }}</b><br />
-									<script>
-										var valor = ""+{{ perfil.anio_venta_2 }};
-										valor = valor.substr(0,valor.length - 2);
-										document.writeln("$"+parseFloat(valor).formatMoney(2));
-									</script>
-
-								</td>
-							</tr>
-							<tr>
-								<td><b>Ventas totales para el año {{ anio_3 }}</b><br />
-									<script>
-										var valor = ""+{{ perfil.anio_venta_3 }};
-										valor = valor.substr(0,valor.length - 2);
-										document.writeln("$"+parseFloat(valor).formatMoney(2));
-									</script>
-
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div class="col-xs-6">
-						<table class="table">
-							<tr>
-								<td><b>Alcance del Mercado</b><br />
-									<ul>
-										{% for alcance in perfil.alcance_mercado.all %}
-											<li>{{ alcance }}</li>
-										{% endfor %}
-									</ul>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				
-			</fieldset>
-		</div>
-
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Sistema de Gestión</legend>
-				<table class="table">
-					<tr>
-						<td><b>Calidad</b></td>
-						<td>{{ perfil.calidad }}</td>
-					</tr>
-					<tr>
-						<td><b>Seguridad Industrial</b></td>
-						<td>{{ perfil.seguridad_industrial }}</td>
-					</tr>
-					<tr>
-						<td><b>Ambiental</b></td>
-						<td>{{ perfil.ambiental }}</td>
-					</tr>
-					<tr>
-						<td><b>Otro</b></td>
-						<td>{{ perfil.otro }}</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
-
-		<div class="col-md-4">
-			<fieldset>
-				<legend>Investigación e innovación</legend>
-				<table class="table">
-					<tr>
-						<td><b>Cuenta con departamento de I+D+i</b></td>
-						<td>
-							{% if perfil.departamento_idi %}
-								Si tiene
-							{% else %}
-								No tiene
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Asesor Externo</b></td>
-						<td>{{ perfil.asesor_externo_especifique }}</td>
-					</tr>
-					<tr>
-						<td><b>Firma Consultora</b></td>
-						<td>{{ perfil.firma_consultora_especifique }}</td>
-					</tr>
-					<tr>
-						<td><b>Alianza</b></td>
-						<td>{{ perfil.alianza_especifique }}</td>
-					</tr>
-					<tr>
-						<td><b>No Aplica</b></td>
-						<td>
-							{% if perfil.no_aplica %}
-								Si tiene
-							{% else %}
-								No tiene
-							{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td><b>Ha publicado patentes</b></td>
-						<td>
-							{% if perfil.patentes %}
-								Si tiene
-							{% else %}
-								No tiene
-							{% endif %}
-						</td>
-					</tr>
-					{% if perfil.patentes %}
 						<tr>
-							<td colspan="2"><b>Patentes</b><br />
-								{{ perfil.patentes_descripcion }}
+							<td><b>Usuario</b></td>
+							<td>{{ entidad.perfil_usuario }}</td>
+						</tr>
+						<tr>
+							<td><b>Dirección</b></td>
+							<td>{{ entidad.direccion }}</td>
+						</tr>
+						<tr>
+							<td><b>URL</b></td>
+							<td>{{ entidad.url_web }}</td>
+						</tr>
+						<tr>
+							<td><b>Teléfono</b></td>
+							<td>{{ entidad.telefono }}</td>
+						</tr>
+						<tr>
+							<td><b>E-mail</b></td>
+							<td>{{ entidad.email }}</td>
+						</tr>
+						<tr>
+							<td><b>Departamento</b></td>
+							<td>{{ entidad.departamento }}</td>
+						</tr>
+						<tr>
+							<td><b>Municipio</b></td>
+							<td>{{ entidad.municipio }}</td>
+						</tr>
+						<tr>
+							<td><b>Corregimiento</b></td>
+							<td>{{ entidad.corregimiento }}</td>
+						</tr>
+						<tr>
+							<td><b>FAX</b></td>
+							<td>{{ entidad.fax }}</td>
+						</tr>
+						<tr>
+							<td><b>Facebook</b></td>
+							<td>{{ entidad.facebook }}</td>
+						</tr>
+						<tr>
+							<td><b>Twitter</b></td>
+							<td>{{ entidad.twitter }}</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Representante Legal</legend>
+
+					<table class="table">
+						<tr>
+							<td><b>Nombres</b></td>
+							<td>{{ representante.nombres }}</td>
+						</tr>
+						<tr>
+							<td><b>Cargo</b></td>
+							<td>{{ representante.cargo }}</td>
+						</tr>
+						<tr>
+							<td><b>Ciudad</b></td>
+							<td>{{ representante.ciudad }}</td>
+						</tr>
+						<tr>
+							<td><b>Dirección</b></td>
+							<td>{{ representante.direccion }}</td>
+						</tr>
+						<tr>
+							<td><b>Teléfono</b></td>
+							<td>{{ representante.telefono }}</td>
+						</tr>
+						<tr>
+							<td><b>Celular</b></td>
+							<td>{{ representante.celular }}</td>
+						</tr>
+						<tr>
+							<td><b>E-mail</b></td>
+							<td>{{ representante.email }}</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Contacto</legend>
+
+					<table class="table">
+						<tr>
+							<td><b>Nombres</b></td>
+							<td>{{ contacto.nombres }}</td>
+						</tr>
+						<tr>
+							<td><b>Cargo</b></td>
+							<td>{{ contacto.cargo }}</td>
+						</tr>
+						<tr>
+							<td><b>Ciudad</b></td>
+							<td>{{ contacto.ciudad }}</td>
+						</tr>
+						<tr>
+							<td><b>Dirección</b></td>
+							<td>{{ contacto.direccion }}</td>
+						</tr>
+						<tr>
+							<td><b>Teléfono</b></td>
+							<td>{{ contacto.telefono }}</td>
+						</tr>
+						<tr>
+							<td><b>Celular</b></td>
+							<td>{{ contacto.celular }}</td>
+						</tr>
+						<tr>
+							<td><b>E-mail</b></td>
+							<td>{{ contacto.email }}</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Operación</legend>
+
+					<table class="table">
+						<tr>
+							<td><b>Años de operación</b></td>
+							<td>{{ perfil.anios_operacion }}</td>
+						</tr>
+						<tr>
+							<td><b>Tipo de organización</b></td>
+							<td>
+								{% if perfil.tipo_organizacion.descripcion == "Otra" %}
+									{{ perfil.tipo_organizacion_otra }}
+								{% else %}
+									{{ perfil.tipo_organizacion }}
+								{% endif %}
 							</td>
 						</tr>
-					{% endif %}
-					
-					<tr>
-						<td colspan="2"><b>Competitividad en el mercado</b><br />
-							<ul>
-								{% for compe in perfil.competitividad.all %}
-									<li>{{ compe }}</li>
-								{% endfor %}
-								{% if perfil.competitividad_especifique %}
-									<li>{{ perfil.competitividad_especifique }}</li>
+						<tr>
+							<td><b>Actividad Económica</b></td>
+							<td>
+								{% if perfil.actividad_economica.descripcion == "Otra" %}
+									{{ perfil.actividad_economica_otra }}
+								{% else %}
+									{{ perfil.actividad_economica }}
 								{% endif %}
-							</ul>
-						</td>
-					</tr>
+							</td>
+						</tr>
+						<tr>
+							<td><b>Código del CIUU</b></td>
+							<td>{{ perfil.codigo_ciiu }}</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
 
-				</table>
-			</fieldset>
-		</div>
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Organización</legend>
+
+					<table class="table">
+						<tr>
+							<td><b>Tamaño de la organización</b></td>
+							<td>
+								<script>
+									var valor = "{{ perfil.tamano_organizacion.descripcion }}";
+									if(valor.indexOf("Pequeña") > -1){
+										document.writeln("Pequeña");
+									}else{
+										if(valor.indexOf("Mediana") > -1){
+											document.writeln("Mediana");
+										}else{
+											if(valor.indexOf("Grande") > -1){
+												document.writeln("Grande");
+											}else{
+												document.writeln("Micro");
+											}
+										}
+									}
+								</script>
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores Directos</b></td>
+							<td>
+								{{ trabajadores.trabajadores_directos }}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores Indirectos</b></td>
+							<td>
+								{{ trabajadores.trabajadores_indirectos }}
+							</td>
+						</tr>
+
+						<tr>
+							<td><b>Trabajadores directos con título de Tecnólogo</b></td>
+							<td>
+								{{ trabajadores.trabajadores_tecnologo }}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores directos Profesionales</b></td>
+							<td>
+								{{ trabajadores.trabajadores_profesional }}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores directos Profesionales Especializados</b></td>
+							<td>
+								{{ trabajadores.trabajadores_profesional_esp }}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores directos con Maestría</b></td>
+							<td>
+								{{ trabajadores.trabajadores_maestria }}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Trabajadores directos con Doctorado</b></td>
+							<td>
+								{{ trabajadores.trabajadores_doctorado }}
+							</td>
+						</tr>					
+					</table>
+				</fieldset>
+			</div>
 		
-		<div class="col-md-4">
-			<fieldset>
-				<legend>¿Cómo se enteró?</legend>
-				<table class="table">
-					<tr>
-						<td><b>Razones de participación</b><br />
-							<ul>
-								{% for razon in perfil.razones_participacion.all %}
-									<li>{{ razon.descripcion }}</li>
-								{% endfor %}
-								{% if perfil.razones_participacion_especifique %}
-									<li>{{ perfil.razones_participacion_especifique }}</li>
-								{% endif %}
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td><b>Medio por el cuál se enteró</b><br />
-							<ul>
-								{% for canal in perfil.canal_recepcion.all %}
-									<li>{{ canal.descripcion }}</li>
-								{% endfor %}
-								{% if perfil.canal_recepcion_especifique %}
-									<li>{{ perfil.canal_recepcion_especifique }}</li>
-								{% endif %}
-							</ul>
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</div>
+			<div class="col-md-12">
+				<fieldset>
+					<legend>Mercado</legend>
 
-		<div class="col-md-12">
-			<fieldset>
-				<legend>Distinciones</legend>
+					<div class="col-md-6">
 
-				<table class="table">
-					<thead>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Descripción de sus Productos y/o Servicios</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ descripciones.descripcion_productos }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-6">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Mencione 3 de sus proveedores principales</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ descripciones.proveedores_principales }}</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Mencione 3 de sus clientes principales</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ descripciones.clientes_principales }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="col-md-6">
+						<div class="col-xs-6">
+							<table class="table">
+								<tr>
+									<td><b>Ventas totales para el año {{ anio_1 }}</b><br />
+										<script>
+											var valor = ""+{{ perfil.anio_venta_1 }};
+											valor = valor.substr(0,valor.length - 2);
+											document.writeln("$"+parseFloat(valor).formatMoney(2));
+										</script>
+									</td>
+								</tr>
+								<tr>
+									<td><b>Ventas totales para el año {{ anio_2 }}</b><br />
+										<script>
+											var valor = ""+{{ perfil.anio_venta_2 }};
+											valor = valor.substr(0,valor.length - 2);
+											document.writeln("$"+parseFloat(valor).formatMoney(2));
+										</script>
+
+									</td>
+								</tr>
+								<tr>
+									<td><b>Ventas totales para el año {{ anio_3 }}</b><br />
+										<script>
+											var valor = ""+{{ perfil.anio_venta_3 }};
+											valor = valor.substr(0,valor.length - 2);
+											document.writeln("$"+parseFloat(valor).formatMoney(2));
+										</script>
+
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-xs-6">
+							<table class="table">
+								<tr>
+									<td><b>Alcance del Mercado</b><br />
+										<ul>
+											{% for alcance in perfil.alcance_mercado.all %}
+												<li>{{ alcance }}</li>
+											{% endfor %}
+										</ul>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					
+				</fieldset>
+			</div>
+
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Sistema de Gestión</legend>
+					<table class="table">
 						<tr>
-							<th>Reconocimiento</th>
-							<th>Fecha</th>
-							<th>Alcance</th>
+							<td><b>Calidad</b></td>
+							<td>{{ perfil.calidad }}</td>
 						</tr>
-					</thead>
-					<tbody>
-						{% for distincion in distinciones %}
+						<tr>
+							<td><b>Seguridad Industrial</b></td>
+							<td>{{ perfil.seguridad_industrial }}</td>
+						</tr>
+						<tr>
+							<td><b>Ambiental</b></td>
+							<td>{{ perfil.ambiental }}</td>
+						</tr>
+						<tr>
+							<td><b>Otro</b></td>
+							<td>{{ perfil.otro }}</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Investigación e innovación</legend>
+					<table class="table">
+						<tr>
+							<td><b>Cuenta con departamento de I+D+i</b></td>
+							<td>
+								{% if perfil.departamento_idi %}
+									Si tiene
+								{% else %}
+									No tiene
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Asesor Externo</b></td>
+							<td>{{ perfil.asesor_externo_especifique }}</td>
+						</tr>
+						<tr>
+							<td><b>Firma Consultora</b></td>
+							<td>{{ perfil.firma_consultora_especifique }}</td>
+						</tr>
+						<tr>
+							<td><b>Alianza</b></td>
+							<td>{{ perfil.alianza_especifique }}</td>
+						</tr>
+						<tr>
+							<td><b>No Aplica</b></td>
+							<td>
+								{% if perfil.no_aplica %}
+									Si tiene
+								{% else %}
+									No tiene
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<td><b>Ha publicado patentes</b></td>
+							<td>
+								{% if perfil.patentes %}
+									Si tiene
+								{% else %}
+									No tiene
+								{% endif %}
+							</td>
+						</tr>
+						{% if perfil.patentes %}
 							<tr>
-								<td>{{ distincion.reconocimiento }}</td>
-								<td>{{ distincion.fecha }}</td>
-								<td>{{ distincion.alcance }}</td>
+								<td colspan="2"><b>Patentes</b><br />
+									{{ perfil.patentes_descripcion }}
+								</td>
 							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</fieldset>
-		</div>
-
-		<div class="col-md-12">
-			<fieldset>
-				<legend>Adjuntos</legend>
-
-				<table class="table">
-					<thead>
+						{% endif %}
+						
 						<tr>
-							<th>Adjunto</th>
-							<th></th>
+							<td colspan="2"><b>Competitividad en el mercado</b><br />
+								<ul>
+									{% for compe in perfil.competitividad.all %}
+										<li>{{ compe }}</li>
+									{% endfor %}
+									{% if perfil.competitividad_especifique %}
+										<li>{{ perfil.competitividad_especifique }}</li>
+									{% endif %}
+								</ul>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{% for adjunto in adjuntos %}
+
+					</table>
+				</fieldset>
+			</div>
+			
+			<div class="col-md-4">
+				<fieldset>
+					<legend>¿Cómo se enteró?</legend>
+					<table class="table">
+						<tr>
+							<td><b>Razones de participación</b><br />
+								<ul>
+									{% for razon in perfil.razones_participacion.all %}
+										<li>{{ razon.descripcion }}</li>
+									{% endfor %}
+									{% if perfil.razones_participacion_especifique %}
+										<li>{{ perfil.razones_participacion_especifique }}</li>
+									{% endif %}
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td><b>Medio por el cuál se enteró</b><br />
+								<ul>
+									{% for canal in perfil.canal_recepcion.all %}
+										<li>{{ canal.descripcion }}</li>
+									{% endfor %}
+									{% if perfil.canal_recepcion_especifique %}
+										<li>{{ perfil.canal_recepcion_especifique }}</li>
+									{% endif %}
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+
+			<div class="col-md-12">
+				<fieldset>
+					<legend>Distinciones</legend>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Reconocimiento</th>
+								<th>Fecha</th>
+								<th>Alcance</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for distincion in distinciones %}
+								<tr>
+									<td>{{ distincion.reconocimiento }}</td>
+									<td>{{ distincion.fecha }}</td>
+									<td>{{ distincion.alcance }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+
+			<div class="col-md-12">
+				<fieldset>
+					<legend>Adjuntos</legend>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Adjunto</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for adjunto in adjuntos %}
+								<tr>
+									<td>
+										<script>
+
+											var labels = ["Certificado de existencia y representación legal, actualizados a la fecha", "Estado financiero hasta diciembre del {{ anio_3 }}", "Estado financiero hasta diciembre del {{ anio_2 }}", "Estado financiero hasta diciembre del {{ anio_1 }}", "Presentación de la empresa", "Portafolio de servicios", "Imágenes y/o vídeo de la empresa en alta resolución", "Logo de la empresa en alta resolución", "Carta de intención firmada por el representante legal"];
+
+											document.writeln(labels[{{ adjunto.tipo_adjunto }} - 1]);
+
+										</script>
+										
+
+									</td>
+									<td><a href="/media/{{ adjunto.adjunto }}" class="btn btn-primary">Ver o descargar archivo adjunto</a></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+
+					<hr>
+
+					<h4>Otros adjuntos</h4>
+
+					<table class="table">
+						{% for adjunto in otrosAdjuntos %}
 							<tr>
 								<td>
-									<script>
-
-										var labels = ["Certificado de existencia y representación legal, actualizados a la fecha", "Estado financiero hasta diciembre del {{ anio_3 }}", "Estado financiero hasta diciembre del {{ anio_2 }}", "Estado financiero hasta diciembre del {{ anio_1 }}", "Presentación de la empresa", "Portafolio de servicios", "Imágenes y/o vídeo de la empresa en alta resolución", "Logo de la empresa en alta resolución", "Carta de intención firmada por el representante legal"];
-
-										document.writeln(labels[{{ adjunto.tipo_adjunto }} - 1]);
-
-									</script>
-									
-
+									{{ adjunto.adjunto }}
 								</td>
 								<td><a href="/media/{{ adjunto.adjunto }}" class="btn btn-primary">Ver o descargar archivo adjunto</a></td>
 							</tr>
 						{% endfor %}
-					</tbody>
-				</table>
-
-				<hr>
-
-				<h4>Otros adjuntos</h4>
-
-				<table class="table">
-					{% for adjunto in otrosAdjuntos %}
-						<tr>
-							<td>
-								{{ adjunto.adjunto }}
-							</td>
-							<td><a href="/media/{{ adjunto.adjunto }}" class="btn btn-primary">Ver o descargar archivo adjunto</a></td>
-						</tr>
-					{% endfor %}
-				</table>
-			</fieldset>
-		</div>
-		<div class="col-md-12">
-			<fieldset>
-				<legend>Categorías</legend>
-				
-				{% if empresaMeritoInnovadora.descripcion_a|length == 0 and  empresaMeritoInnovadora.descripcion_b|length == 0 and  empresaMeritoInnovadora.descripcion_c|length == 0 and  empresaMeritoInnovadora.descripcion_d|length == 0 and  empresaMeritoInnovadora.descripcion_e|length == 0 and  empresaMeritoInnovadora.descripcion_f|length == 0 and  empresaMeritoInnovadora.descripcion_g|length == 0 and  empresaMeritoInnovadora.descripcion_h|length == 0 and  empresaMeritoInnovadora.descripcion_i|length == 0 and  empresaMeritoInnovadora.descripcion_j|length == 0 %} 
-					{# No pertenece al merito innovadora #}
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Innovadora</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Mencione las personas dedicadas a actividades de Investigación, Desarrollo e Innovación en la empresa. Especifique nombre, cargo, nivel de formación y tiempo de dedicación (Debe expresarse en horas/mes)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>Enumere las actividades de formación, relacionadas con el desarrollo de competencias en materia de innovación, en las que ha participado el personal de la empresa en los últimos 3 años. Indique el nombre de la actividad de formación y el número de asistentes</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa los productos y/o servicios innovadores lanzados al mercado por la empresa en los últimos 3 años. Especifique nombre, fecha de lanzamiento (en formato DD/MM/AAAA), alcance (Local, Nacional o Internacional) y las ventas del producto o servicio para el último año (Debe expresar los valores en pesos colombianos)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_c }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Indique el porcentaje de innovaciones en productos y/o servicios realizadas conjuntamente con empresas o instituciones externas (Entiéndase como el cociente entre el número de productos y/o servicios innovadores trabajados conjuntamente con empresas o instituciones externas y el número total de productos y/o servicios realizados multiplicado por 100)</strong> <br />
-								{{ empresaMeritoInnovadora.descripcion_d }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa el producto y/o servicio innovador más destacado desarrollado por la empresa en los últimos 3 años. Mencione la ficha técnica del producto y/o servicio, sus ventajas tecnológicas y el valor agregado que aporta.</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_e }}
-							</p>
-							<hr />
-							<p>
-								<strong>Mencione las innovaciones en los procesos implementados en la empresa en los últimos 3 años. Especifique nombre, fecha de implementación (en formato DD/MM/AAAA), beneficios que le ha generado a la empresa y la modalidad de desarrollo utilizada (Desarrollo propio o Desarrollo en Alianza con una empresa o institución externa)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_f }}
-							</p>
-							<hr />
-							<p>
-								<strong>Realice una descripción de las innovaciones en marketing desarrolladas en los últimos 3 años por la empresa (Entiéndase como innovación la modificación de cualquiera de las variables del marketing como: nueva presentación de un producto, nuevo método de distribución, nueva forma de aplicación de un producto ya conocido, nuevos medios de promoción de ventas, etc.)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_g }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las innovaciones en la gestión o administración de la empresa en los últimos 3 años (Entiéndase como innovación a la adopción de nuevos sistemas de dirección estratégica, nuevos sistemas de gestión del conocimiento, nueva estructuración de bases de datos para la gestión, etc.)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_h }}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique las ventas que provienen de los productos y/o servicios innovadores para los últimos 3 años. (Debe expresar los valores en pesos colombianos)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_i }}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique el valor de los gastos y/o inversiones realizadas en I+D+i en los últimos 3 años (Debe expresar los valores en pesos colombianos)</strong><br />
-								{{ empresaMeritoInnovadora.descripcion_j }}
-							</p>
-							
-						</div>
-					</div>
-				{% endif %}
-				
-				{% if empresaMeritoRSocial.descripcion_a|length == 0 and empresaMeritoRSocial.descripcion_b|length == 0 and empresaMeritoRSocial.descripcion_c|length == 0 and empresaMeritoRSocial.descripcion_d|length == 0 and empresaMeritoRSocial.descripcion_e|length == 0 %} 
-					{# No pertenece al merito de Responsabilidad Social #}					
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa de Responsabilidad Social</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>De acuerdo al balance social de la empresa, describa las principales acciones realizadas en el último año orientadas al mejoramiento de la calidad de vida de la comunidad interna y externa, evidenciando iniciativas que atiendan problematicas sociales específicas</strong><br />
-								{{ empresaMeritoRSocial.descripcion_a }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las acciones de alto impacto con las cuales la empresa ha contribuido al mejoramiento del medio ambiente.</strong><br />
-								{{ empresaMeritoRSocial.descripcion_b }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con los empleados (aporte indicadores y alcances)</strong><br />
-								{{ empresaMeritoRSocial.descripcion_c }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con los proveedores (aporte indicadores y alcances)</strong><br />
-								{{ empresaMeritoRSocial.descripcion_d }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con la comunidad (aporte indicadores y alcances)</strong><br />
-								{{ empresaMeritoRSocial.descripcion_e }}	
-							</p>
-						</div>
-					</div>
-				{% endif %}
-
-				{% if empresaSalud.descripcion_a|length == 0 and empresaSalud.descripcion_b|length == 0 and empresaSalud.descripcion_c|length == 0 and empresaSalud.descripcion_d|length == 0 %}
-					{# No pertenece al merito de Salud #}
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa de Salud</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Enumere y describa los proyectos generadores de productos y/o servicios innovadores en cuidado continuo que ha desarrollado la empresa en los últimos 3 años. (Monitoreo, Promoción, Prevención, Diagnóstico, Intervención)</strong><br />
-								{{ empresaSalud.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique el número de usuarios atendidos con los productos y/o servicios innovadores enfocados en cuidado continuo en el último año</strong><br />
-								{{ empresaSalud.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>Enumere y describa los productos y/o servicios diseñados que incorporen las TIC y su aplicación en el proceso de cuidado continuo</strong><br />
-								{{ empresaSalud.descripcion_c }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿Cuál ha sido la calificación obtenida en el último año en Servicio al Cliente?. Indique el tamaño de la población, el parámetro de calificación, el tamaño de la muestra y adjunte el instrumento utilizado</strong><br />
-								{{ empresaSalud.descripcion_d }}
-							</p>
-						</div>
-					</div>
-				{% endif %}
-
-				{% if empresaIndustrial.descripcion_a|length == 0 and empresaIndustrial.descripcion_b|length == 0 and empresaIndustrial.descripcion_c|length == 0 %}
-					{# No pertenece al merito de Industrial #}
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Industrial</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Indique la productividad total de la empresa en los últimos 3 años (Entíendase productividad total como el cociente entre la producción total y los insumos totales por cien)</strong><br />
-								{{ empresaIndustrial.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa la acciones de modernización tecnológica realizadas por la empresa en los últimos 3 años, indicando el nombre y la fecha de implementación (en formato DD/MM/AAAA)</strong><br />
-								{{ empresaIndustrial.descripcion_b }}	
-							</p>	
-							<hr />
-							<p>
-								<strong>Describa las acciones desarrolladas por la empresa para mitigar su impacto en el medio ambiente en los últimos 3 años, indique la fecha de implementación (en formato DD/MM/AAAA)</strong><br />
-								{{ empresaIndustrial.descripcion_c }}
-							</p>
-						</div>
-					</div>
-				{% endif %}
-				
-				{% if empresaEsfuerzoExpo.descripcion_a == 0 and empresaEsfuerzoExpo.descripcion_b == 0 and empresaEsfuerzoExpo.descripcion_c|length == 0 and empresaEsfuerzoExpo.descripcion_d.all|length == 0 and empresaEsfuerzoExpo.descripcion_e|length == 0 and empresaEsfuerzoExpo.descripcion_f|length == 0 and empresaEsfuerzoExpo.descripcion_g == False and empresaEsfuerzoExpo.descripcion_h == 0 %} 
-					{# No pertenece al merito Esfuerzo Exportador #}
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Esfuerzo Exportador</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Mencione el año en el cual la empresa inició a exportar</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique el porcentaje de exportaciones de la empresa, de acuerdo a las ventas totales en el último año</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>Mencione los paises con los cuales establece relaciones comerciales, especifique el porcentaje de exportaciones realizadas a cada país en el último año.</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_c }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Seleccione la modalidad de internacionalización que utiliza la empresa.</strong><br>
-								{% for modalidad in empresaEsfuerzoExpo.descripcion_d.all %}
-									{{ modalidad.descripcion }},
-								{% endfor %}
-								<br />
-								{% if not empresaEsfuerzoExpo.descripcion_d_otra|length == 0 %}
-									{{ empresaEsfuerzoExpo.descripcion_d_otra }}
-								{% endif %}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique el valor de las exportaciones y/o importaciones no tradicionales en el último año en valor FOB (Free On Board)* Entiéndase como valor FOB (Free On Board: Término de comercialización internacional que indica el precio de la mercancía a bordo de la nave o aeronave. Sin incluir fletes, seguros y otros gastos de manipulación después de embarcada la mercancía. El valor debe ser expresado en pesos colombianos - COP)</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_e }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa los productos exportados en el último año y mencione el valor exportado en pesos colombianos - COP</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_f }}
-							</p>
-							<hr />
-							<p>
-								<strong>Indique si la empresa importa materia prima para la fabricación de su producto</strong><br />
-								{% if empresaEsfuerzoExpo.descripcion_g %}
-									Si importa
-								{% else %}
-									No importa
-								{% endif %}
-							</p>
-							<hr />
-							<p>
-								<strong>Si la respuesta a la pregunta anterior es afirmativa. Especifique el procentaje de materia prima importada en el producto final</strong><br />
-								{{ empresaEsfuerzoExpo.descripcion_h }}
-							</p>
-						</div>
-					</div>
-				{% endif %}
-
-				{% if empresaComercial.descripcion_a|length == 0 and empresaComercial.descripcion_b|length == 0 and empresaComercial.descripcion_c|length == 0 and empresaComercial.descripcion_d|length == 0 and empresaComercial.descripcion_e|length == 0 %} 
-					{# No pertenece al merito de Comercial #}					
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Comercial</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Mencione el número total de establecimientos comerciales que tiene la empresa actualmente.</strong><br />
-								{{ empresaComercial.descripcion_a }}	
-							</p>
-							<hr />
-							<p>
-								<strong>Indique cuantos establecimientos comerciales ha abierto la empresa en los últimos 3 años, especifique donde están ubicados (domicilio, ciudad, país).</strong><br />
-								{{ empresaComercial.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa los canales de comercialización utilizados para penetrar a nuevos mercados en los últimos 3 años, especificando ciudad y país.</strong><br />
-								{{ empresaComercial.descripcion_c }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa los productos y/o servicios nuevos dentro de la misma línea o lineas nuevas lanzadas al mercado en los últimos 3 años.</strong><br />
-								{{ empresaComercial.descripcion_d }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las estrategias de comercialización novedosas, exitosas y comprobables utilizadas por la empresa en los últimos 3 años. Teniendo en cuenta modificaciones en las variables de marketing: producto, precio, distribución y promoción.</strong><br />
-								{{ empresaComercial.descripcion_e }}
-							</p>
-							
-						</div>
-					</div>
-				{% endif %}
-
-				{% if empresaServicio.descripcion_a|length == 0 and empresaServicio.descripcion_b|length == 0 and empresaServicio.descripcion_c|length == 0 and empresaServicio.descripcion_d|length == 0 and empresaServicio.descripcion_e|length = 0 and empresaServicio.descripcion_f|length == 0 %} 
-					{# No pertenece al merito de Servicio #}					
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Servicio</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>Describa los nuevos servicios y/o modelos innovadores en atención al cliente desarrollados por la empresa en los últimos 3 años.</strong><br />
-								{{ empresaServicio.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿La empresa tiene un plan de formación y/o apoyo para el crecimiento profesional de sus empleados?. En caso afirmativo descríbalo.</strong><br />
-								{{ empresaServicio.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa el plan de mejoramiento continuo de la empresa enfocado en servicio al cliente o sistemas de gestión implementados.</strong><br />
-								{{ empresaServicio.descripcion_c }}
-							</p>
-							<hr />
-							<p>
-								<strong>Mencione el número de personas capacitadas en servicio al cliente en el último año. Especifique las actividades de formación y fecha de realización de las mismas. (en formato DD/MM/AAAA).</strong><br />
-								{{ empresaServicio.descripcion_d }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa como la empresa ha implementado las TIC en sus servicios en los últimos 3 años.</strong><br />
-								{{ empresaServicio.descripcion_e }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿Cuál ha sido la calificación obtenida por la empresa en el último año en Servicio al Cliente?. Indique el tamaño de la población, tamaño de la muestra, parámetro de calificación y adjunte el instrumento utilizado.</strong><br />
-								{{ empresaServicio.descripcion_f }}
-							</p>
-							
-						</div>
-					</div>
-				{% endif %}
-
-				{% if empresaAgro.descripcion_a|length == 0 and empresaAgro.descripcion_b|length == 0 and empresaAgro.descripcion_c|length == 0 and empresaAgro.descripcion_d|length == 0 and empresaAgro.descripcion_e|length == 0 and empresaAgro.descripcion_f|length == 0 %} 
-					{# No pertenece al merito de Agroindustrial #}					
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>Categoría de Empresa Agroindustrial - Agropecuaria</h4></div>
-						<div class="panel-body">
-							<p>
-								<strong>¿Cómo ha sido el comportamiento de la producción en su organización durante los últimos 5 años en términos de porcentaje (aumentos o disminuciones). Realice un breve comentario sobre los factores que han incidido en la producción.</strong><br />
-								{{ empresaAgro.descripcion_a }}
-							</p>
-							<hr />
-							<p>
-								<strong>Mencione los procesos tecnológicos implentemados en su organización que han permitido desarrollar nuevos productos y/o servicios en los últimos 5 años.</strong><br />
-								{{ empresaAgro.descripcion_b }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿La organización ha desarrollado por su propia cuenta nuevas técnicas? Descríbalas y mencione los resultados obtenidos.</strong><br />
-								{{ empresaAgro.descripcion_c }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿Cómo gestiona su organización la calidad de sus procesos? Especifique las certificaciones obtenidas y el año.</strong><br />
-								{{ empresaAgro.descripcion_d }}
-							</p>
-							<hr />
-							<p>
-								<strong>¿Cómo gestiona su organización la seguridad industrial y la salud ocupacional?</strong><br />
-								{{ empresaAgro.descripcion_e }}
-							</p>
-							<hr />
-							<p>
-								<strong>Describa las acciones encaminadas a la gestión ambiental que está ejecutando su organización tales como: manejos de residuos sólidos, de aguas servidas, cuencas hidrográficas, emisiones atmosféricas, desechos contaminantes, lixiviados polutantes, escapes de especies exóticas, eficiencia energética, uso racional de recursos hídricos y otros.</strong><br />
-								{{ empresaAgro.descripcion_f }}
-							</p>
-						</div>
-					</div>
-				{% endif %}
-
-
-
-				<!-- Por si las moscas, aquí está con el acordeon -->
-
-				<!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-					{% if empresaMeritoInnovadora.descripcion_a|length = 0 and  empresaMeritoInnovadora.descripcion_b|length = 0 and  empresaMeritoInnovadora.descripcion_c|length = 0 and  empresaMeritoInnovadora.descripcion_d|length = 0 and  empresaMeritoInnovadora.descripcion_e|length = 0 and  empresaMeritoInnovadora.descripcion_f|length = 0 and  empresaMeritoInnovadora.descripcion_g|length = 0 and  empresaMeritoInnovadora.descripcion_h|length = 0 and  empresaMeritoInnovadora.descripcion_i|length = 0 and  empresaMeritoInnovadora.descripcion_j|length = 0 %} 
-						{# No pertenece al merito innovadora #}
-					{% else %}
+					</table>
+				</fieldset>
+			</div>
+		
+			<div class="col-md-12">
+					<fieldset>
+						<legend>Categorías</legend>
 						
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingOne">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-										Mérito a la empresa Innovadora
-									</a>
-								</h4>
-							</div>
-							<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+						{% if empresaMeritoInnovadora.descripcion_a|length == 0 and  empresaMeritoInnovadora.descripcion_b|length == 0 and  empresaMeritoInnovadora.descripcion_c|length == 0 and  empresaMeritoInnovadora.descripcion_d|length == 0 and  empresaMeritoInnovadora.descripcion_e|length == 0 and  empresaMeritoInnovadora.descripcion_f|length == 0 and  empresaMeritoInnovadora.descripcion_g|length == 0 and  empresaMeritoInnovadora.descripcion_h|length == 0 and  empresaMeritoInnovadora.descripcion_i|length == 0 and  empresaMeritoInnovadora.descripcion_j|length == 0 %} 
+							{# No pertenece al merito innovadora #}
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4>Categoría de Empresa Innovadora</h4>
+								</div>
 								<div class="panel-body">
-									{{ empresaMeritoInnovadora.descripcion_a }}
-									{{ empresaMeritoInnovadora.descripcion_b }}
-									{{ empresaMeritoInnovadora.descripcion_c }}
-									{{ empresaMeritoInnovadora.descripcion_d }}
-									{{ empresaMeritoInnovadora.descripcion_e }}
-									{{ empresaMeritoInnovadora.descripcion_f }}
-									{{ empresaMeritoInnovadora.descripcion_g }}
-									{{ empresaMeritoInnovadora.descripcion_h }}
-									{{ empresaMeritoInnovadora.descripcion_i }}
-									{{ empresaMeritoInnovadora.descripcion_j }}
+									<p>
+										<strong>Mencione las personas dedicadas a actividades de Investigación, Desarrollo e Innovación en la empresa. Especifique nombre, cargo, nivel de formación y tiempo de dedicación (Debe expresarse en horas/mes)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>Enumere las actividades de formación, relacionadas con el desarrollo de competencias en materia de innovación, en las que ha participado el personal de la empresa en los últimos 3 años. Indique el nombre de la actividad de formación y el número de asistentes</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa los productos y/o servicios innovadores lanzados al mercado por la empresa en los últimos 3 años. Especifique nombre, fecha de lanzamiento (en formato DD/MM/AAAA), alcance (Local, Nacional o Internacional) y las ventas del producto o servicio para el último año (Debe expresar los valores en pesos colombianos)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_c }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Indique el porcentaje de innovaciones en productos y/o servicios realizadas conjuntamente con empresas o instituciones externas (Entiéndase como el cociente entre el número de productos y/o servicios innovadores trabajados conjuntamente con empresas o instituciones externas y el número total de productos y/o servicios realizados multiplicado por 100)</strong> <br />
+										{{ empresaMeritoInnovadora.descripcion_d }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa el producto y/o servicio innovador más destacado desarrollado por la empresa en los últimos 3 años. Mencione la ficha técnica del producto y/o servicio, sus ventajas tecnológicas y el valor agregado que aporta.</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_e }}
+									</p>
+									<hr />
+									<p>
+										<strong>Mencione las innovaciones en los procesos implementados en la empresa en los últimos 3 años. Especifique nombre, fecha de implementación (en formato DD/MM/AAAA), beneficios que le ha generado a la empresa y la modalidad de desarrollo utilizada (Desarrollo propio o Desarrollo en Alianza con una empresa o institución externa)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_f }}
+									</p>
+									<hr />
+									<p>
+										<strong>Realice una descripción de las innovaciones en marketing desarrolladas en los últimos 3 años por la empresa (Entiéndase como innovación la modificación de cualquiera de las variables del marketing como: nueva presentación de un producto, nuevo método de distribución, nueva forma de aplicación de un producto ya conocido, nuevos medios de promoción de ventas, etc.)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_g }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las innovaciones en la gestión o administración de la empresa en los últimos 3 años (Entiéndase como innovación a la adopción de nuevos sistemas de dirección estratégica, nuevos sistemas de gestión del conocimiento, nueva estructuración de bases de datos para la gestión, etc.)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_h }}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique las ventas que provienen de los productos y/o servicios innovadores para los últimos 3 años. (Debe expresar los valores en pesos colombianos)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_i }}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique el valor de los gastos y/o inversiones realizadas en I+D+i en los últimos 3 años (Debe expresar los valores en pesos colombianos)</strong><br />
+										{{ empresaMeritoInnovadora.descripcion_j }}
+									</p>
 								</div>
 							</div>
-						</div>					
-					{% endif %}
-					
-					{% if empresaMeritoRSocial.descripcion_a|length = 0 and empresaMeritoRSocial.descripcion_b|length = 0 and empresaMeritoRSocial.descripcion_c|length = 0 and empresaMeritoRSocial.descripcion_d|length = 0 and empresaMeritoRSocial.descripcion_e|length = 0 %} 
-						{# No pertenece al merito de Responsabilidad Social #}					
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingTwo">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-										Mérito a la Responsabilidad Social Empresarial
-									</a>
-								</h4>
-							</div>
-							<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-								<div class="panel-body">
-									{{ empresaMeritoRSocial.descripcion_a }}
-									{{ empresaMeritoRSocial.descripcion_b }}
-									{{ empresaMeritoRSocial.descripcion_c }}
-									{{ empresaMeritoRSocial.descripcion_d }}
-									{{ empresaMeritoRSocial.descripcion_e }}
-								</div>
-							</div>
-						</div>
-					{% endif %}
 
-					{% if empresaSalud.descripcion_a|length = 0 and empresaSalud.descripcion_b|length = 0 and empresaSalud.descripcion_c|length = 0 and empresaSalud.descripcion_d|length = 0 %}
-						{# No pertenece al merito de Salud #}
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingThree">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-										Mérito a la empresa de Salud
-									</a>
-								</h4>
-							</div>
-							<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+						{% endif %}
+						
+						{% if empresaMeritoRSocial.descripcion_a|length == 0 and empresaMeritoRSocial.descripcion_b|length == 0 and empresaMeritoRSocial.descripcion_c|length == 0 and empresaMeritoRSocial.descripcion_d|length == 0 and empresaMeritoRSocial.descripcion_e|length == 0 %} 
+							{# No pertenece al merito de Responsabilidad Social #}					
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa de Responsabilidad Social</h4></div>
 								<div class="panel-body">
-									{{ empresaSalud.descripcion_a }}
-									{{ empresaSalud.descripcion_b }}
-									{{ empresaSalud.descripcion_c }}
-									{{ empresaSalud.descripcion_d }}
+									<p>
+										<strong>De acuerdo al balance social de la empresa, describa las principales acciones realizadas en el último año orientadas al mejoramiento de la calidad de vida de la comunidad interna y externa, evidenciando iniciativas que atiendan problematicas sociales específicas</strong><br />
+										{{ empresaMeritoRSocial.descripcion_a }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las acciones de alto impacto con las cuales la empresa ha contribuido al mejoramiento del medio ambiente.</strong><br />
+										{{ empresaMeritoRSocial.descripcion_b }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con los empleados (aporte indicadores y alcances)</strong><br />
+										{{ empresaMeritoRSocial.descripcion_c }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con los proveedores (aporte indicadores y alcances)</strong><br />
+										{{ empresaMeritoRSocial.descripcion_d }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las acciones de responsabilidad social implementadas por la empresa para con la comunidad (aporte indicadores y alcances)</strong><br />
+										{{ empresaMeritoRSocial.descripcion_e }}	
+									</p>
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
 
-					{% if empresaIndustrial.descripcion_a|length = 0 and empresaIndustrial.descripcion_b|length = 0 and empresaIndustrial.descripcion_c|length = 0 %}
-						{# No pertenece al merito de Industrial #}
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingFour">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-										Mérito a la empresa Industrial - Manufacturera
-									</a>
-								</h4>
-							</div>
-							<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+						{% if empresaSalud.descripcion_a|length == 0 and empresaSalud.descripcion_b|length == 0 and empresaSalud.descripcion_c|length == 0 and empresaSalud.descripcion_d|length == 0 %}
+							{# No pertenece al merito de Salud #}
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa de Salud</h4></div>
 								<div class="panel-body">
-									{{ empresaIndustrial.descripcion_a }}
-									{{ empresaIndustrial.descripcion_b }}
-									{{ empresaIndustrial.descripcion_c }}
+									<p>
+										<strong>Enumere y describa los proyectos generadores de productos y/o servicios innovadores en cuidado continuo que ha desarrollado la empresa en los últimos 3 años. (Monitoreo, Promoción, Prevención, Diagnóstico, Intervención)</strong><br />
+										{{ empresaSalud.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique el número de usuarios atendidos con los productos y/o servicios innovadores enfocados en cuidado continuo en el último año</strong><br />
+										{{ empresaSalud.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>Enumere y describa los productos y/o servicios diseñados que incorporen las TIC y su aplicación en el proceso de cuidado continuo</strong><br />
+										{{ empresaSalud.descripcion_c }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿Cuál ha sido la calificación obtenida en el último año en Servicio al Cliente?. Indique el tamaño de la población, el parámetro de calificación, el tamaño de la muestra y adjunte el instrumento utilizado</strong><br />
+										{{ empresaSalud.descripcion_d }}
+									</p>
 								</div>
 							</div>
-						</div>
-					{% endif %}
-					
-					{% if empresaEsfuerzoExpo.descripcion_a|length = 0 and empresaEsfuerzoExpo.descripcion_b|length = 0 and  empresaEsfuerzoExpo.descripcion_c|length = 0 and empresaEsfuerzoExpo.descripcion_d|length = 0 and  empresaEsfuerzoExpo.descripcion_e|length = 0 and empresaEsfuerzoExpo.descripcion_f|length = 0 and  empresaEsfuerzoExpo.descripcion_g|length = 0 and empresaEsfuerzoExpo.descripcion_h|length = 0 %} 
-						{# No pertenece al merito Esfuerzo Exportador #}
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingFive">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-										Mérito al Esfuerzo Exportador
-									</a>
-								</h4>
-							</div>
-							<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headinFive">
+						{% endif %}
+
+						{% if empresaIndustrial.descripcion_a|length == 0 and empresaIndustrial.descripcion_b|length == 0 and empresaIndustrial.descripcion_c|length == 0 %}
+							{# No pertenece al merito de Industrial #}
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa Industrial</h4></div>
 								<div class="panel-body">
-									{{ empresaEsfuerzoExpo.descripcion_a }}
-									{{ empresaEsfuerzoExpo.descripcion_b }}
-									{{ empresaEsfuerzoExpo.descripcion_c }}
+									<p>
+										<strong>Indique la productividad total de la empresa en los últimos 3 años (Entíendase productividad total como el cociente entre la producción total y los insumos totales por cien)</strong><br />
+										{{ empresaIndustrial.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa la acciones de modernización tecnológica realizadas por la empresa en los últimos 3 años, indicando el nombre y la fecha de implementación (en formato DD/MM/AAAA)</strong><br />
+										{{ empresaIndustrial.descripcion_b }}	
+									</p>	
+									<hr />
+									<p>
+										<strong>Describa las acciones desarrolladas por la empresa para mitigar su impacto en el medio ambiente en los últimos 3 años, indique la fecha de implementación (en formato DD/MM/AAAA)</strong><br />
+										{{ empresaIndustrial.descripcion_c }}
+									</p>
+								</div>
+							</div>
+						{% endif %}
+						
+						{% if empresaEsfuerzoExpo.descripcion_a == 0 and empresaEsfuerzoExpo.descripcion_b == 0 and empresaEsfuerzoExpo.descripcion_c|length == 0 and empresaEsfuerzoExpo.descripcion_d.all|length == 0 and empresaEsfuerzoExpo.descripcion_e|length == 0 and empresaEsfuerzoExpo.descripcion_f|length == 0 and empresaEsfuerzoExpo.descripcion_g == False and empresaEsfuerzoExpo.descripcion_h == 0 %} 
+							{# No pertenece al merito Esfuerzo Exportador #}
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa Esfuerzo Exportador</h4></div>
+								<div class="panel-body">
+									<p>
+										<strong>Mencione el año en el cual la empresa inició a exportar</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique el porcentaje de exportaciones de la empresa, de acuerdo a las ventas totales en el último año</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>Mencione los paises con los cuales establece relaciones comerciales, especifique el porcentaje de exportaciones realizadas a cada país en el último año.</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_c }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Seleccione la modalidad de internacionalización que utiliza la empresa.</strong><br>
+										{% for modalidad in empresaEsfuerzoExpo.descripcion_d.all %}
+											{{ modalidad.descripcion }},
+										{% endfor %}
+										<br />
+										{% if not empresaEsfuerzoExpo.descripcion_d_otra|length == 0 %}
+											{{ empresaEsfuerzoExpo.descripcion_d_otra }}
+										{% endif %}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique el valor de las exportaciones y/o importaciones no tradicionales en el último año en valor FOB (Free On Board)* Entiéndase como valor FOB (Free On Board: Término de comercialización internacional que indica el precio de la mercancía a bordo de la nave o aeronave. Sin incluir fletes, seguros y otros gastos de manipulación después de embarcada la mercancía. El valor debe ser expresado en pesos colombianos - COP)</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_e }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa los productos exportados en el último año y mencione el valor exportado en pesos colombianos - COP</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_f }}
+									</p>
+									<hr />
+									<p>
+										<strong>Indique si la empresa importa materia prima para la fabricación de su producto</strong><br />
+										{% if empresaEsfuerzoExpo.descripcion_g %}
+											Si importa
+										{% else %}
+											No importa
+										{% endif %}
+									</p>
+									<hr />
+									<p>
+										<strong>Si la respuesta a la pregunta anterior es afirmativa. Especifique el procentaje de materia prima importada en el producto final</strong><br />
+										{{ empresaEsfuerzoExpo.descripcion_h }}
+									</p>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if empresaComercial.descripcion_a|length == 0 and empresaComercial.descripcion_b|length == 0 and empresaComercial.descripcion_c|length == 0 and empresaComercial.descripcion_d|length == 0 and empresaComercial.descripcion_e|length == 0 %} 
+							{# No pertenece al merito de Comercial #}					
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa Comercial</h4></div>
+								<div class="panel-body">
+									<p>
+										<strong>Mencione el número total de establecimientos comerciales que tiene la empresa actualmente.</strong><br />
+										{{ empresaComercial.descripcion_a }}	
+									</p>
+									<hr />
+									<p>
+										<strong>Indique cuantos establecimientos comerciales ha abierto la empresa en los últimos 3 años, especifique donde están ubicados (domicilio, ciudad, país).</strong><br />
+										{{ empresaComercial.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa los canales de comercialización utilizados para penetrar a nuevos mercados en los últimos 3 años, especificando ciudad y país.</strong><br />
+										{{ empresaComercial.descripcion_c }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa los productos y/o servicios nuevos dentro de la misma línea o lineas nuevas lanzadas al mercado en los últimos 3 años.</strong><br />
+										{{ empresaComercial.descripcion_d }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las estrategias de comercialización novedosas, exitosas y comprobables utilizadas por la empresa en los últimos 3 años. Teniendo en cuenta modificaciones en las variables de marketing: producto, precio, distribución y promoción.</strong><br />
+										{{ empresaComercial.descripcion_e }}
+									</p>
 									
-									{{ empresaEsfuerzoExpo.descripcion_d_otra }}
-									{{ empresaEsfuerzoExpo.descripcion_e }}
-									{{ empresaEsfuerzoExpo.descripcion_f }}
-									{{ empresaEsfuerzoExpo.descripcion_g }}
-									{{ empresaEsfuerzoExpo.descripcion_h }}
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
 
-					{% if empresaComercial.descripcion_a|length = 0 and empresaComercial.descripcion_b|length = 0 and empresaComercial.descripcion_c|length = 0 and empresaComercial.descripcion_d|length = 0 and empresaComercial.descripcion_e|length = 0 %} 
-						{# No pertenece al merito de Comercial #}					
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingSix">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
-										Mérito a la Empresa Comercial
-									</a>
-								</h4>
-							</div>
-							<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headinSix">
+						{% if empresaServicio.descripcion_a|length == 0 and empresaServicio.descripcion_b|length == 0 and empresaServicio.descripcion_c|length == 0 and empresaServicio.descripcion_d|length == 0 and empresaServicio.descripcion_e|length = 0 and empresaServicio.descripcion_f|length == 0 %} 
+							{# No pertenece al merito de Servicio #}					
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa Servicio</h4></div>
 								<div class="panel-body">
-									{{ empresaComercial.descripcion_a }}
-									{{ empresaComercial.descripcion_b }}
-									{{ empresaComercial.descripcion_c }}
-									{{ empresaComercial.descripcion_d }}
-									{{ empresaComercial.descripcion_e }}
+									<p>
+										<strong>Describa los nuevos servicios y/o modelos innovadores en atención al cliente desarrollados por la empresa en los últimos 3 años.</strong><br />
+										{{ empresaServicio.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿La empresa tiene un plan de formación y/o apoyo para el crecimiento profesional de sus empleados?. En caso afirmativo descríbalo.</strong><br />
+										{{ empresaServicio.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa el plan de mejoramiento continuo de la empresa enfocado en servicio al cliente o sistemas de gestión implementados.</strong><br />
+										{{ empresaServicio.descripcion_c }}
+									</p>
+									<hr />
+									<p>
+										<strong>Mencione el número de personas capacitadas en servicio al cliente en el último año. Especifique las actividades de formación y fecha de realización de las mismas. (en formato DD/MM/AAAA).</strong><br />
+										{{ empresaServicio.descripcion_d }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa como la empresa ha implementado las TIC en sus servicios en los últimos 3 años.</strong><br />
+										{{ empresaServicio.descripcion_e }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿Cuál ha sido la calificación obtenida por la empresa en el último año en Servicio al Cliente?. Indique el tamaño de la población, tamaño de la muestra, parámetro de calificación y adjunte el instrumento utilizado.</strong><br />
+										{{ empresaServicio.descripcion_f }}
+									</p>
+									
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
 
-					{% if empresaServicio.descripcion_a|length = 0 and empresaServicio.descripcion_b|length = 0 and empresaServicio.descripcion_c|length = 0 and empresaServicio.descripcion_d|length = 0 and empresaServicio.descripcion_e|length = 0 and empresaServicio.descripcion_f|length = 0 %} 
-						{# No pertenece al merito de Servicio #}					
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingSeven">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
-										Mérito a la Empresa de Servicios
-									</a>
-								</h4>
-							</div>
-							<div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+						{% if empresaAgro.descripcion_a|length == 0 and empresaAgro.descripcion_b|length == 0 and empresaAgro.descripcion_c|length == 0 and empresaAgro.descripcion_d|length == 0 and empresaAgro.descripcion_e|length == 0 and empresaAgro.descripcion_f|length == 0 %} 
+							{# No pertenece al merito de Agroindustrial #}					
+						{% else %}
+							<div class="panel panel-default">
+								<div class="panel-heading"><h4>Categoría de Empresa Agroindustrial - Agropecuaria</h4></div>
 								<div class="panel-body">
-									{{ empresaServicio.descripcion_a }}
-									{{ empresaServicio.descripcion_b }}
-									{{ empresaServicio.descripcion_c }}
-									{{ empresaServicio.descripcion_d }}
-									{{ empresaServicio.descripcion_e }}
-									{{ empresaServicio.descripcion_f }}
+									<p>
+										<strong>¿Cómo ha sido el comportamiento de la producción en su organización durante los últimos 5 años en términos de porcentaje (aumentos o disminuciones). Realice un breve comentario sobre los factores que han incidido en la producción.</strong><br />
+										{{ empresaAgro.descripcion_a }}
+									</p>
+									<hr />
+									<p>
+										<strong>Mencione los procesos tecnológicos implentemados en su organización que han permitido desarrollar nuevos productos y/o servicios en los últimos 5 años.</strong><br />
+										{{ empresaAgro.descripcion_b }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿La organización ha desarrollado por su propia cuenta nuevas técnicas? Descríbalas y mencione los resultados obtenidos.</strong><br />
+										{{ empresaAgro.descripcion_c }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿Cómo gestiona su organización la calidad de sus procesos? Especifique las certificaciones obtenidas y el año.</strong><br />
+										{{ empresaAgro.descripcion_d }}
+									</p>
+									<hr />
+									<p>
+										<strong>¿Cómo gestiona su organización la seguridad industrial y la salud ocupacional?</strong><br />
+										{{ empresaAgro.descripcion_e }}
+									</p>
+									<hr />
+									<p>
+										<strong>Describa las acciones encaminadas a la gestión ambiental que está ejecutando su organización tales como: manejos de residuos sólidos, de aguas servidas, cuencas hidrográficas, emisiones atmosféricas, desechos contaminantes, lixiviados polutantes, escapes de especies exóticas, eficiencia energética, uso racional de recursos hídricos y otros.</strong><br />
+										{{ empresaAgro.descripcion_f }}
+									</p>
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
 
-					{% if empresaAgro.descripcion_a|length = 0 and empresaAgro.descripcion_b|length = 0 and empresaAgro.descripcion_c|length = 0 and empresaAgro.descripcion_d|length = 0 and empresaAgro.descripcion_e|length = 0 and empresaAgro.descripcion_f|length = 0 %} 
-						{# No pertenece al merito de Agroindustrial #}					
-					{% else %}
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingEight">
-								<h4 class="panel-title">
-									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
-										Mérito a la Empresa Agroindustrial - Agropecuaria
-									</a>
-								</h4>
-							</div>
-							<div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
-								<div class="panel-body">
-									{{ empresaAgro.descripcion_a }}
-									{{ empresaAgro.descripcion_b }}
-									{{ empresaAgro.descripcion_c }}
-									{{ empresaAgro.descripcion_d }}
-									{{ empresaAgro.descripcion_e }}
-									{{ empresaAgro.descripcion_f }}
-								</div>
-							</div>
-						</div>
-					{% endif %}
-				</div>-->
-
-				<!-- ############################################ -->
-
-			</fieldset>
-			<br />
+					</fieldset>
+					<br />
+			</div>
 		</div>
+
+		
 	</div>
 
 
@@ -1127,6 +933,14 @@
       }
     }
 
+    function imprimir(){
+      var objeto = document.getElementById('capa_imprimir');
+      var ventana = window.open('','_blank');
+      ventana.document.write(objeto.innerHTML);
+      ventana.document.close();
+      ventana.print();
+      ventana.close();
+    }
 
   </script>
 </body>

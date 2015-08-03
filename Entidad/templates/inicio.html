@@ -2600,17 +2600,23 @@
 				var wizardJson = localStorage.getItem('wizardSerialized');
 				if (wizardJson != "" && wizardJson != "null" && wizardJson != null){
 					wizardJsonArr = wizardJson.split('&');
+					var banderaLimpio = 0;
 					for (var i = 0; i < wizardJsonArr.length; i++) {
 						wizardDict = wizardJsonArr[i].split('=');
 						if(wizardDict[1] == "" || wizardDict[1] == null || wizardDict[1] == "null" || wizardDict[1] == " "){
 							var labelFromParent = $('#'+wizardDict[0]).parent().find('label').html();
 							if(($('#'+wizardDict[0]).parent().parent().parent().parent().parent()[0].id) != "accordion" && $('#'+wizardDict[0]).parent().hasClass('checkbox') == false && labelFromParent != "undefined" && labelFromParent != "" && labelFromParent != " " && labelFromParent != "null" && labelFromParent != null && labelFromParent != "Municipio" && labelFromParent != "Corregimiento" && $('#'+wizardDict[0])[0].id.indexOf("Otra") <= -1 && $('#'+wizardDict[0])[0].id.indexOf("Especifique") <= -1 && $('#'+wizardDict[0])[0].id.indexOf("otra") <= -1){
-								//console.log(labelFromParent);
-								$('#listaCampos').append('<li class="list-group-item">'+labelFromParent+'</li>');
+								
+								if($('#'+wizardDict[0])[0].id != "enunciePatentes_ii"){
+									$('#listaCampos').append('<li class="list-group-item">'+labelFromParent+'</li>');
+								}
 							}
-
 						}
 					};
+				}
+
+				if($('input[name="patentes_ii"]:checked').val() == '1' && $('#enunciePatentes_ii').val() == ""){
+					$('#listaCampos').append('<li class="list-group-item">Enuncie los productos o tecnologías y el año de patentamiento</li>');		
 				}
 			{% endif %}
 

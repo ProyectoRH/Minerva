@@ -7,7 +7,9 @@ urlpatterns = patterns('',
     url(r'^emprendedor/(?P<pk>[\d]+)', 'Vistas.views.detallesEmprendedor', name="detallesEmprendedor"),
     
     url(r'^entidades/', 'Vistas.views.listarEmpresas', name="listarEmpresas"),
+    url(r'^listarEntidades/', 'Vistas.views.listarEmpresasNoReporte', name="listarEmpresasNoReporte"),
     url(r'^entidad/(?P<pk>[\d]+)', 'Vistas.views.detallesEntidad', name="detallesEntidad"),
+
 
     url(r'^gremios/', 'Vistas.views.listarGremios', name="listarEmpresas"),
     url(r'^gremio/(?P<pk>[\d]+)', 'Vistas.views.detallesGremio', name="detallesEntidad"),

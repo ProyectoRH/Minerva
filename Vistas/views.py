@@ -104,6 +104,24 @@ def listarEmpresas(request):
 	return render(request, "adminPremio/listaPrincipal.html", {'entidades':empresas, 'perfilEntidades':perfiles_empresas, 'trabajadoresEntidades':trabajadores_empresas, 'descripcionesEntidades':descripciones_empresas, 'representanteEntidades':representantes_empresas, 'contactoEntidades':contactos_empresas, 'adjuntosEntidades':adjuntos_empresas, 'distincionesEntidades':distinciones_empresas, 'empresas_meritoInnovadora':empresas_MeritoInnovadora, 'empresas_meritoRSocial':empresas_MeritoResponsabilidadSocial, 'empresas_meritoSalud':empresas_MeritoSalud, 'empresas_meritoIndustrial':empresas_MeritoIndustrial, 'empresas_meritoEsfuerzo':empresas_MeritoEsfuerzoExpo, 'empresas_meritoComercial':empresas_MeritoComercial, 'empresas_meritoServicio':empresas_MeritoServicio, 'empresas_meritoAgro':empresas_MeritoAgroIndustrial})
 
 @login_required(login_url='/usuarios/registroEntidad/')
+def listarEmpresasNoReporte(request):
+	empresas = Entidad.objects.exclude(pk = "")
+
+	######## Categorias meritos #################
+	empresas_MeritoInnovadora = MeritoEmpresaInnovadora.objects.all()
+	empresas_MeritoResponsabilidadSocial = MeritoResponsabilidadSocial.objects.all()
+	empresas_MeritoSalud = MeritoEmpresaSalud.objects.all()
+	empresas_MeritoIndustrial = MeritoEmpresaIndustrial.objects.all()
+	empresas_MeritoEsfuerzoExpo = MeritoEsfuerzoExportador.objects.all()
+	empresas_MeritoComercial = MeritoEmpresaComercial.objects.all()
+	empresas_MeritoServicio = MeritoEmpresaServicio.objects.all()
+	empresas_MeritoAgroIndustrial = MeritoEmpresaAgroindustrial.objects.all()
+	#############################################
+
+	return render(request, "adminPremio/listarEmpresasNoReporte.html", {'entidades':empresas, 'empresas_meritoInnovadora':empresas_MeritoInnovadora, 'empresas_meritoRSocial':empresas_MeritoResponsabilidadSocial, 'empresas_meritoSalud':empresas_MeritoSalud, 'empresas_meritoIndustrial':empresas_MeritoIndustrial, 'empresas_meritoEsfuerzo':empresas_MeritoEsfuerzoExpo, 'empresas_meritoComercial':empresas_MeritoComercial, 'empresas_meritoServicio':empresas_MeritoServicio, 'empresas_meritoAgro':empresas_MeritoAgroIndustrial})
+
+
+@login_required(login_url='/usuarios/registroEntidad/')
 def listarGremios(request):
 	gremios = Gremio.objects.all()
 	empresariosBen_gremio = EmpresarioBenemerito.objects.filter(tipo_empresario = "benemerito")
